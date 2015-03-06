@@ -1,4 +1,4 @@
-package mz800.flappy;
+package com.mz800.flappy;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import static mz800.flappy.Constants.*;
+import static com.mz800.flappy.Constants.*;
 
 /**
  * Flappy:

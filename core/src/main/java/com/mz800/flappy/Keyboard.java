@@ -1,6 +1,6 @@
-package mz800.flappy;
+package com.mz800.flappy;
 
-import static mz800.flappy.Constants.*;
+import static com.mz800.flappy.Constants.*;
 
 /**
  * Keyboard handler.

@@ -1,4 +1,4 @@
-package mz800.flappy;
+package com.mz800.flappy;
 
 import java.awt.Color;
 import java.awt.Graphics;

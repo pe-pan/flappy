@@ -1,4 +1,4 @@
-package mz800.flappy;
+package com.mz800.flappy;
 
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiSystem;

@@ -1,7 +1,7 @@
-package mz800.flappy;
+package com.mz800.flappy;
 
 import java.awt.image.BufferedImage;
-import static mz800.flappy.Constants.*;
+import static com.mz800.flappy.Constants.*;
 
 /**
  * Flappy:
