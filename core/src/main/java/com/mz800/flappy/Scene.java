@@ -508,7 +508,7 @@ class Scene {
     }
 
     private void firing() {
-        if (keyboard.userAction == FIRE) {
+        if (chicken.chickenEaten == 0 && keyboard.userAction == FIRE) {
             fireOneMushroom();
         }
         Iterator<Mushroom> iter = mushrooms.iterator();
