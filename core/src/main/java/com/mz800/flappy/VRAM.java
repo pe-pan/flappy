@@ -1,8 +1,13 @@
 package com.mz800.flappy;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.util.Log;
+import android.view.SurfaceView;
+
+import com.mz800.flappy.awt.BufferedImage;
+import com.mz800.flappy.awt.Color;
+import com.mz800.flappy.awt.Graphics;
 
 /**
  * VideoRAM "routines".
@@ -19,7 +24,7 @@ public class VRAM {
         return me;
     }
     private BufferedImage img;
-    private Window window;
+    private SurfaceView window;
 
     private VRAM() {
         this.img = new BufferedImage(320 * ZOOM, 200 * ZOOM, BufferedImage.TYPE_INT_RGB);
@@ -123,15 +128,32 @@ public class VRAM {
     }
     
     void refresh() {
-        window.repaint();
-    }
-    
-    void createWindow(boolean fullScreen) {
-        if (window != null) {
-            window.setVisible(false);
-            window.dispose();
+        Canvas c = window.getHolder().lockCanvas();
+        if (c!= null) {
+            if (ratio == 0) {
+                int targetHeight = c.getHeight();
+                int targetWidth = c.getWidth();
+                int sourceHeight = img.getHeight();
+                int sourceWidth = img.getWidth();
+                float ratioH = (float) targetHeight / (float) sourceHeight;
+                float ratioW = (float) targetWidth / (float) sourceWidth;
+                ratio = Math.min(ratioH, ratioW);
+                Log.d("VRAM", "ratio: " + ratio);
+            }
+            c.scale(ratio, ratio);
+            c.drawBitmap(img.getBitmap(), 0, 0, paint);
+            window.getHolder().unlockCanvasAndPost(c);
         }
-        window = fullScreen ? Window.createFullScreen(this) : Window.createWindow(this);
+    }
+
+    private float ratio = 0;
+    private Paint paint;
+    void createWindow(SurfaceView window) {
+        this.window = window;
+        paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setFilterBitmap(true);
+        paint.setDither(true);
     }
     
 }

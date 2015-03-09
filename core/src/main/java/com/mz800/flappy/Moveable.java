@@ -1,6 +1,6 @@
 package com.mz800.flappy;
 
-import java.awt.image.BufferedImage;
+import com.mz800.flappy.awt.BufferedImage;
 
 /**
  * Flappy:

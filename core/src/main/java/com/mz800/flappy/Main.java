@@ -1,6 +1,9 @@
 package com.mz800.flappy;
 
-import java.awt.Color;
+import android.view.SurfaceView;
+
+import com.mz800.core.R;
+import com.mz800.flappy.awt.Color;
 import static com.mz800.flappy.Constants.*;
 import java.io.InputStream;
 
@@ -22,29 +25,15 @@ public class Main {
     private final Music music;
     private final FinalScreen finalScr;
 
-    public static void main(String[] args) throws Exception {
-        for (String s : args) {
-            if ("-v".equals(s)) {
-                verbose = true;
-            }
-        }
-        Main me = new Main();
+    public static void main(SurfaceView view) throws Exception {
+        Main me = new Main(view);
         me.firstScreen();
         me.game();
         System.exit(0);
     }
 
-    private Main() throws Exception {
-        InputStream is = getClass().getResourceAsStream("flappy.mzf");
-        if (is == null) {
-            if (verbose) {
-                System.out.println("MZF resource - second try");
-            }
-            is = getClass().getResourceAsStream("/flappy/flappy.mzf");
-            if (is == null) {
-                System.out.println("Input stream is null");
-            }
-        }
+    private Main(SurfaceView view) throws Exception {
+        InputStream is = view.getResources().openRawResource(R.raw.flappy);
         int read = 0;
         while (read < 65536) {
             int res = is.read(memory, read, 65536 - read);
@@ -61,7 +50,7 @@ public class Main {
         keyboard = Keyboard.getInstance();
         vram = VRAM.getInstance();
         music = Music.getInstance();
-        vram.createWindow(false);
+        vram.createWindow(view);
         finalScr = new FinalScreen();
     }
 
@@ -353,9 +342,6 @@ public class Main {
                 case ' ':
                     if (!musicOn) {
                         music.disableMusic();
-                    }
-                    if (fullScr) {
-                        vram.createWindow(true);
                     }
                     vram.clear();
                     vram.refresh();

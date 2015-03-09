@@ -1,6 +1,6 @@
 package com.mz800.flappy;
 
-import java.awt.Color;
+import com.mz800.flappy.awt.Color;
 
 /**
  * Flappy:
