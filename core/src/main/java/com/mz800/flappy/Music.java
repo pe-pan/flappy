@@ -27,12 +27,13 @@ class Music {
 
     private Music(Context c) {
         player = MediaPlayer.create(c, R.raw.flappy_song);
+        player.setLooping(true);
     }
 
     void disableMusic() {
         soundOn = false;
     }
-    
+
     void start() {
         if (soundOn) {
             player.seekTo(0);
