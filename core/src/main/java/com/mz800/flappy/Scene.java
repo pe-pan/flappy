@@ -350,7 +350,7 @@ class Scene {
             chicken.jumping();
             // compute score
             while (mushroomsPicked > 0) {
-                Main.score++;
+                Main.score += 10;
                 mushroomsPicked--;
                 drawMushroomsHeader();
                 printScore();
@@ -363,7 +363,7 @@ class Scene {
                     time = 0;
                 }
                 printTime();
-                Main.score++;
+                Main.score += 10;
                 printScore();
                 vram.refresh();
                 Main.wait(3);

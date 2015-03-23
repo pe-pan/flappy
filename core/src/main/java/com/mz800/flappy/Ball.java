@@ -98,7 +98,7 @@ class Ball extends Moveable {
         BlueEnemy e = scene.findBlueEnemy(m & 0x0F);
         e.crashBlueEnemy();
         killStatus++;
-        Main.score += killStatus * 3;
+        Main.score += killStatus * 30;
         scene.printScore();
     }
 
@@ -106,7 +106,7 @@ class Ball extends Moveable {
         RedEnemy e = scene.findRedEnemy(m & 0x0F);
         e.crashRedEnemy(x);
         killStatus++;
-        Main.score += killStatus * 5;
+        Main.score += killStatus * 50;
         scene.printScore();
     }
 }
