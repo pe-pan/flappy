@@ -11,7 +11,7 @@ import com.mz800.flappy.awt.BufferedImage;
  */
 class ImageUtils {
 
-    private static final int ZOOM = 2;
+    private static final int ZOOM = 1;
 
     private ImageUtils() {
     }

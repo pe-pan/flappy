@@ -16,7 +16,7 @@ import com.mz800.flappy.awt.Graphics;
  */
 public class VRAM {
 
-    private static final int ZOOM = 2;
+    private static final int ZOOM = 1;
     private static final int Y_OFS = 3;
     private static final VRAM me = new VRAM();
 
