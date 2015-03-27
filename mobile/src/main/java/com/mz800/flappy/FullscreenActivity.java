@@ -93,12 +93,14 @@ public class FullscreenActivity extends Activity {
                 isMove = false;
                 spaceMightBeenHit = false;
                 break;
+            case MotionEvent.ACTION_POINTER_UP :
             case MotionEvent.ACTION_POINTER_2_UP:
                 Log.d(TAG, "Action Pointer Up");
                 keyboard.keyUp(SPACE_BAR);
                 event.getX();
                 spaceMightBeenHit = false;
                 break;
+            case MotionEvent.ACTION_POINTER_DOWN :
             case MotionEvent.ACTION_POINTER_2_DOWN:
                 Log.d(TAG, "Action Pointer Down");
                 keyboard.keyDown(SPACE_BAR);
