@@ -21,6 +21,12 @@ class Music {
     static Music getInstance() {
         return me;
     }
+
+    static Music getInstance(Context c) {
+        if (me == null) init(c);
+        return getInstance();
+    }
+
     private boolean soundOn = true;
 
     private MediaPlayer player;
