@@ -169,6 +169,6 @@ public class FullscreenActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        Music.getInstance(this).stop();
+        Music.getInstance(this).destroy();
     }
 }

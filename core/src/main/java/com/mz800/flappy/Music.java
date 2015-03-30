@@ -42,7 +42,6 @@ class Music {
 
     void start() {
         if (soundOn) {
-            player.seekTo(0);
             player.start();
         }
     }
@@ -50,6 +49,14 @@ class Music {
     void stop() {
         if (soundOn) {
             player.pause();
+            player.seekTo(0);
         }
+    }
+
+    void destroy() {
+        if (soundOn) {
+            player.release();
+        }
+        me = null;
     }
 }
