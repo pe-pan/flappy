@@ -8,8 +8,8 @@ package com.mz800.flappy.awt;
  */
 public enum Color {
     BLACK(0xff000000),
-    RED(0xffff8080),
-    BLUE(0xff8080ff),
+    RED(0xffff0000),
+    BLUE(0xff0000ff),
     YELLOW(0xffffff00),
     WHITE(0xffffffff),
     DARK_GRAY(0xff404040),
