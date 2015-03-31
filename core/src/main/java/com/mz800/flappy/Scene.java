@@ -359,7 +359,7 @@ class Scene {
             }
             while (time > 0) {
                 time -= 13;
-                if (time < 0) {
+                if (time < 13) {
                     time = 0;
                 }
                 printTime();
