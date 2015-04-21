@@ -3,6 +3,7 @@ package com.mz800.flappy;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.mz800.flappy.awt.BufferedImage;
@@ -128,7 +129,8 @@ public class VRAM {
     }
     
     void refresh() {
-        Canvas c = window.getHolder().lockCanvas();
+        SurfaceHolder holder = window.getHolder();
+        Canvas c = holder.lockCanvas();
         if (c!= null) {
             if (ratio == 0) {
                 int targetHeight = c.getHeight();
@@ -142,7 +144,7 @@ public class VRAM {
             }
             c.scale(ratio, ratio);
             c.drawBitmap(img.getBitmap(), 0, 0, paint);
-            window.getHolder().unlockCanvasAndPost(c);
+            holder.unlockCanvasAndPost(c);
         }
     }
 

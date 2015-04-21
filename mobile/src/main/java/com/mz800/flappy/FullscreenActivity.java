@@ -1,12 +1,15 @@
 package com.mz800.flappy;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.view.View;
+import static com.mz800.flappy.Device.keyboard;
 
 /**
  * Flappy:
@@ -17,32 +20,47 @@ import android.view.SurfaceView;
 public class FullscreenActivity extends Activity {
     private static final String TAG = FullscreenActivity.class.getSimpleName();
 
+    private View gameMenu;
+    private AsyncTask<Void, Void, Void> game;
+    SurfaceView contentView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        final SurfaceView contentView = (SurfaceView) findViewById(R.id.fullscreen_content);
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        contentView = (SurfaceView) findViewById(R.id.fullscreen_content);
+        gameMenu = findViewById(R.id.gameMenu);
 
-        new AsyncTask<Void, Void, Void>() {
+        game = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    keyboard = Keyboard.getInstance();
-                    Music.init(contentView.getContext());
-
-                    Main.main(contentView);
+                    Main.getInstance(contentView).game();
                 } catch (Exception e) {
-                    Log.e("Activity", "Exception thrown", e);
+                    Log.e("Activity", "Exception thrown "+e.getMessage(), e);
                 }
                 return null;
             }
         }.execute();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume");
+        super.onResume();
+        final SurfaceView contentView = (SurfaceView) findViewById(R.id.fullscreen_content);
+        Device.init(contentView);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {                         // when getting back from pause
+            Device.vram.refresh();
+        }
     }
 
     private static final int MOVE_LIMIT = 5;
@@ -62,8 +80,6 @@ public class FullscreenActivity extends Activity {
     private int key;
     private boolean spaceMightBeenHit = false;
 
-    private Keyboard keyboard;
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
@@ -80,14 +96,12 @@ public class FullscreenActivity extends Activity {
                         Log.d(TAG, "Space Bar down and up");
                         keyboard.keyDown(SPACE_BAR);
                         keyboard.keyUp(SPACE_BAR);
-                        keyboard.keyPressed(SPACE_BAR);
                     }
                 }
 
                 if (key != 0) {
                     Log.d(TAG, "Key up " + key);
                     keyboard.keyUp(key);
-                    keyboard.keyPressed(key);
                 }
                 key = 0;
                 isMove = false;
@@ -163,12 +177,60 @@ public class FullscreenActivity extends Activity {
                 Log.d(TAG, "Unknown action " + event.getAction());
                 spaceMightBeenHit = false;
         }
-        return true;
+        return super.onTouchEvent(event);
     }
 
     @Override
     protected void onPause() {
+        Log.d(TAG, "onPause");
         super.onPause();
-        Music.getInstance(this).destroy();
+        if (gameMenu.getVisibility() != View.VISIBLE) {
+            pause();
+        }
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    }
+
+    public void restartScene(View view) {
+        gameMenu.setVisibility(View.GONE);
+        Main.setState(Main.LOOSE_LIFE);
+        Device.music.stop();
+    }
+
+    public void resumeScene(View view) {
+        gameMenu.setVisibility(View.GONE);
+        Main.setState(Main.NORMAL_WAIT);
+        Device.music.start();
+    }
+
+    public void selectScreen(View view) {
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (gameMenu.getVisibility() == View.VISIBLE) {
+            closeMenu();
+        } else {
+            pause();
+        }
+    }
+
+    private void closeMenu() {
+        gameMenu.setVisibility(View.GONE);
+        Main.setState(Main.NORMAL_WAIT);
+        Device.music.start();
+    }
+
+    private void pause() {
+        gameMenu.setVisibility(View.VISIBLE);
+        Main.setState(Main.KEEP_WAITING);
+        Device.music.pause();
+    }
+
+    public void playIntro(View view) {
+        Main.setState(Main.EXIT_GAME);
+        Device.music.stop();
+        startActivity(new Intent(this, IntroActivity.class));
+        game.cancel(true);
+        finish();
     }
 }

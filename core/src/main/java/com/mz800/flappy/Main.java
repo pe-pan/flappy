@@ -1,10 +1,12 @@
 package com.mz800.flappy;
 
+import android.util.Log;
 import android.view.SurfaceView;
 
 import com.mz800.core.R;
 import com.mz800.flappy.awt.Color;
 import static com.mz800.flappy.Constants.*;
+import static com.mz800.flappy.Device.*;
 import java.io.InputStream;
 
 /**
@@ -13,6 +15,7 @@ import java.io.InputStream;
  *   Java version by Petr Slechta, 2014.
  */
 public class Main {
+    private static final String TAG = Main.class.getSimpleName();
 
     static byte[] memory = new byte[65536];
     static int score;
@@ -20,16 +23,11 @@ public class Main {
     static boolean verbose = false;
     static boolean cheating = false;
     private String password = "     ";
-    private final Keyboard keyboard;
-    private final VRAM vram;
-    private final Music music;
     private final FinalScreen finalScr;
 
-    public static void main(SurfaceView view) throws Exception {
-        Main me = new Main(view);
-        me.firstScreen();
-        me.game();
-        System.exit(0);
+    public static Main getInstance(SurfaceView view) throws Exception {
+        Log.d(TAG, "Init");
+        return new Main(view);
     }
 
     private Main(SurfaceView view) throws Exception {
@@ -47,26 +45,20 @@ public class Main {
         }
         is.close();
 
-        keyboard = Keyboard.getInstance();
-        vram = VRAM.getInstance();
-        music = Music.getInstance();
         vram.createWindow(view);
         finalScr = new FinalScreen();
     }
 
-    private void game() throws Exception {
+    void game() throws Exception {
         keyboard.clearKeyPressed();
         keyboard.clear();
+        Main.resetState(NORMAL_WAIT);
         int scNo = 1;
         int scNoRestart = 1;
-        int sel = INTRO;
+        int sel = GAME;
         while (true) {
             while (sel < 0) {
                 switch (sel) {
-                    case INTRO:
-                        Intro intro = new Intro();
-                        sel = intro.intro();
-                        break;
                     case GAME:
                         sel = 0;
                         score = 0;
@@ -85,10 +77,24 @@ public class Main {
             Scene s = new Scene(scNo);
             s.showSceneNumberScreen();
             s.showScene(false);
-            s.chickenOutOfHome(lives);
+            int res = s.chickenOutOfHome(lives);
+            if (res == EXIT_GAME) {
+                return;
+            }
+            if (res == LOOSE_LIFE) {
+                Main.setState(NORMAL_WAIT);
+                lives--;
+                if (lives == 0) {
+                    sel = s.gameOver();
+                }
+                continue;
+            }
             music.start();
-            int res = s.gameLoop();
-            if (res == 0) {
+            res = s.gameLoop();
+            if (res == EXIT_GAME) {
+                return;
+            } else if (res == LOOSE_LIFE || res == NORMAL_WAIT) {
+                Main.setState(NORMAL_WAIT);
                 lives--;
                 if (lives == 0) {
                     sel = s.gameOver();
@@ -288,83 +294,41 @@ public class Main {
         }
     }
 
-    private void firstScreen() {
-        vram.clear();
-        tit(1, "xxx x   xxx xxx xxx x x");
-        tit(2, "x   x   x x x x x x x x");
-        tit(3, "xx  x   x x xxx xxx xxx");
-        tit(4, "x   x   xxx x   x    x");
-        tit(5, "x   xxx x x x   x    x");
-        vram.printText(7, 7, "Original game created for", Color.RED);
-        vram.printText(9, 8, "SHARP MZ-800", Color.WHITE);
-        vram.printText(22, 8, "computer", Color.RED);
-        vram.printText(3, 10, "Java version by Petr Slechta, 2014", Color.RED);
-        vram.printText(12, 14, "M", Color.yellow);
-        vram.printText(14, 14, "-", Color.BLUE);
-        vram.printText(16, 14, "music:", Color.RED);
-        vram.printText(23, 14, "on", Color.yellow);
-        vram.printText(12, 15, "S", Color.yellow);
-        vram.printText(14, 15, "-", Color.BLUE);
-        vram.printText(16, 15, "screen:", Color.RED);
-        vram.printText(24, 15, "full", Color.yellow);
-        vram.printText(8, 16, "space", Color.yellow);
-        vram.printText(14, 16, "-", Color.BLUE);
-        vram.printText(16, 16, "start game", Color.RED);
-        vram.printText(7, 20, "http://www.8bit-times.eu", Color.WHITE);
-        vram.printText(2, 22, "Let's celebrate 30 years of the best", Color.RED);
-        vram.printText(3, 23, "logical game for 8-bit computers!", Color.RED);
-        vram.printText(35, 0, "ver.B", Color.DARK_GRAY);
-        vram.refresh();
+    public static final int NORMAL_WAIT = 0;
+    public static final int EXIT_GAME = -1;
+    public static final int LOOSE_LIFE = -2;
+    public static final int KEEP_WAITING = -3;
 
-        boolean musicOn = true;
-        boolean fullScr = true;
+    private static int gameState = NORMAL_WAIT;
 
-        keyboard.clearKeyPressed();
-        while (true) {
-            switch (keyboard.getKeyPressed()) {
-                case 'M':
-                case 'm':
-                    musicOn = !musicOn;
-                    vram.printText(23, 14, musicOn ? "on " : "off", Color.yellow);
-                    vram.refresh();
-                    break;
-                case 'S':
-                case 's':
-                    fullScr = !fullScr;
-                    vram.printText(24, 15, fullScr ? "full  " : "window", Color.yellow);
-                    vram.refresh();
-                    break;
-                case '9':
-                    cheating = true;
-                    vram.printText(30, 0, "CHEAT MODE", Color.yellow);
-                    vram.refresh();
-                    break;
-                case ' ':
-                    if (!musicOn) {
-                        music.disableMusic();
-                    }
-                    vram.clear();
-                    vram.refresh();
-                    wait(50);
-                    return;
-            }
-            wait(10);
-        }
-    }
-
-    private void tit(int y, String s) {
-        for (int i = 0, maxi = s.length(); i < maxi; i++) {
-            if (s.charAt(i) == 'x') {
-                vram.imageNoOfs(8 + i, y, Images.blueWall);
-            }
-        }
-    }
-
-    static void wait(int t) {
+    static synchronized int wait(int t) {
         try {
-            Thread.sleep(t * 8);
-        } catch (Exception e) {
+            if (gameState == NORMAL_WAIT) {
+                Main.class.wait(t * 6);
+            }
+            while (gameState == KEEP_WAITING) {
+                Main.class.wait();
+            }
+            return gameState;
+        } catch (InterruptedException e) {
             e.printStackTrace();
+            return EXIT_GAME;
         }
     }
+
+    static synchronized boolean isWaiting() {
+        return gameState == NORMAL_WAIT || gameState == KEEP_WAITING;
+    }
+
+
+    static synchronized void setState(int state) {
+        gameState = state;
+        Main.class.notify();
+    }
+
+    static synchronized void resetState(int state) {
+        if (gameState == KEEP_WAITING) return;
+        setState(state);
+    }
+
 }

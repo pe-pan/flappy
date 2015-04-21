@@ -2,6 +2,7 @@ package com.mz800.flappy;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.util.Log;
 
 import com.mz800.core.R;
 
@@ -11,10 +12,12 @@ import com.mz800.core.R;
  *   Java version by Petr Slechta, 2014.
  */
 class Music {
+    private static final String TAG = Music.class.getSimpleName();
 
     private static Music me;
 
     static void init(Context c) {
+        Log.d(TAG, "Init");
         me = new Music(c);
     }
 
@@ -41,19 +44,33 @@ class Music {
     }
 
     void start() {
+        Log.d(TAG, "Start");
+        if (me == null) return;
         if (soundOn) {
             player.start();
         }
     }
 
     void stop() {
+        Log.d(TAG, "Stop");
+        if (me == null) return;
         if (soundOn) {
             player.pause();
             player.seekTo(0);
         }
     }
 
+    void pause() {
+        Log.d(TAG, "Pause");
+        if (me == null) return;
+        if (soundOn) {
+            player.pause();
+        }
+    }
+
     void destroy() {
+        Log.d(TAG, "Destroy");
+        if (me == null) return;
         if (soundOn) {
             player.release();
         }

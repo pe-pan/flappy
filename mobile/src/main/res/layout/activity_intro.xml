@@ -3,12 +3,13 @@
     android:layout_height="match_parent">
 
     <SurfaceView
-        android:id="@+id/fullscreen_content"
+        android:id="@+id/intro_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+
     <LinearLayout
-        android:id="@+id/gameMenu"
+        android:id="@+id/mainMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -20,7 +21,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/game_menu" />
+            android:text="@string/main_menu" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -35,15 +36,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:onClick="resumeScene"
-                android:text="@string/resume_scene" />
+                android:onClick="playGame"
+                android:text="@string/play_flappy" />
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:onClick="restartScene"
-                android:text="@string/restart_scene" />
+                android:onClick="playIntro"
+                android:text="@string/resume_intro" />
 
             <Button
                 android:layout_width="match_parent"
@@ -56,8 +57,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:onClick="playIntro"
-                android:text="@string/play_intro" />
+                android:onClick="exitGame"
+                android:text="@string/exit_flappy" />
 
         </LinearLayout>
     </LinearLayout>

@@ -1,7 +1,7 @@
 package com.mz800.flappy;
 
 import com.mz800.flappy.awt.BufferedImage;
-
+import static com.mz800.flappy.Device.*;
 /**
  * Flappy:
  *   Original game created by dB-SOFT in 1984 for SHARP MZ-800 computer.
@@ -9,7 +9,6 @@ import com.mz800.flappy.awt.BufferedImage;
  */
 class Moveable {
 
-    protected final VRAM vram = VRAM.getInstance();
     protected int x, y;
     protected byte objType;
     protected byte number;

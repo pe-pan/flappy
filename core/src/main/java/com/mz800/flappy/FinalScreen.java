@@ -1,6 +1,7 @@
 package com.mz800.flappy;
 
 import com.mz800.flappy.awt.Color;
+import static com.mz800.flappy.Device.*;
 
 /**
  * Flappy:
@@ -8,9 +9,6 @@ import com.mz800.flappy.awt.Color;
  *   Java version by Petr Slechta, 2014.
  */
 class FinalScreen {
-
-    private final VRAM vram = VRAM.getInstance();
-    private final Music music = Music.getInstance();
 
     private static byte[] arr7D19 = new byte[]{ // steps 1
         3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,

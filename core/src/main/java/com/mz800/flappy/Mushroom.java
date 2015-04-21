@@ -1,6 +1,7 @@
 package com.mz800.flappy;
 
 import static com.mz800.flappy.Constants.*;
+import static com.mz800.flappy.Device.*;
 
 /**
  * Flappy:

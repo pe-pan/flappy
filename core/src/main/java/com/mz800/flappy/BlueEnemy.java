@@ -2,6 +2,7 @@ package com.mz800.flappy;
 
 import com.mz800.flappy.awt.BufferedImage;
 import static com.mz800.flappy.Constants.*;
+import static com.mz800.flappy.Device.*;
 
 /**
  * Flappy:

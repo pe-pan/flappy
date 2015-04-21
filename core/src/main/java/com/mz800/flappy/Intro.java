@@ -2,6 +2,7 @@ package com.mz800.flappy;
 
 import com.mz800.flappy.awt.Color;
 import static com.mz800.flappy.Constants.*;
+import static com.mz800.flappy.Device.*;
 import com.mz800.flappy.awt.BufferedImage;
 
 /**
@@ -88,9 +89,6 @@ public class Intro {
         0, 0, 0, 15, 16, 17, 18, 19, 20, 21, 22
     };
     private final byte[] memory;
-    private final VRAM vram = VRAM.getInstance();
-    private final Keyboard keyboard = Keyboard.getInstance();
-    private final Music music = Music.getInstance();
     private ElementStatus chicken;
     private ElementStatus blueEnemy;
     private ElementStatus redEnemy;
@@ -107,31 +105,21 @@ public class Intro {
         this.memory = Main.memory;
     }
 
-    int intro() {
-        keyboard.clear();
+    void intro() {
         vram.clear();
         music.start();
+        Main.resetState(Main.NORMAL_WAIT);
         int r;
-        while (true) {
+        while (Main.isWaiting()) {
             r = part1();
-            if (r != 0) {
-                return r;
+            if (r != Main.NORMAL_WAIT) {
+                return;
             }
             r = part2();
-            if (r != 0) {
-                return r;
+            if (r != Main.NORMAL_WAIT) {
+                return;
             }
         }
-    }
-
-    private int testKey() {
-        if (keyboard.spaceKey()) {
-            return GAME;
-        }
-        if (keyboard.enterKey()) {
-            return SETUP;
-        }
-        return 0;
     }
 
     private int part1() {
@@ -235,13 +223,8 @@ public class Intro {
             moveChicken();
             //drawExtra();
             vram.refresh();
-            r = testKey();
-            if (r != 0) {
-                return r;
-            }
-            Main.wait(20);
-            r = testKey();
-            if (r != 0) {
+            r = Main.wait(20);
+            if (r != Main.NORMAL_WAIT) {
                 return r;
             }
 
@@ -253,13 +236,8 @@ public class Intro {
             moveChicken();
             drawExtra();
             vram.refresh();
-            r = testKey();
-            if (r != 0) {
-                return r;
-            }
-            Main.wait(20);
-            r = testKey();
-            if (r != 0) {
+            r = Main.wait(20);
+            if (r != Main.NORMAL_WAIT) {
                 return r;
             }
 
@@ -465,13 +443,8 @@ public class Intro {
         for (int i = 1; i <= 9; i++) {
             drawLogoPart(addr, i);
             vram.refresh();
-            r = testKey();
-            if (r != 0) {
-                return r;
-            }
-            Main.wait(20);
-            r = testKey();
-            if (r != 0) {
+            r = Main.wait(20);
+            if (r != Main.NORMAL_WAIT) {
                 return r;
             }
         }

@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import static com.mz800.flappy.Constants.*;
+import static com.mz800.flappy.Device.*;
 
 /**
  * Flappy:
@@ -22,13 +23,11 @@ class Scene {
         "Sappr", "OhaYo", "Gohan", "Ramen", "Nemui", "Natsu", "Yuki!", "HeIwa", "Pice!", "MZ801",
         "Engla", "Rome!", "PaRie", "Letgo", "FrEnc", "AFewe", "GerMa", "Tokyo", "Prend", "OKU-H"
     };
-    private static final long[] DELAYS = {
+    private static final int[] DELAYS = {
         // 19 1D 21 26 2C 33 3B 44 4E 59
-        65, 76, 87, 99, 126, 168, 196, 225, 258, 295
+//        65, 76, 87, 99, 126, 168, 196, 225, 258, 295
+        8, 10, 11, 12, 16, 21, 25, 28, 32, 37
     };
-    private final Keyboard keyboard = Keyboard.getInstance();
-    private final VRAM vram = VRAM.getInstance();
-    private final Music music = Music.getInstance();
     private final int num;
     private final byte[] memory;
     private final byte[][] model = new byte[22][40];
@@ -206,7 +205,6 @@ class Scene {
     }
 
     static void drawSimpleBorder() {
-        VRAM vram = VRAM.getInstance();
         for (int i = 0; i < 40; i++) {
             vram.imageNoOfs(i, 0, Images.redWall);
         }
@@ -378,7 +376,7 @@ class Scene {
     }
 
     int gameLoop() throws Exception {
-        long wait = DELAYS[gameSpeed];
+        int wait = DELAYS[gameSpeed];
         keyboard.clear();
         while (true) {
             keyboard.userAction();
@@ -397,7 +395,10 @@ class Scene {
             decreaseTime();
             vram.refresh();
             waitAndTestGameEnd();
-            Thread.sleep(wait);
+            int r = Main.wait(wait);
+            if (r != Main.NORMAL_WAIT) {
+                return r;
+            }
             extraCyclesIfChickenEaten();
             moveChicken2();
             gameStep = 0;
@@ -410,7 +411,10 @@ class Scene {
             moveRedEnemies1();
             vram.refresh();
             waitAndTestGameEnd();
-            Thread.sleep(wait);
+            r = Main.wait(wait);
+            if (r != Main.NORMAL_WAIT) {
+                return r;
+            }
             // extra game cycles
             if (extraCycles != 0) {
                 extraCycles--;
@@ -570,16 +574,22 @@ class Scene {
         Main.wait(0xF0);
     }
 
-    void chickenOutOfHome(int lives) {
+    int chickenOutOfHome(int lives) {
         int y = 0;
         for (int i = 0; i < 4; i++) {
             y++;
             vram.imageNoOfs(1, y, Images.chickenJump1);
             vram.refresh();
-            Main.wait(0x0C);
+            int r = Main.wait(0x0C);
+            if (r != Main.NORMAL_WAIT) {
+                return r;
+            }
             vram.imageNoOfs(1, y, Images.chickenJump2);
             vram.refresh();
-            Main.wait(0x0C);
+            r = Main.wait(0x0C);
+            if (r != Main.NORMAL_WAIT) {
+                return r;
+            }
             vram.emptyRectNoOfs(1, y, 2, 16);
         }
         vram.image(1, 1, Images.chickenDown);
@@ -590,7 +600,10 @@ class Scene {
         vram.image(1, 0, Images.redWall);
         vram.image(2, 0, Images.redWall);
         vram.refresh();
-        Main.wait(0x28);
+        int r = Main.wait(0x28);
+        if (r != Main.NORMAL_WAIT) {
+            return r;
+        }
         if (lives > 1) {
             xStep1(lives, 3);
             xStep2(lives, 2);
@@ -601,10 +614,14 @@ class Scene {
             for (int i = 0; i < lives - 1; i++) {
                 vram.imageNoOfs(x, 1, Images.chickenDown);
                 vram.refresh();
-                Main.wait(0x28);
+                r = Main.wait(0x28);
+                if (r != Main.NORMAL_WAIT) {
+                    return r;
+                }
                 x += 2;
             }
         }
+        return Main.NORMAL_WAIT;
     }
 
     private void xStep1(int lives, int x) {
