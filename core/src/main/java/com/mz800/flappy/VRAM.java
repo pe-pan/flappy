@@ -135,6 +135,12 @@ public class VRAM {
             if (ratio == 0) {
                 int targetHeight = c.getHeight();
                 int targetWidth = c.getWidth();
+                if (targetHeight > targetWidth) {
+                    targetHeight = targetHeight + targetWidth;   // h + w
+                    targetWidth = targetHeight - targetWidth;    // h + w - w -> h
+                    targetHeight = targetHeight - targetWidth;   // h + w - h -> w
+                    Log.d("VRAM", "Ratio swapped "+targetWidth+", "+targetHeight);
+                }
                 int sourceHeight = img.getHeight();
                 int sourceWidth = img.getWidth();
                 float ratioH = (float) targetHeight / (float) sourceHeight;
