@@ -364,7 +364,7 @@ class Scene {
                 Main.score += 10;
                 printScore();
                 vram.refresh();
-                Main.wait(3);
+                Main.wait(1);
             }
             Main.wait(0x1E);
             music.stop();
