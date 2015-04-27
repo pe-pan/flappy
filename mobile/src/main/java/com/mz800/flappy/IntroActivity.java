@@ -28,15 +28,14 @@ public class IntroActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
         contentView = (SurfaceView) findViewById(R.id.intro_content);
-        final View menu = findViewById(R.id.mainMenu);
+        mainMenu = findViewById(R.id.mainMenu);
         contentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                menu.setVisibility(menu.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                mainMenu.setVisibility(mainMenu.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             }
         });
 
-        mainMenu = findViewById(R.id.mainMenu);
         intro = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -85,7 +84,6 @@ public class IntroActivity extends Activity {
         startActivity(new Intent(this, FullscreenActivity.class));
         Main.setState(Main.EXIT_GAME);
         mainMenu.setVisibility(View.GONE);
-        Main.setState(Main.EXIT_GAME);
         intro.cancel(true);
         finish();
     }
