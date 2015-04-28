@@ -21,5 +21,10 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="sensorLandscape">
         </activity>
+        <activity
+            android:name=".SelectSceneActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="sensorLandscape">
+        </activity>
     </application>
 </manifest>

@@ -44,10 +44,17 @@ class Scene {
     private int extraCycles = 0;
     private int timeBlink = 0;
 
+    private final VRAM vram;
+
     Scene(int number) {
+        this(number, Device.vram);
+    }
+
+    Scene (int number, VRAM vram) {
         this.num = number;
         this.memory = Main.memory;
         this.chicken = new Chicken(this);
+        this.vram = vram;
     }
 
     byte[][] getModel() {
@@ -58,7 +65,11 @@ class Scene {
         return chicken;
     }
 
-    void showScene(boolean preview) {
+    VRAM getVRAM() {
+        return vram;
+    }
+
+    void predrawScene(boolean preview) {
         int max = memory[0xB000] & 0xFF;
         if (num > max) {
             return;
@@ -97,7 +108,10 @@ class Scene {
             }
             vram.printText(13, 1, " [SCENE " + n + "] ", Color.yellow);
         }
+    }
 
+    void showScene(boolean preview) {
+        predrawScene(preview);
         vram.refresh();
     }
 
@@ -206,14 +220,14 @@ class Scene {
 
     static void drawSimpleBorder() {
         for (int i = 0; i < 40; i++) {
-            vram.imageNoOfs(i, 0, Images.redWall);
+            Device.vram.imageNoOfs(i, 0, Images.redWall);
         }
         for (int i = 1; i < 24; i++) {
-            vram.imageNoOfs(0, i, Images.redWall);
-            vram.imageNoOfs(39, i, Images.redWall);
+            Device.vram.imageNoOfs(0, i, Images.redWall);
+            Device.vram.imageNoOfs(39, i, Images.redWall);
         }
         for (int i = 0; i < 40; i++) {
-            vram.imageNoOfs(i, 24, Images.redWall);
+            Device.vram.imageNoOfs(i, 24, Images.redWall);
         }
     }
 

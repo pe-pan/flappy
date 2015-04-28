@@ -7,6 +7,10 @@ package com.mz800.flappy;
  */
 class Constants {
 
+    static final int SCREEN_WIDTH = 320;
+    static final int SCREEN_HEIGHT = 200;
+    static final int NUM_SCENES = 200;
+
     static final int UP = 1;
     static final int DOWN = 2;
     static final int LEFT = 3;

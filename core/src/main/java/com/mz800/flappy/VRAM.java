@@ -27,7 +27,7 @@ public class VRAM {
     private BufferedImage img;
     private SurfaceView window;
 
-    private VRAM() {
+    public VRAM() {
         this.img = new BufferedImage(320 * ZOOM, 200 * ZOOM, BufferedImage.TYPE_INT_RGB);
     }
 
@@ -127,7 +127,7 @@ public class VRAM {
             g.drawRect(x2 + i, y2 + i, w2 - 2 * i, h2 - 2 * i);
         }
     }
-    
+
     void refresh() {
         SurfaceHolder holder = window.getHolder();
         Canvas c = holder.lockCanvas();

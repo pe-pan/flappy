@@ -49,12 +49,11 @@ public class Main {
         finalScr = new FinalScreen();
     }
 
-    void game() throws Exception {
+    void game(int scNo) throws Exception {
         keyboard.clearKeyPressed();
         keyboard.clear();
         Main.resetState(NORMAL_WAIT);
-        int scNo = 1;
-        int scNoRestart = 1;
+        int scNoRestart = scNo;
         int sel = GAME;
         while (true) {
             while (sel < 0) {

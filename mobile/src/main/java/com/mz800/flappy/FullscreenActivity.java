@@ -24,6 +24,8 @@ public class FullscreenActivity extends Activity {
     private AsyncTask<Void, Void, Void> game;
     SurfaceView contentView;
 
+    public static final String SCENE_NUMBER = "SCENE_NUMBER";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
@@ -37,7 +39,8 @@ public class FullscreenActivity extends Activity {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    Main.getInstance(contentView).game();
+                    int scNo = getIntent().getIntExtra(SCENE_NUMBER, 1);
+                    Main.getInstance(contentView).game(scNo);
                 } catch (Exception e) {
                     Log.e("Activity", "Exception thrown "+e.getMessage(), e);
                 }
@@ -203,6 +206,11 @@ public class FullscreenActivity extends Activity {
     }
 
     public void selectScreen(View view) {
+        Main.setState(Main.EXIT_GAME);
+        Device.music.stop();
+        startActivity(new Intent(this, SelectSceneActivity.class));
+        game.cancel(true);
+        finish();
     }
 
     @Override

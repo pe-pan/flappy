@@ -81,7 +81,7 @@ public class IntroActivity extends Activity {
     }
 
     public void playGame(View view) {
-        startActivity(new Intent(this, FullscreenActivity.class));
+        startActivity(new Intent(this, FullscreenActivity.class).putExtra(FullscreenActivity.SCENE_NUMBER, 1));
         Main.setState(Main.EXIT_GAME);
         mainMenu.setVisibility(View.GONE);
         intro.cancel(true);
@@ -89,6 +89,12 @@ public class IntroActivity extends Activity {
     }
 
     public void selectScreen(View view) {
+        Main.setState(Main.EXIT_GAME);
+        mainMenu.setVisibility(View.GONE);
+        Device.music.stop();
+        startActivity(new Intent(this, SelectSceneActivity.class));
+        intro.cancel(true);
+        finish();
     }
 
     @Override
