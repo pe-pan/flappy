@@ -63,7 +63,9 @@ public class SelectSceneActivity extends FlappyActivity {
                             adjustMinMaxShiftPosition();
                             slowingVelocityX = slowingVelocityX * FLING_INHIBITION;
                         }
-                        flingScrolling = null;
+                        synchronized(SelectSceneActivity.this) {
+                            flingScrolling = null;
+                        }
                         return null;
                     }
                 }.execute();
@@ -135,9 +137,11 @@ public class SelectSceneActivity extends FlappyActivity {
             }
 
             private void cancelFlingScrolling() {
-                if (flingScrolling != null) {
-                    Log.d(TAG, "Cancelling fling");
-                    flingScrolling.cancel(true);
+                synchronized (SelectSceneActivity.this) {
+                    if (flingScrolling != null) {
+                        Log.d(TAG, "Cancelling fling");
+                        flingScrolling.cancel(true);
+                    }
                 }
                 adjustShiftEvent = false;
             }
