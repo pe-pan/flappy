@@ -9,4 +9,5 @@
     <string name="play_flappy">Play Flappy</string>
     <string name="resume_intro">Resume Intro</string>
     <string name="exit_flappy">Exit Flappy</string>
+    <string name="notThisSceneYet">Not this scene yet!</string>
 </resources>

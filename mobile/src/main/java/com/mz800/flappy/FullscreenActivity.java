@@ -17,7 +17,7 @@ import static com.mz800.flappy.Device.keyboard;
  * Java version by Petr Slechta, 2014.
  * Android version by Petr Panuska, 2015.
  */
-public class FullscreenActivity extends Activity {
+public class FullscreenActivity extends FlappyActivity {
     private static final String TAG = FullscreenActivity.class.getSimpleName();
 
     private View gameMenu;
@@ -40,7 +40,14 @@ public class FullscreenActivity extends Activity {
             protected Void doInBackground(Void... params) {
                 try {
                     int scNo = getIntent().getIntExtra(SCENE_NUMBER, 1);
-                    Main.getInstance(contentView).game(scNo);
+                    Main main = Main.getInstance(contentView);
+                    main.listener = new Main.Listener() {
+                        @Override
+                        public void gameFinished(int scNo) {
+                            storeOpenScene(scNo);
+                        }
+                    };
+                    main.game(scNo);
                 } catch (Exception e) {
                     Log.e("Activity", "Exception thrown "+e.getMessage(), e);
                 }

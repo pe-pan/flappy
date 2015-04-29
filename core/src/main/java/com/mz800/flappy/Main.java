@@ -24,6 +24,11 @@ public class Main {
     static boolean cheating = false;
     private String password = "     ";
     private final FinalScreen finalScr;
+    Listener listener;
+
+    interface Listener {
+        void gameFinished(int scNo);
+    }
 
     public static Main getInstance(SurfaceView view) throws Exception {
         Log.d(TAG, "Init");
@@ -103,6 +108,7 @@ public class Main {
                     scNoRestart = scNo + 1;
                     password = s.printPassword(scNo / 5);
                 }
+                listener.gameFinished(scNo);
                 scNo++;
                 if (scNo > 200) {
                     finalScr.finalCertificate();

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 /**
  * Flappy:
@@ -27,6 +28,7 @@ public class SelectSceneActivity extends FlappyActivity {
     private int sceneHeight;
     private int sceneSpace;
     private FingerUpGestureDetector detector;
+    private int openScenes;
 
     private static final float START_FLING_INHIBITION = 0.05f;
     private static final float FLING_INHIBITION = 0.95f;
@@ -43,7 +45,8 @@ public class SelectSceneActivity extends FlappyActivity {
         sceneWidth = (Device.displayWidth - (NUM_VISIBLE_SCENES - 1) * sceneSpace) / NUM_VISIBLE_SCENES;
         sceneHeight = Constants.SCREEN_HEIGHT * sceneWidth / Constants.SCREEN_WIDTH;
         minShift = (sceneWidth - Device.displayWidth) / 2;
-        maxShift = Constants.NUM_SCENES * (sceneWidth + sceneSpace) - (Device.displayWidth + sceneWidth) / 2 - sceneSpace;
+        openScenes = retrieveOpenScenes();
+        maxShift = (openScenes + 1) * (sceneWidth + sceneSpace) - (Device.displayWidth + sceneWidth) / 2 - sceneSpace;
         currentShift = retrieveCurrentShift();
 
         detector = new FingerUpGestureDetector(this, new FingerUpGestureDetector.SimpleOnGestureListener() {
@@ -80,7 +83,11 @@ public class SelectSceneActivity extends FlappyActivity {
                 if (y > (Device.displayHeight - sceneHeight) / 2 && y < (Device.displayHeight + sceneHeight) / 2 && currentShift + x > 0) {
                     int scNo = (currentShift + x) / (sceneWidth + sceneSpace);
                     Log.d(TAG, "Scene no " + (scNo + 1));
-                    if (scNo >= 0 && scNo < 200) {
+                    if (scNo > openScenes) {
+                        Toast.makeText(SelectSceneActivity.this, getString(R.string.notThisSceneYet), Toast.LENGTH_LONG).show();
+                        return true;
+                    }
+                    if (scNo >= 0 && scNo <= openScenes) {
                         startActivity(new Intent(SelectSceneActivity.this, FullscreenActivity.class).putExtra(FullscreenActivity.SCENE_NUMBER, scNo + 1));
                         storeSceneNumber(scNo);
                         finish();
@@ -213,21 +220,21 @@ public class SelectSceneActivity extends FlappyActivity {
     Bitmap predrawnScenes[];
 
     private Bitmap getSceneBitmap(int num) {
-        if (num < 0 || num >= Constants.NUM_SCENES) {
+        if (num < 0 || num >= openScenes+NUM_VISIBLE_SCENES+2) {
             return null;
         }
         if (num < firstPredrawnScene) {
             Log.d(TAG, "Decreasing ");
             System.arraycopy(predrawnScenes, 0, predrawnScenes, 1, NUM_PREDRAWN_SCENES - 1);
 
-            predrawnScenes[0] = drawSceneBitmap(num + 1);
+            predrawnScenes[0] = drawSceneBitmap(num);
             firstPredrawnScene--;
         } else {
             if (num >= firstPredrawnScene + NUM_PREDRAWN_SCENES) {
                 Log.d(TAG, "Increasing ");
                 System.arraycopy(predrawnScenes, 1, predrawnScenes, 0, NUM_PREDRAWN_SCENES - 1);
 
-                predrawnScenes[NUM_PREDRAWN_SCENES - 1] = drawSceneBitmap(num + 1);
+                predrawnScenes[NUM_PREDRAWN_SCENES - 1] = drawSceneBitmap(num);
                 firstPredrawnScene++;
             }
         }
@@ -238,14 +245,18 @@ public class SelectSceneActivity extends FlappyActivity {
         firstPredrawnScene = currentShift / (sceneWidth + sceneSpace);
         predrawnScenes = new Bitmap[NUM_PREDRAWN_SCENES];
         for (int i = 0; i < predrawnScenes.length; i++) {
-            predrawnScenes[i] = drawSceneBitmap(firstPredrawnScene + i + 1);
+            predrawnScenes[i] = drawSceneBitmap(firstPredrawnScene + i);
         }
     }
 
     private Bitmap drawSceneBitmap(int num) {
         Log.d(TAG, "Drawing scaled scene " + num);
-        Scene scene = new Scene(num, new VRAM());
-        scene.predrawScene(true);
+        Scene scene = new Scene(num+1, new VRAM());
+        if (num <= openScenes) {
+            scene.predrawScene(true);
+        } else {
+            scene.predrawSceneNumberScreen();
+        }
         return Bitmap.createScaledBitmap(scene.getVRAM().getImage().getBitmap(), sceneWidth, sceneHeight, true);
     }
 

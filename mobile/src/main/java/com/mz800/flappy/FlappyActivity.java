@@ -26,4 +26,16 @@ public class FlappyActivity extends Activity {
         ed.putInt(SCENE_NUMBER, scNo);
         ed.apply();
     }
+
+    int retrieveOpenScenes() {
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+        return p.getInt(OPEN_SCENES, 0);
+    }
+
+    void storeOpenScene(int num) {
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+        SharedPreferences.Editor ed = p.edit();
+        ed.putInt(OPEN_SCENES, num);
+        ed.apply();
+    }
 }

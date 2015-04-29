@@ -575,6 +575,12 @@ class Scene {
 
     void showSceneNumberScreen() {
         music.stop();
+        predrawSceneNumberScreen();
+        vram.refresh();
+        Main.wait(0xF0);
+    }
+
+    void predrawSceneNumberScreen() {
         vram.clear();
         drawHeader();
         for (int i = 0; i <= 21; i++) {
@@ -584,8 +590,6 @@ class Scene {
         }
         vram.imageNoOfs(16, 10, Images.sceneYellow);
         printNumber(22, 10, num, 3, Color.YELLOW);
-        vram.refresh();
-        Main.wait(0xF0);
     }
 
     int chickenOutOfHome(int lives) {
@@ -747,4 +751,13 @@ class Scene {
         }
         return -1;
     }
+
+//    private static long debugTime = System.nanoTime();
+//     static void printTime(String what) {
+//        long now = System.nanoTime();
+//        long diff = now - debugTime;
+////        Log.d("Debug", what + " - It took " + diff);
+//        Log.d("Debug", String.format("%s - It took %,d", what, diff));
+//        debugTime = now;
+//    }
 }
