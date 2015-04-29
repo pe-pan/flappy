@@ -1,7 +1,7 @@
 package com.mz800.flappy;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PorterDuff;
@@ -17,7 +17,7 @@ import android.view.SurfaceView;
  * Java version by Petr Slechta, 2014.
  * Android version by Petr Panuska, 2015.
  */
-public class SelectSceneActivity extends Activity {
+public class SelectSceneActivity extends FlappyActivity {
     private static final String TAG = SelectSceneActivity.class.getSimpleName();
     private SurfaceView view;
     private int currentShift;
@@ -44,7 +44,7 @@ public class SelectSceneActivity extends Activity {
         sceneHeight = Constants.SCREEN_HEIGHT * sceneWidth / Constants.SCREEN_WIDTH;
         minShift = (sceneWidth - Device.displayWidth) / 2;
         maxShift = Constants.NUM_SCENES * (sceneWidth + sceneSpace) - (Device.displayWidth + sceneWidth) / 2 - sceneSpace;
-        currentShift = minShift;
+        currentShift = retrieveCurrentShift();
 
         detector = new FingerUpGestureDetector(this, new FingerUpGestureDetector.SimpleOnGestureListener() {
             private AsyncTask<Void, Void, Void> flingScrolling;
@@ -80,6 +80,7 @@ public class SelectSceneActivity extends Activity {
                     Log.d(TAG, "Scene no " + (scNo + 1));
                     if (scNo >= 0 && scNo < 200) {
                         startActivity(new Intent(SelectSceneActivity.this, FullscreenActivity.class).putExtra(FullscreenActivity.SCENE_NUMBER, scNo + 1));
+                        storeSceneNumber(scNo);
                         finish();
                         return true;
                     }
@@ -145,6 +146,18 @@ public class SelectSceneActivity extends Activity {
         predrawScenes();
     }
 
+    int retrieveCurrentShift() {
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+        return p.getInt(SCROLL_SHIFT, minShift);
+    }
+
+    void storeScrollShift(int currentShift) {
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+        SharedPreferences.Editor ed = p.edit();
+        ed.putInt(SCROLL_SHIFT, currentShift);
+        ed.apply();
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (detector.onTouchEvent(event)) return true;
@@ -191,7 +204,7 @@ public class SelectSceneActivity extends Activity {
         c.drawBitmap(b, x, y, null);
     }
 
-    int firstPredrawnScene = 0;
+    int firstPredrawnScene;
     private static final int NUM_PREDRAWN_SCENES = NUM_VISIBLE_SCENES + 1;
     Bitmap predrawnScenes[];
 
@@ -218,9 +231,10 @@ public class SelectSceneActivity extends Activity {
     }
 
     private void predrawScenes() {
+        firstPredrawnScene = currentShift / (sceneWidth + sceneSpace);
         predrawnScenes = new Bitmap[NUM_PREDRAWN_SCENES];
         for (int i = 0; i < predrawnScenes.length; i++) {
-            predrawnScenes[i] = drawSceneBitmap(i + 1);
+            predrawnScenes[i] = drawSceneBitmap(firstPredrawnScene + i + 1);
         }
     }
 
@@ -229,5 +243,11 @@ public class SelectSceneActivity extends Activity {
         Scene scene = new Scene(num, new VRAM());
         scene.predrawScene(true);
         return Bitmap.createScaledBitmap(scene.getVRAM().getImage().getBitmap(), sceneWidth, sceneHeight, true);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        storeScrollShift(currentShift);
     }
 }

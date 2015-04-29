@@ -15,7 +15,7 @@ import android.view.View;
  * Java version by Petr Slechta, 2014.
  * Android version by Petr Panuska, 2015.
  */
-public class IntroActivity extends Activity {
+public class IntroActivity extends FlappyActivity {
     private static final String TAG = IntroActivity.class.getSimpleName();
 
     private View mainMenu;
@@ -81,7 +81,7 @@ public class IntroActivity extends Activity {
     }
 
     public void playGame(View view) {
-        startActivity(new Intent(this, FullscreenActivity.class).putExtra(FullscreenActivity.SCENE_NUMBER, 1));
+        startActivity(new Intent(this, FullscreenActivity.class).putExtra(FullscreenActivity.SCENE_NUMBER, retrieveSceneNumber()+1));
         Main.setState(Main.EXIT_GAME);
         mainMenu.setVisibility(View.GONE);
         intro.cancel(true);
