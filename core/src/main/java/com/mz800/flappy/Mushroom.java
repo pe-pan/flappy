@@ -135,7 +135,7 @@ class Mushroom extends Moveable {
             // 458e
             // ???
             // 45ad
-            if (mCurr2 == 0) {
+            if (mCurr2 == 0 || mCurrObj2 == MUSHROOM) {
                 clearMe(origX, origY);
                 drawMe();
             }
