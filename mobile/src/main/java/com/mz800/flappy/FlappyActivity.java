@@ -33,6 +33,8 @@ public class FlappyActivity extends Activity {
     }
 
     void storeOpenScene(int num) {
+        int current = retrieveOpenScenes();
+        if (num <= current) return;
         SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
         SharedPreferences.Editor ed = p.edit();
         ed.putInt(OPEN_SCENES, num);
