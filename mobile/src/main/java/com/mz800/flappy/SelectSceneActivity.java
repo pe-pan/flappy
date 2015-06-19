@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -83,7 +86,7 @@ public class SelectSceneActivity extends FlappyActivity {
                 if (y > (Device.displayHeight - sceneHeight) / 2 && y < (Device.displayHeight + sceneHeight) / 2 && currentShift + x > 0) {
                     int scNo = (currentShift + x) / (sceneWidth + sceneSpace);
                     Log.d(TAG, "Scene no " + (scNo + 1));
-                    if (scNo > openScenes) {
+                    if (!canBeSelected(scNo)) {
                         Toast.makeText(SelectSceneActivity.this, getString(R.string.notThisSceneYet), Toast.LENGTH_LONG).show();
                         return true;
                     }
@@ -257,7 +260,34 @@ public class SelectSceneActivity extends FlappyActivity {
         } else {
             scene.predrawSceneNumberScreen();
         }
-        return Bitmap.createScaledBitmap(scene.getVRAM().getImage().getBitmap(), sceneWidth, sceneHeight, true);
+        Bitmap b = scene.getVRAM().getImage().getBitmap();
+        if (!canBeSelected(num)) {
+            b = updateSaturation(b, 0.5f);
+        }
+        return Bitmap.createScaledBitmap(b, sceneWidth, sceneHeight, true);
+    }
+
+    private boolean canBeSelected(int scNo) {
+        return scNo <= openScenes - (openScenes % 5);
+    }
+
+    // copied from http://android-er.blogspot.com/2013/09/adjust-saturation-of-bitmap-with.html
+    private Bitmap updateSaturation(Bitmap src, float settingSat) {
+
+        int w = src.getWidth();
+        int h = src.getHeight();
+
+        Bitmap bitmapResult =
+                Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas canvasResult = new Canvas(bitmapResult);
+        Paint paint = new Paint();
+        ColorMatrix colorMatrix = new ColorMatrix();
+        colorMatrix.setSaturation(settingSat);
+        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(colorMatrix);
+        paint.setColorFilter(filter);
+        canvasResult.drawBitmap(src, 0, 0, paint);
+
+        return bitmapResult;
     }
 
     @Override
