@@ -1,6 +1,5 @@
 package com.mz800.flappy;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.AsyncTask;
@@ -43,8 +42,14 @@ public class FullscreenActivity extends FlappyActivity {
                     Main main = Main.getInstance(contentView);
                     main.listener = new Main.Listener() {
                         @Override
-                        public void gameFinished(int scNo) {
+                        public int[] gameStarting(int scNo) {
+                            return loadScore(scNo);
+                        }
+
+                        @Override
+                        public void gameFinished(int scNo, int score, int lives, int time) {
                             storeOpenScene(scNo);
+                            storeScore(scNo-1, score, lives);
                         }
                     };
                     main.game(scNo);

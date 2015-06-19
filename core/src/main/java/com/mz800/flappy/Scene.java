@@ -500,7 +500,7 @@ class Scene {
     }
 
     void printScore() {
-        printNumber(19, 1, Main.score, 6, Color.YELLOW);
+        printNumber(19, 1, Main.previousScore+Main.score, 6, Color.YELLOW);
     }
 
     private void printTime() {

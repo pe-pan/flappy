@@ -19,6 +19,7 @@ public class Main {
 
     static byte[] memory = new byte[65536];
     static int score;
+    static int previousScore;  // sum of scores from previous screens
     static int lives;
     static boolean verbose = false;
     static boolean cheating = false;
@@ -27,7 +28,8 @@ public class Main {
     Listener listener;
 
     interface Listener {
-        void gameFinished(int scNo);
+        int[] gameStarting(int scNo);
+        void gameFinished(int scNo, int score, int lives, int time);
     }
 
     public static Main getInstance(SurfaceView view) throws Exception {
@@ -64,9 +66,11 @@ public class Main {
             while (sel < 0) {
                 switch (sel) {
                     case GAME:
+                        int[] data = listener.gameStarting(scNo); //todo return value should be handled better than array of ints
                         sel = 0;
+                        previousScore = data[0];
                         score = 0;
-                        lives = 5;
+                        lives = data[1];
                         scNo = scNoRestart;
                         break;
                     case SETUP:
@@ -104,11 +108,11 @@ public class Main {
                     sel = s.gameOver();
                 }
             } else {
+                listener.gameFinished(scNo, score, lives, 0); //todo time should be also saved here
                 if (scNo % 5 == 0) {
                     scNoRestart = scNo + 1;
                     password = s.printPassword(scNo / 5);
                 }
-                listener.gameFinished(scNo);
                 scNo++;
                 if (scNo > 200) {
                     finalScr.finalCertificate();

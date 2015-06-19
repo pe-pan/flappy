@@ -1,6 +1,5 @@
 package com.mz800.flappy;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.AsyncTask;
@@ -55,6 +54,7 @@ public class IntroActivity extends FlappyActivity {
         Log.d(TAG, "onResume");
         super.onResume();
         Device.init(contentView);
+        ScreenScore.init();
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         Device.music.start();
 

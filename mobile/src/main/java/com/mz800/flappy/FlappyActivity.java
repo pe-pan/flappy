@@ -2,6 +2,15 @@ package com.mz800.flappy;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.util.Base64;
+import android.util.Log;
+import android.widget.Toast;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * Flappy:
@@ -10,10 +19,54 @@ import android.content.SharedPreferences;
  * Android version by Petr Panuska, 2015.
  */
 public class FlappyActivity extends Activity {
+    private static final String TAG = FlappyActivity.class.getSimpleName();
+
     public static final String PREFERENCE_NAME = "flappy.prefs";
     public static final String SCENE_NUMBER = "scene.number";
     public static final String SCROLL_SHIFT = "scroll.shift";
     public static final String OPEN_SCENES = "open.scenes";
+    public static final String SCORES = "metadata";
+
+    void saveScoreDetails() {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(baos);
+
+            for (ScreenScore screenScore : ScreenScore.screenScores) {
+                screenScore.writeExternal(out);
+            }
+            out.close();
+            String base64 = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+
+            SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+            SharedPreferences.Editor ed = p.edit();
+            ed.putString(SCORES, base64);
+            ed.commit();
+//            ed.apply();
+        } catch(IOException e) {
+            Log.e(TAG, "Exception when saving score details", e);
+            Toast.makeText(this, "Cannot save scores!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    void loadScoreDetails() {
+        if (ScreenScore.initialized) return;
+        try {
+            SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+            String base64 = p.getString(SCORES, null);
+
+            if (base64 != null) {
+                byte[] data = Base64.decode(base64.getBytes(), Base64.DEFAULT);
+                for (ScreenScore screenScore : ScreenScore.screenScores) {
+                    screenScore.readExternal(new ObjectInputStream(new ByteArrayInputStream(data)));
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            Log.e(TAG, "Exception when loading score details", e);
+            Toast.makeText(this, "Cannot load scores!", Toast.LENGTH_LONG).show();
+        }
+        ScreenScore.initialized = true;
+    }
 
     int retrieveSceneNumber() {
         SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
@@ -39,5 +92,25 @@ public class FlappyActivity extends Activity {
         SharedPreferences.Editor ed = p.edit();
         ed.putInt(OPEN_SCENES, num);
         ed.apply();
+    }
+
+    int[] loadScore(int scNo) {
+        loadScoreDetails();
+        int previousScores = 0;
+        for (int i = 0; i < scNo-1; i++) {
+            previousScores += ScreenScore.screenScores[i].myBestScore;
+        }
+        return new int[] { previousScores,
+                (scNo-1) % 5 == 0                     // for every fifth scene
+                        ? 5 :                         // give 5 lives
+                        ScreenScore.screenScores[scNo-2].myLives }; // or the previous num of lives
+
+    }
+
+    void storeScore(int scNo, int score, int lives) {
+        if (ScreenScore.screenScores[scNo].myBestScore >= score) return;
+        ScreenScore.screenScores[scNo].myBestScore = score;
+        ScreenScore.screenScores[scNo].myLives = lives;
+        saveScoreDetails();
     }
 }
