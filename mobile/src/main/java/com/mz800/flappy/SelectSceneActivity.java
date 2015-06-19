@@ -292,6 +292,12 @@ public class SelectSceneActivity extends FlappyActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, IntroActivity.class));
+        finish();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         storeScrollShift(currentShift);
