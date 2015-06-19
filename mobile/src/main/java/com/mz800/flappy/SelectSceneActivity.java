@@ -33,10 +33,22 @@ public class SelectSceneActivity extends FlappyActivity {
     private FingerUpGestureDetector detector;
     private int openScenes;
 
-    private static final float START_FLING_INHIBITION = 0.05f;
-    private static final float FLING_INHIBITION = 0.95f;
-    private static final float FLING_LIMIT = 1f;
-    private static final int NUM_VISIBLE_SCENES = 2;  // how many scenes visible in the screen
+    static final float START_FLING_INHIBITION = 0.05f;
+    static final float FLING_INHIBITION = 0.95f;
+    static final float FLING_LIMIT = 1f;
+    static final int NUM_VISIBLE_SCENES = 2;  // how many scenes visible in the screen
+
+    static int getSceneWidth(int sceneSpace) {
+        return (Device.displayWidth - (NUM_VISIBLE_SCENES - 1) * sceneSpace) / NUM_VISIBLE_SCENES;
+    }
+
+    static int getSceneHeight(int sceneWidth) {
+        return Constants.SCREEN_HEIGHT * sceneWidth / Constants.SCREEN_WIDTH;
+    }
+
+    static int getMinShift(int sceneWidth) {
+        return (sceneWidth - Device.displayWidth) / 2;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,12 +57,12 @@ public class SelectSceneActivity extends FlappyActivity {
         view = (SurfaceView) findViewById(R.id.sceneList);
 
         sceneSpace = getResources().getInteger(R.integer.sceneSpace);
-        sceneWidth = (Device.displayWidth - (NUM_VISIBLE_SCENES - 1) * sceneSpace) / NUM_VISIBLE_SCENES;
-        sceneHeight = Constants.SCREEN_HEIGHT * sceneWidth / Constants.SCREEN_WIDTH;
-        minShift = (sceneWidth - Device.displayWidth) / 2;
+        sceneWidth = getSceneWidth(sceneSpace);
+        sceneHeight = getSceneHeight(sceneWidth);
+        minShift = getMinShift(sceneWidth);
         openScenes = retrieveOpenScenes();
         maxShift = (openScenes + 1) * (sceneWidth + sceneSpace) - (Device.displayWidth + sceneWidth) / 2 - sceneSpace;
-        currentShift = retrieveCurrentShift();
+        currentShift = retrieveCurrentShift(minShift);
 
         detector = new FingerUpGestureDetector(this, new FingerUpGestureDetector.SimpleOnGestureListener() {
             private AsyncTask<Void, Void, Void> flingScrolling;
@@ -158,18 +170,6 @@ public class SelectSceneActivity extends FlappyActivity {
         });
 
         predrawScenes();
-    }
-
-    int retrieveCurrentShift() {
-        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
-        return p.getInt(SCROLL_SHIFT, minShift);
-    }
-
-    void storeScrollShift(int currentShift) {
-        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
-        SharedPreferences.Editor ed = p.edit();
-        ed.putInt(SCROLL_SHIFT, currentShift);
-        ed.apply();
     }
 
     @Override

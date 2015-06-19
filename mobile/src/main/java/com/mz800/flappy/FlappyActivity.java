@@ -68,6 +68,18 @@ public class FlappyActivity extends Activity {
         ScreenScore.initialized = true;
     }
 
+    int retrieveCurrentShift(int minShift) {
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+        return p.getInt(SCROLL_SHIFT, minShift);
+    }
+
+    void storeScrollShift(int currentShift) {
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+        SharedPreferences.Editor ed = p.edit();
+        ed.putInt(SCROLL_SHIFT, currentShift);
+        ed.apply();
+    }
+
     int retrieveSceneNumber() {
         SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
         return p.getInt(SCENE_NUMBER, 0);
