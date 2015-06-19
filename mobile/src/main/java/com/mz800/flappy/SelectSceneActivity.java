@@ -268,6 +268,7 @@ public class SelectSceneActivity extends FlappyActivity {
     }
 
     private boolean canBeSelected(int scNo) {
+        if (Main.cheating) return true;
         return scNo <= openScenes - (openScenes % 5);
     }
 
