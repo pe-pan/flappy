@@ -50,6 +50,11 @@ public class FullscreenActivity extends FlappyActivity {
                         public void gameFinished(int scNo, int score, int lives, int time) {
                             storeOpenScene(scNo);
                             storeScore(scNo-1, score, lives);
+                            int sceneSpace = getResources().getInteger(R.integer.sceneSpace);
+                            int sceneWidth = SelectSceneActivity.getSceneWidth(sceneSpace);
+                            int minShift = SelectSceneActivity.getMinShift(sceneWidth);
+                            int currentShift = retrieveCurrentShift(minShift);
+                            storeScrollShift(currentShift + sceneSpace + sceneWidth);
                         }
                     };
                     main.game(scNo);
