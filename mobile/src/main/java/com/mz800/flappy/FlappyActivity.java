@@ -57,8 +57,9 @@ public class FlappyActivity extends Activity {
 
             if (base64 != null) {
                 byte[] data = Base64.decode(base64.getBytes(), Base64.DEFAULT);
+                ObjectInputStream stream = new ObjectInputStream(new ByteArrayInputStream(data));
                 for (ScreenScore screenScore : ScreenScore.screenScores) {
-                    screenScore.readExternal(new ObjectInputStream(new ByteArrayInputStream(data)));
+                    screenScore.readExternal(stream);
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
