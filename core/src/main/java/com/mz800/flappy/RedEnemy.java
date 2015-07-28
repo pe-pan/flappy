@@ -210,12 +210,10 @@ class RedEnemy extends Moveable {
 
     // TODO: refactor this
     private boolean testMove(int m1, int m2) {
-        int f = m1 & 0xF0;
-        boolean chick = (f == CHICKEN);
-        boolean wall = (f > CHICKEN);
-        f = m2 & 0xF0;
-        chick |= (f == CHICKEN);
-        wall |= (f > CHICKEN);
+        boolean chick = false;
+        boolean wall = false;
+        if ((m1 & 0xF0) == CHICKEN || ((m2 & 0xF0) == CHICKEN)) chick = true;
+        if ((m1 & 0xF0) > CHICKEN || ((m2 & 0xF0) > CHICKEN)) wall = true;
         if (wall) {
             return false;
         }
