@@ -390,6 +390,10 @@ class Chicken extends Moveable {
                 return;
             }
             if (chickenEaten == 1) {
+                if (keyboard.userAction == UP) {    // bug fix: half of Flappy remained visible when eaten by Frog
+                    vram.emptyRect(x, y+2, 2, 8);
+                    // only VRAM update + 40 ... why?
+                }
                 empty2x1(x, y);
                 y++;
             }
