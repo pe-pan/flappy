@@ -51,6 +51,7 @@ public class FlappyActivity extends Activity {
 
     void loadScoreDetails() {
         if (ScreenScore.initialized) return;
+        ScreenScore.init();
         try {
             SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
             String base64 = p.getString(SCORES, null);

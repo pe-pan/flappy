@@ -255,10 +255,12 @@ public class SelectSceneActivity extends FlappyActivity {
     private Bitmap drawSceneBitmap(int num) {
         Log.d(TAG, "Drawing scaled scene " + num);
         Scene scene = new Scene(num+1, new VRAM());
+        ScreenScore score = ScreenScore.screenScores[num];
+        int lives = num % 5 == 0 ? 5 : ScreenScore.screenScores[num-1].myLives;  // take number of lives from previous scene
         if (num <= openScenes) {
-            scene.predrawScene(true);
+            scene.predrawScene(true, lives, score.myBestScore);
         } else {
-            scene.predrawSceneNumberScreen();
+            scene.predrawSceneNumberScreen(lives, score.myBestScore);
         }
         Bitmap b = scene.getVRAM().getImage().getBitmap();
         if (!canBeSelected(num)) {

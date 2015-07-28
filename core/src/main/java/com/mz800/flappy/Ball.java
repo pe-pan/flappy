@@ -100,7 +100,7 @@ class Ball extends Moveable {
         e.crashBlueEnemy();
         killStatus++;
         Main.score += killStatus * 30;
-        scene.printScore();
+        scene.printScore(Main.score+Main.previousScore);
     }
 
     void crashRedEnemy(int m) {
@@ -108,6 +108,6 @@ class Ball extends Moveable {
         e.crashRedEnemy(x);
         killStatus++;
         Main.score += killStatus * 50;
-        scene.printScore();
+        scene.printScore(Main.score+Main.previousScore);
     }
 }

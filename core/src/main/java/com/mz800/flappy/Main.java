@@ -109,6 +109,8 @@ public class Main {
                 }
             } else {
                 listener.gameFinished(scNo, score, lives, 0); //todo time should be also saved here
+                previousScore += score;             // re-initialize score
+                score = 0;
                 if (scNo % 5 == 0) {
                     scNoRestart = scNo + 1;
                     password = s.printPassword(scNo / 5);

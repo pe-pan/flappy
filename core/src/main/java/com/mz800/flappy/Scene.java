@@ -69,7 +69,7 @@ class Scene {
         return vram;
     }
 
-    void predrawScene(boolean preview) {
+    void predrawScene(boolean preview, int lives, int score) {
         int max = memory[0xB000] & 0xFF;
         if (num > max) {
             return;
@@ -83,7 +83,7 @@ class Scene {
         }
         vram.clear();
         drawBorder();
-        drawHeader();
+        drawHeader(lives, score);
 
         for (int i = 0; i < 10; i++) {
             int p = (memory[addr++] << 16) & 0xFF0000;
@@ -111,7 +111,7 @@ class Scene {
     }
 
     void showScene(boolean preview) {
-        predrawScene(preview);
+        predrawScene(preview, Main.lives, Main.previousScore+Main.score);
         vram.refresh();
     }
 
@@ -365,7 +365,7 @@ class Scene {
                 Main.score += 10;
                 mushroomsPicked--;
                 drawMushroomsHeader();
-                printScore();
+                printScore(Main.score+Main.previousScore);
                 vram.refresh();
                 Main.wait(3);
             }
@@ -376,7 +376,7 @@ class Scene {
                 }
                 printTime();
                 Main.score += 10;
-                printScore();
+                printScore(Main.score+Main.previousScore);
                 vram.refresh();
                 Main.wait(1);
             }
@@ -461,7 +461,7 @@ class Scene {
         }
     }
 
-    private void drawHeader() {
+    private void drawHeader(int lives, int score) {
         for (int i = 0; i < 40; i++) {
             vram.imageNoOfs(i, 0, Images.redWall);
         }
@@ -478,12 +478,12 @@ class Scene {
         vram.imageNoOfs(28, 1, Images.time);
         vram.imageNoOfs(29, 2, Images.cDbSoft);
         int x = 1;
-        for (int i = 0; i < Main.lives; i++) {
+        for (int i = 0; i < lives; i++) {
             vram.imageNoOfs(x, 1, Images.chickenDown);
             x += 2;
         }
         drawMushroomsHeader();
-        printScore();
+        printScore(score);
         printTime();
     }
 
@@ -499,8 +499,8 @@ class Scene {
         }
     }
 
-    void printScore() {
-        printNumber(19, 1, Main.previousScore+Main.score, 6, Color.YELLOW);
+    void printScore(int score) {
+        printNumber(19, 1, score, 6, Color.YELLOW);
     }
 
     private void printTime() {
@@ -575,14 +575,14 @@ class Scene {
 
     void showSceneNumberScreen() {
         music.stop();
-        predrawSceneNumberScreen();
+        predrawSceneNumberScreen(Main.lives, Main.score+Main.previousScore);
         vram.refresh();
         Main.wait(0xF0);
     }
 
-    void predrawSceneNumberScreen() {
+    void predrawSceneNumberScreen(int lives, int score) {
         vram.clear();
-        drawHeader();
+        drawHeader(lives, score);
         for (int i = 0; i <= 21; i++) {
             for (int j = 0; j < 40; j++) {
                 vram.image(j, i, Images.redWall);

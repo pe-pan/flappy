@@ -55,7 +55,7 @@ public class IntroActivity extends FlappyActivity {
         Log.d(TAG, "onResume");
         super.onResume();
         Device.init(contentView);
-        ScreenScore.init();
+        loadScoreDetails();
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         Device.music.start();
 
