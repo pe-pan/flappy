@@ -219,12 +219,12 @@ class RedEnemy extends Moveable {
         if (wall) {
             return false;
         }
-        if (!chick && !wall) {
+        if (!chick) {
             return true;
         }
         if (chicken.chickenEaten == 0) {
             chicken.setChickenEaten();
-            return true;
+            return false;
         }
         return false;
     }
