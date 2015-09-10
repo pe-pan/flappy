@@ -30,7 +30,10 @@ public class Device {
 
     public static boolean initialized = false;
     public static void init (SurfaceView view) {
-        if (initialized) return;
+        if (initialized) {
+            Log.d(TAG, "Device already initialized");
+            return;
+        }
         Log.d(TAG, "Init");
         initMemory(view);
         Images.load();
@@ -52,6 +55,7 @@ public class Device {
     }
 
     private static void initMemory(View view) {
+        Log.d(TAG, "Initializing memory");
         try {
             InputStream is = view.getResources().openRawResource(R.raw.flappy);
             int read = 0;

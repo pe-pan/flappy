@@ -1,5 +1,7 @@
 package com.mz800.flappy;
 
+import android.util.Log;
+
 import com.mz800.flappy.awt.BufferedImage;
 import com.mz800.flappy.awt.Color;
 
@@ -41,7 +43,10 @@ class Images {
     static BufferedImage cDbSoft, bySSKO;
     static BufferedImage score, time, sceneRed, sceneYellow;
 
+    private static final String TAG = Images.class.getSimpleName();
+
     public static void load() {
+        Log.d(TAG, "Loading images");
         byte[] memory = Device.memory;
         redWall = ImageUtils.createImage2x1x1(memory, 0x5c5d);
         blueWall = ImageUtils.createImage2x1x1(memory, 0x5c8d);

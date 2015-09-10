@@ -37,6 +37,7 @@ public class FullscreenActivity extends FlappyActivity {
 
     @Override
     protected void onResume() {
+        Log.d(TAG, "onResume");
         super.onResume();
         game = new AsyncTask<Void, Void, Void>() {
             @Override
@@ -235,12 +236,14 @@ public class FullscreenActivity extends FlappyActivity {
     }
 
     private void closeMenu() {
+        Log.d(TAG, "Closing menu");
         gameMenu.setVisibility(View.GONE);
         Main.setState(Main.NORMAL_WAIT);
         Device.music.start();
     }
 
     private void pause() {
+        Log.d(TAG, "Pausing");
         gameMenu.setVisibility(View.VISIBLE);
         Main.setState(Main.KEEP_WAITING);
         Device.music.pause();

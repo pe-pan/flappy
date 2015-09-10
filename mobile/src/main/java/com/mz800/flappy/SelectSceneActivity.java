@@ -62,10 +62,13 @@ public class SelectSceneActivity extends FlappyActivity {
         sceneSpace = getResources().getInteger(R.integer.sceneSpace);
         sceneWidth = getSceneWidth(sceneSpace);
         sceneHeight = getSceneHeight(sceneWidth);
+        Log.d(TAG, "SceneSpace: "+sceneSpace+"; SceneWidth: "+sceneWidth+"; SceneHeight: "+sceneHeight);
         openScenes = retrieveOpenScenes();
+        Log.d(TAG, "OpenScenes: "+openScenes);
         minShift = getMinShift(sceneWidth);
         maxShift = (openScenes + 1) * (sceneWidth + sceneSpace) - (Device.displayWidth + sceneWidth) / 2 - sceneSpace;
         currentShift = retrieveCurrentShift(minShift);
+        Log.d(TAG, "minShift: "+minShift+"; maxShift: "+maxShift+"; currentShift: "+currentShift);
 
         detector = new FingerUpGestureDetector(this, new FingerUpGestureDetector.SimpleOnGestureListener() {
             private AsyncTask<Void, Void, Void> flingScrolling;
@@ -249,6 +252,7 @@ public class SelectSceneActivity extends FlappyActivity {
 
     private void predrawScenes() {
         firstPredrawnScene = currentShift / (sceneWidth + sceneSpace);
+        Log.d(TAG, "First predrawn scene: "+firstPredrawnScene);
         predrawnScenes = new Bitmap[NUM_PREDRAWN_SCENES];
         for (int i = 0; i < predrawnScenes.length; i++) {
             predrawnScenes[i] = drawSceneBitmap(firstPredrawnScene + i);

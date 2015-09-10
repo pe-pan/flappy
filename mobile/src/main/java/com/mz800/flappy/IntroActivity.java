@@ -38,6 +38,7 @@ public class IntroActivity extends FlappyActivity {
 
     @Override
     protected void onResume() {
+        Log.d(TAG, "onResume");
         super.onResume();
         intro = new AsyncTask<Void, Void, Void>() {
             @Override
