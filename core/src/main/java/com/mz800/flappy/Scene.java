@@ -29,7 +29,6 @@ class Scene {
         8, 10, 11, 12, 16, 21, 25, 28, 32, 37
     };
     private final int num;
-    private final byte[] memory;
     private final byte[][] model = new byte[22][40];
     private final Chicken chicken;
     private final List<BlueEnemy> blueEnemies = new ArrayList<>();
@@ -52,7 +51,6 @@ class Scene {
 
     Scene (int number, VRAM vram) {
         this.num = number;
-        this.memory = Main.memory;
         this.chicken = new Chicken(this);
         this.vram = vram;
     }

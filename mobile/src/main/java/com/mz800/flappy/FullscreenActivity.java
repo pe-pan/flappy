@@ -21,7 +21,6 @@ public class FullscreenActivity extends FlappyActivity {
 
     private View gameMenu;
     private AsyncTask<Void, Void, Void> game;
-    SurfaceView contentView;
 
     public static final String SCENE_NUMBER = "SCENE_NUMBER";
 
@@ -31,15 +30,20 @@ public class FullscreenActivity extends FlappyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
 
-        contentView = (SurfaceView) findViewById(R.id.fullscreen_content);
+        view = (SurfaceView) findViewById(R.id.fullscreen_content);
         gameMenu = findViewById(R.id.gameMenu);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         game = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
                     int scNo = getIntent().getIntExtra(SCENE_NUMBER, 1);
-                    Main main = Main.getInstance(contentView);
+                    Main main = Main.getInstance(view);
                     main.listener = new Main.Listener() {
                         @Override
                         public int[] gameStarting(int scNo) {
@@ -64,15 +68,6 @@ public class FullscreenActivity extends FlappyActivity {
                 return null;
             }
         }.execute();
-    }
-
-    @Override
-    protected void onResume() {
-        Log.d(TAG, "onResume");
-        super.onResume();
-        final SurfaceView contentView = (SurfaceView) findViewById(R.id.fullscreen_content);
-        Device.init(contentView);
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     @Override

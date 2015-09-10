@@ -8,10 +8,11 @@ import static com.mz800.flappy.Constants.*;
  */
 class Keyboard {
 
-    private static final Keyboard me = new Keyboard();
+    private static Keyboard me;
     private static final boolean DEBUG = false;
 
     static Keyboard getInstance() {
+        if (me == null) me = new Keyboard();
         return me;
     }
     private boolean up = false;
@@ -32,9 +33,6 @@ class Keyboard {
     private int keyPressed = 0;
     int userAction;
     int lastUserAction;
-
-    private Keyboard() {
-    }
 
     void keyDown(int key) {
         switch (key) {

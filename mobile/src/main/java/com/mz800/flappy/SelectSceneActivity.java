@@ -1,7 +1,6 @@
 package com.mz800.flappy;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
@@ -23,7 +22,6 @@ import android.widget.Toast;
  */
 public class SelectSceneActivity extends FlappyActivity {
     private static final String TAG = SelectSceneActivity.class.getSimpleName();
-    private SurfaceView view;
     private int currentShift;
     private int minShift;
     private int maxShift;
@@ -55,12 +53,17 @@ public class SelectSceneActivity extends FlappyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selectscene);
         view = (SurfaceView) findViewById(R.id.sceneList);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         sceneSpace = getResources().getInteger(R.integer.sceneSpace);
         sceneWidth = getSceneWidth(sceneSpace);
         sceneHeight = getSceneHeight(sceneWidth);
-        minShift = getMinShift(sceneWidth);
         openScenes = retrieveOpenScenes();
+        minShift = getMinShift(sceneWidth);
         maxShift = (openScenes + 1) * (sceneWidth + sceneSpace) - (Device.displayWidth + sceneWidth) / 2 - sceneSpace;
         currentShift = retrieveCurrentShift(minShift);
 

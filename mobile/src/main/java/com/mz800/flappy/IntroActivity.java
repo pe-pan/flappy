@@ -20,27 +20,30 @@ public class IntroActivity extends FlappyActivity {
 
     private View mainMenu;
     private AsyncTask intro;
-    private SurfaceView contentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
-        contentView = (SurfaceView) findViewById(R.id.intro_content);
+        view = (SurfaceView) findViewById(R.id.intro_content);
         mainMenu = findViewById(R.id.mainMenu);
-        contentView.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mainMenu.setVisibility(mainMenu.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             }
         });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         intro = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 try {
-                    Main.getInstance(contentView);
+                    Main.getInstance(view);
                     new Intro().intro();
                 } catch (Exception e) {
                     Log.e("Activity", "Exception thrown " + e.getMessage(), e);
@@ -48,17 +51,6 @@ public class IntroActivity extends FlappyActivity {
                 return null;
             }
         }.execute();
-    }
-
-    @Override
-    protected void onResume() {
-        Log.d(TAG, "onResume");
-        super.onResume();
-        Device.init(contentView);
-        loadScoreDetails();
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        Device.music.start();
-
     }
 
     @Override

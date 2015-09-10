@@ -3,11 +3,9 @@ package com.mz800.flappy;
 import android.util.Log;
 import android.view.SurfaceView;
 
-import com.mz800.core.R;
 import com.mz800.flappy.awt.Color;
 import static com.mz800.flappy.Constants.*;
 import static com.mz800.flappy.Device.*;
-import java.io.InputStream;
 
 /**
  * Flappy:
@@ -17,7 +15,6 @@ import java.io.InputStream;
 public class Main {
     private static final String TAG = Main.class.getSimpleName();
 
-    static byte[] memory = new byte[65536];
     static int score;
     static int previousScore;  // sum of scores from previous screens
     static int lives;
@@ -38,20 +35,6 @@ public class Main {
     }
 
     private Main(SurfaceView view) throws Exception {
-        InputStream is = view.getResources().openRawResource(R.raw.flappy);
-        int read = 0;
-        while (read < 65536) {
-            int res = is.read(memory, read, 65536 - read);
-            if (res < 0) {
-                break;
-            }
-            read += res;
-            if (verbose) {
-                System.out.println("read: " + res + " total: " + read);
-            }
-        }
-        is.close();
-
         vram.createWindow(view);
         finalScr = new FinalScreen();
     }
@@ -333,6 +316,7 @@ public class Main {
 
 
     static synchronized void setState(int state) {
+        Log.d(TAG, "State is "+state);
         gameState = state;
         Main.class.notify();
     }

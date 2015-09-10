@@ -2,8 +2,10 @@ package com.mz800.flappy;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.util.Base64;
 import android.util.Log;
+import android.view.SurfaceView;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
@@ -26,6 +28,16 @@ public class FlappyActivity extends Activity {
     public static final String SCROLL_SHIFT = "scroll.shift";
     public static final String OPEN_SCENES = "open.scenes";
     public static final String SCORES = "metadata";
+
+    protected SurfaceView view;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Device.init(view);
+        loadScoreDetails();
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    }
 
     void saveScoreDetails() {
         try {

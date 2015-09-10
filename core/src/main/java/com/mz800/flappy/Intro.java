@@ -88,7 +88,6 @@ public class Intro {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         0, 0, 0, 15, 16, 17, 18, 19, 20, 21, 22
     };
-    private final byte[] memory;
     private ElementStatus chicken;
     private ElementStatus blueEnemy;
     private ElementStatus redEnemy;
@@ -100,10 +99,6 @@ public class Intro {
     private int textPtr;
     private boolean secondStep;
     private boolean firstSubStep;
-
-    Intro() {
-        this.memory = Main.memory;
-    }
 
     void intro() {
         vram.clear();

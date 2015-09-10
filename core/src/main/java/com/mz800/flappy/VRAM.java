@@ -19,9 +19,10 @@ public class VRAM {
 
     private static final int ZOOM = 1;
     private static final int Y_OFS = 3;
-    private static final VRAM me = new VRAM();
+    private static VRAM me;
 
     static VRAM getInstance() {
+        if (me == null) me = new VRAM();
         return me;
     }
     private BufferedImage img;
@@ -109,7 +110,7 @@ public class VRAM {
             } else {
                 z -= 0x20;
             }
-            BufferedImage imgChar = ImageUtils.createLetterImage(1, 8, color, Main.memory, 0x6add + 8 * z, background);
+            BufferedImage imgChar = ImageUtils.createLetterImage(1, 8, color, Device.memory, 0x6add + 8 * z, background);
             imageNoOfs(x, y, imgChar, yOfs);
             x++;
         }
