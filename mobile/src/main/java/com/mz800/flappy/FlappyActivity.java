@@ -1,6 +1,7 @@
 package com.mz800.flappy;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.util.Base64;
@@ -50,7 +51,7 @@ public class FlappyActivity extends Activity {
             out.close();
             String base64 = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
 
-            SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+            SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
             SharedPreferences.Editor ed = p.edit();
             ed.putString(SCORES, base64);
             ed.commit();
@@ -65,7 +66,7 @@ public class FlappyActivity extends Activity {
         if (ScreenScore.initialized) return;
         ScreenScore.init();
         try {
-            SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+            SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
             String base64 = p.getString(SCORES, null);
 
             if (base64 != null) {
@@ -83,38 +84,38 @@ public class FlappyActivity extends Activity {
     }
 
     int retrieveCurrentShift(int minShift) {
-        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         return p.getInt(SCROLL_SHIFT, minShift);
     }
 
     void storeScrollShift(int currentShift) {
-        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor ed = p.edit();
         ed.putInt(SCROLL_SHIFT, currentShift);
         ed.apply();
     }
 
     int retrieveSceneNumber() {
-        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         return p.getInt(SCENE_NUMBER, 0);
     }
 
     void storeSceneNumber(int scNo) {
-        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor ed = p.edit();
         ed.putInt(SCENE_NUMBER, scNo);
         ed.apply();
     }
 
     int retrieveOpenScenes() {
-        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         return p.getInt(OPEN_SCENES, 0);
     }
 
     void storeOpenScene(int num) {
         int current = retrieveOpenScenes();
         if (num <= current) return;
-        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, 0);
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor ed = p.edit();
         ed.putInt(OPEN_SCENES, num);
         ed.apply();
