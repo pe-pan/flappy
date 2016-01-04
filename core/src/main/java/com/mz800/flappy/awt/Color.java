@@ -15,8 +15,8 @@ public enum Color {
     DARK_GRAY(0xff404040),
 
     black(0xff000000),
-    red(0xffff8080),
-    blue(0xff8080ff),
+    red(0xffff0000),
+    blue(0xff0000ff),
     yellow(0xffffff00),
     white(0xffffffff),
     dark_gray(0xff404040);
