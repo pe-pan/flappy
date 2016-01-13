@@ -94,7 +94,6 @@ public class FullscreenActivity extends FlappyActivity {
     static final int DOWN = 40;
 
     private int key;
-    private boolean spaceMightBeenHit = false;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -103,16 +102,13 @@ public class FullscreenActivity extends FlappyActivity {
                 initialX = lastX = event.getRawX();
                 initialY = lastY = event.getRawY();
                 Log.d(TAG, "Action Down");
-                spaceMightBeenHit = true;
                 break;
             case MotionEvent.ACTION_UP:
                 Log.d(TAG, "Action Up");
                 if (!isMove) {
-                    if (spaceMightBeenHit) {
-                        Log.d(TAG, "Space Bar down and up");
-                        keyboard.keyDown(SPACE_BAR);
-                        keyboard.keyUp(SPACE_BAR);
-                    }
+                    Log.d(TAG, "Space Bar down and up");
+                    keyboard.keyDown(SPACE_BAR);
+                    keyboard.keyUp(SPACE_BAR);
                 }
 
                 if (key != 0) {
@@ -121,19 +117,16 @@ public class FullscreenActivity extends FlappyActivity {
                 }
                 key = 0;
                 isMove = false;
-                spaceMightBeenHit = false;
                 break;
             case MotionEvent.ACTION_POINTER_UP :
             case MotionEvent.ACTION_POINTER_2_UP:
                 Log.d(TAG, "Action Pointer Up");
                 keyboard.keyUp(SPACE_BAR);
-                spaceMightBeenHit = false;
                 break;
             case MotionEvent.ACTION_POINTER_DOWN :
             case MotionEvent.ACTION_POINTER_2_DOWN:
                 Log.d(TAG, "Action Pointer Down");
                 keyboard.keyDown(SPACE_BAR);
-                spaceMightBeenHit = false;
                 break;
             case MotionEvent.ACTION_MOVE:
                 float currX = event.getRawX();
@@ -153,12 +146,10 @@ public class FullscreenActivity extends FlappyActivity {
                 }
                 String what = "Nothing";
                 int newKey = 0;
-                spaceMightBeenHit = true;
                 isMove = false;
                 if (Math.abs(diffX) > Math.abs(diffY)) {
                     if (Math.abs(diffX) > MOVE_LIMIT) {
                         isMove = true;
-                        spaceMightBeenHit = false;
                         if (diffX < 0) {
                             what = "Left " + diffX;
                             newKey = LEFT;
@@ -171,7 +162,6 @@ public class FullscreenActivity extends FlappyActivity {
                 } else {
                     if (Math.abs(diffY) > MOVE_LIMIT) {
                         isMove = true;
-                        spaceMightBeenHit = false;
                         if (diffY < 0) {
                             what = "Up " + diffY;
                             newKey = UP;
@@ -191,7 +181,6 @@ public class FullscreenActivity extends FlappyActivity {
                 break;
             default:
                 Log.d(TAG, "Unknown action " + event.getAction());
-                spaceMightBeenHit = false;
         }
         return super.onTouchEvent(event);
     }
