@@ -84,7 +84,7 @@ public class SelectSceneActivity extends FlappyActivity {
                         float slowingVelocityX = velocityX * START_FLING_INHIBITION;
                         while (!isCancelled() && Math.abs(slowingVelocityX) > FLING_LIMIT) {
                             shiftScenes(-slowingVelocityX);
-                            adjustMinMaxShiftPosition();
+                            adjustMinMaxCenterShiftPosition(slowingVelocityX);
                             slowingVelocityX = slowingVelocityX * FLING_INHIBITION;
                         }
                         synchronized(SelectSceneActivity.this) {
@@ -135,7 +135,7 @@ public class SelectSceneActivity extends FlappyActivity {
             @Override
             public boolean onFingerUp(MotionEvent e) {
                 Log.d(TAG, "Finger up");
-                adjustMinMaxShiftPosition();
+                adjustMinMaxCenterShiftPosition(0f);
                 return true;
             }
 
@@ -145,20 +145,42 @@ public class SelectSceneActivity extends FlappyActivity {
             }
 
             boolean adjustShiftEvent;
-            void adjustMinMaxShiftPosition() {
+            void adjustMinMaxCenterShiftPosition(float slowingVelocityX) {
+                int aimedShift;
                 if (currentShift < minShift) {
+                    // adjust min position
+                    aimedShift = minShift;
+                } else if (currentShift > maxShift) {
+                    // adjust max position
+                    aimedShift = maxShift;
+                } else {
+                    Log.d(TAG, "slowingVelocityX: "+slowingVelocityX);
+                    // center position only if fling velocity is slowing down
+                    if (Math.abs(slowingVelocityX) > 2f) return;
+                    aimedShift = ((currentShift-2*minShift) / (sceneWidth + sceneSpace)) * (sceneWidth + sceneSpace) + minShift;
+                    // add one minShift to make currentShift always positive; add another minShift to make screen center to be the vertical decision line
+                    // round up to sceneWidth + sceneSpace; subtract minShift back to move it to middle of the sceneWidth
+                }
+
+                Log.d(TAG, "aimedShift: "+aimedShift+"; currentShift: "+currentShift);
+
+                if ((currentShift < aimedShift)) {
+                    Log.d(TAG, "center start - left");
                     cancelFlingScrolling();
                     adjustShiftEvent = true;
-                    while (adjustShiftEvent && currentShift < minShift) {
-                        currentShift += (minShift - currentShift) / 10 + 1;
+                    while (adjustShiftEvent && currentShift < aimedShift) {
+                        Log.d(TAG, "center continue - left; currentShift: "+currentShift);
+                        currentShift += (aimedShift - currentShift) / 10 + 1;
                         drawScenes();
                     }
                 }
-                if (currentShift > maxShift) {
+                if ((currentShift > aimedShift)) {
+                    Log.d(TAG, "center start - right");
                     cancelFlingScrolling();
                     adjustShiftEvent = true;
-                    while (adjustShiftEvent && currentShift > maxShift) {
-                        currentShift -= (currentShift - maxShift) / 10 + 1;
+                    while (adjustShiftEvent && currentShift > aimedShift) {
+                        Log.d(TAG, "center continue - right; currentShift: "+currentShift);
+                        currentShift -= (currentShift - aimedShift) / 10 + 1;
                         drawScenes();
                     }
                 }
