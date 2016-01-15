@@ -283,6 +283,9 @@ public class SelectSceneActivity extends FlappyActivity {
 
     private Bitmap drawSceneBitmap(int num) {
         Log.d(TAG, "Drawing scaled scene " + num);
+        if (num >= Constants.NUM_SCENES ) {
+            return null;
+        }
         Scene scene = new Scene(num+1, new VRAM());
         ScreenScore score = ScreenScore.screenScores[num];
         int lives = num % 5 == 0 ? 5 : ScreenScore.screenScores[num-1].myLives;  // take number of lives from previous scene
