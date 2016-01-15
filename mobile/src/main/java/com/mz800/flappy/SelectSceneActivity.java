@@ -27,7 +27,7 @@ public class SelectSceneActivity extends FlappyActivity {
     private int maxShift;
     private int sceneWidth;
     private int sceneHeight;
-    private int sceneSpace;
+    private int sceneWidthSpace;
     private FingerUpGestureDetector detector;
     private int openScenes;
 
@@ -59,14 +59,15 @@ public class SelectSceneActivity extends FlappyActivity {
     protected void onResume() {
         super.onResume();
 
-        sceneSpace = getResources().getInteger(R.integer.sceneSpace);
+        int sceneSpace = getResources().getInteger(R.integer.sceneSpace);
         sceneWidth = getSceneWidth(sceneSpace);
+        sceneWidthSpace = sceneWidth + sceneSpace;
         sceneHeight = getSceneHeight(sceneWidth);
         Log.d(TAG, "SceneSpace: "+sceneSpace+"; SceneWidth: "+sceneWidth+"; SceneHeight: "+sceneHeight);
         openScenes = retrieveOpenScenes();
         Log.d(TAG, "OpenScenes: "+openScenes);
         minShift = getMinShift(sceneWidth);
-        maxShift = (openScenes + 1) * (sceneWidth + sceneSpace) - (Device.displayWidth + sceneWidth) / 2 - sceneSpace;
+        maxShift = (openScenes + 1) * sceneWidthSpace - (Device.displayWidth + sceneWidth) / 2 - sceneSpace;
         currentShift = retrieveCurrentShift(minShift);
         Log.d(TAG, "minShift: "+minShift+"; maxShift: "+maxShift+"; currentShift: "+currentShift);
 
@@ -102,7 +103,7 @@ public class SelectSceneActivity extends FlappyActivity {
                 int x = (int) e.getRawX();
                 int y = (int) e.getRawY();
                 if (y > (Device.displayHeight - sceneHeight) / 2 && y < (Device.displayHeight + sceneHeight) / 2 && currentShift + x > 0) {
-                    int scNo = (currentShift + x) / (sceneWidth + sceneSpace);
+                    int scNo = (currentShift + x) / sceneWidthSpace;
                     Log.d(TAG, "Scene no " + (scNo + 1));
                     if (!canBeSelected(scNo)) {
                         Toast.makeText(SelectSceneActivity.this, getString(R.string.notThisSceneYet), Toast.LENGTH_LONG).show();
@@ -157,9 +158,9 @@ public class SelectSceneActivity extends FlappyActivity {
                     Log.d(TAG, "slowingVelocityX: "+slowingVelocityX);
                     // center position only if fling velocity is slowing down
                     if (Math.abs(slowingVelocityX) > 2f) return;
-                    aimedShift = ((currentShift-2*minShift) / (sceneWidth + sceneSpace)) * (sceneWidth + sceneSpace) + minShift;
+                    aimedShift = ((currentShift-2*minShift) / sceneWidthSpace) * sceneWidthSpace + minShift;
                     // add one minShift to make currentShift always positive; add another minShift to make screen center to be the vertical decision line
-                    // round up to sceneWidth + sceneSpace; subtract minShift back to move it to middle of the sceneWidth
+                    // round up to sceneWidthSpace; subtract minShift back to move it to middle of the sceneWidth
                 }
 
                 Log.d(TAG, "aimedShift: "+aimedShift+"; currentShift: "+currentShift);
@@ -218,8 +219,8 @@ public class SelectSceneActivity extends FlappyActivity {
     private int oldShift;
     private void drawScenes() {
         if (currentShift == oldShift) return;    // no change, nothing to draw
-        int firstVisibleScene = currentShift / (sceneWidth + sceneSpace);
-        int remnant = currentShift % (sceneWidth + sceneSpace);
+        int firstVisibleScene = currentShift / sceneWidthSpace;
+        int remnant = currentShift % sceneWidthSpace;
         Canvas c = view.getHolder().lockCanvas();
         if (c != null) {
             c.drawColor(android.R.color.black, PorterDuff.Mode.CLEAR);
@@ -227,11 +228,11 @@ public class SelectSceneActivity extends FlappyActivity {
             int y = (Device.displayHeight - sceneHeight) / 2;
             if (currentShift > oldShift) {
                 for (int i = 0; i < NUM_VISIBLE_SCENES + 1; i++) {
-                    drawBitmap(c, firstVisibleScene+i, (sceneWidth + sceneSpace) * i - remnant, y);
+                    drawBitmap(c, firstVisibleScene+i, sceneWidthSpace * i - remnant, y);
                 }
             } else {
                 for (int i = NUM_VISIBLE_SCENES; i >= 0; i--) {
-                    drawBitmap(c, firstVisibleScene+i, (sceneWidth + sceneSpace) * i - remnant, y);
+                    drawBitmap(c, firstVisibleScene+i, sceneWidthSpace * i - remnant, y);
                 }
             }
 
@@ -273,7 +274,7 @@ public class SelectSceneActivity extends FlappyActivity {
     }
 
     private void predrawScenes() {
-        firstPredrawnScene = currentShift / (sceneWidth + sceneSpace);
+        firstPredrawnScene = currentShift / sceneWidthSpace;
         Log.d(TAG, "First predrawn scene: "+firstPredrawnScene);
         predrawnScenes = new Bitmap[NUM_PREDRAWN_SCENES];
         for (int i = 0; i < predrawnScenes.length; i++) {
