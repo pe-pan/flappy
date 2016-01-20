@@ -174,6 +174,7 @@ public class SelectSceneActivity extends FlappyActivity {
                         currentShift += (aimedShift - currentShift) / 10 + 1;
                         drawScenes();
                     }
+                    Log.d(TAG, "Leaving cycle - left: "+currentShift);
                 }
                 if ((currentShift > aimedShift)) {
                     Log.d(TAG, "center start - right");
@@ -184,6 +185,7 @@ public class SelectSceneActivity extends FlappyActivity {
                         currentShift -= (currentShift - aimedShift) / 10 + 1;
                         drawScenes();
                     }
+                    Log.d(TAG, "Leaving cycle - right: "+currentShift);
                 }
             }
 
