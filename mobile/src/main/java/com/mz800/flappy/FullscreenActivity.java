@@ -192,7 +192,6 @@ public class FullscreenActivity extends FlappyActivity {
         if (gameMenu.getVisibility() != View.VISIBLE) {
             pause();
         }
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     public void restartScene(View view) {

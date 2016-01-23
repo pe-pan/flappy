@@ -40,6 +40,14 @@ public class FlappyActivity extends Activity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "onPause");
+        super.onPause();
+        Device.music.pause();
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    }
+
     void saveScoreDetails() {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
