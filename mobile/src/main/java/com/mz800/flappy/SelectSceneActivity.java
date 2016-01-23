@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.Toast;
 
 /**
@@ -30,6 +31,7 @@ public class SelectSceneActivity extends FlappyActivity {
     private int sceneWidthSpace;
     private FingerUpGestureDetector detector;
     private int openScenes;
+    private View buttons;
 
     static final float START_FLING_INHIBITION = 0.05f;
     static final float FLING_INHIBITION = 0.95f;
@@ -53,6 +55,7 @@ public class SelectSceneActivity extends FlappyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selectscene);
         view = (SurfaceView) findViewById(R.id.sceneList);
+        buttons = findViewById(R.id.selectSceneButtons);
     }
 
     @Override
@@ -98,36 +101,16 @@ public class SelectSceneActivity extends FlappyActivity {
             }
 
             @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                Log.d(TAG, "Single tap");
-                int x = (int) e.getRawX();
-                int y = (int) e.getRawY();
-                if (y > (Device.displayHeight - sceneHeight) / 2 && y < (Device.displayHeight + sceneHeight) / 2 && currentShift + x > 0) {
-                    int scNo = (currentShift + x) / sceneWidthSpace;
-                    Log.d(TAG, "Scene no " + (scNo + 1));
-                    if (!canBeSelected(scNo)) {
-                        Toast.makeText(SelectSceneActivity.this, getString(R.string.notThisSceneYet), Toast.LENGTH_LONG).show();
-                        return true;
-                    }
-                    if (scNo >= 0 && scNo <= openScenes) {
-                        startActivity(new Intent(SelectSceneActivity.this, FullscreenActivity.class).putExtra(FullscreenActivity.SCENE_NUMBER, scNo + 1));
-                        storeSceneNumber(scNo);
-                        finish();
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
             public synchronized void onShowPress(MotionEvent e) {
                 Log.d(TAG, "Finger down");
+                buttons.setVisibility(View.GONE);
                 cancelFlingScrolling();
             }
 
             @Override
             public synchronized boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 Log.d(TAG, "scroll " + distanceX);
+                buttons.setVisibility(View.GONE);
                 cancelFlingScrolling();
                 shiftScenes(distanceX);
                 return true;
@@ -187,6 +170,13 @@ public class SelectSceneActivity extends FlappyActivity {
                     }
                     Log.d(TAG, "Leaving cycle - right: "+currentShift);
                 }
+                SelectSceneActivity.this.buttons.post(new Runnable() { //make sure it's run in UI thread
+                    public void run() {
+                        buttons.setVisibility(View.VISIBLE);
+                        Log.d(TAG, "Buttons visible");
+                    }
+                });
+
             }
 
             private void cancelFlingScrolling() {
@@ -326,6 +316,30 @@ public class SelectSceneActivity extends FlappyActivity {
         canvasResult.drawBitmap(src, 0, 0, paint);
 
         return bitmapResult;
+    }
+
+    public void startGame(View v) {
+        int scNo = (currentShift + Device.displayWidth/2) / sceneWidthSpace;
+
+        if (!canBeSelected(scNo)) {
+            //todo change this text / implementation
+            Toast.makeText(SelectSceneActivity.this, getString(R.string.notThisSceneYet), Toast.LENGTH_LONG).show();
+            return;
+        } else {
+            startActivity(new Intent(SelectSceneActivity.this, FullscreenActivity.class).putExtra(FullscreenActivity.SCENE_NUMBER, scNo + 1));
+            storeSceneNumber(scNo);
+            finish();
+            return;
+        }
+    }
+
+    public void showHighScores(View v) {
+        int scNo = (currentShift + Device.displayWidth/2) / sceneWidthSpace;
+        startActivity(new Intent(SelectSceneActivity.this, BestScoreActivity.class).putExtra(FullscreenActivity.SCENE_NUMBER, scNo + 1));
+    }
+
+    public void showHint(View v) {
+        Toast.makeText(SelectSceneActivity.this, "Will show hints", Toast.LENGTH_SHORT).show();
     }
 
     @Override
