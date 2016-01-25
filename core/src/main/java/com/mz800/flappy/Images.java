@@ -30,6 +30,8 @@ class Images {
     static BufferedImage redEnemyDown, redEnemyDownS1, redEnemyDownS2;
     static BufferedImage redEnemyLeft, redEnemyLeftS2;
     static BufferedImage redEnemyRight, redEnemyRightS2;
+    static BufferedImage redEnemyLeftS2Demo, redEnemyRightS2Demo;
+    static BufferedImage redEnemyDownS1Demo, redEnemyDownS2Demo;
     static BufferedImage ballCrash1, ballCrash2, ballCrash3, ballCrash4;
     static BufferedImage chickenCrash1;
     static BufferedImage blueEnemyCrash1;
@@ -62,11 +64,15 @@ class Images {
         redEnemyLeft = ImageUtils.createImage2x2x2(memory, 0x688d);
         redEnemyRight = ImageUtils.createImage2x2x2(memory, 0x67ed);
         redEnemyLeftS2 = ImageUtils.createImage2x3x2(memory, 0x68cd);
+        redEnemyLeftS2Demo = ImageUtils.get16x16Image(4, 0, redEnemyLeftS2);
         redEnemyRightS2 = ImageUtils.createImage2x3x2(memory, 0x682d);
+        redEnemyRightS2Demo = ImageUtils.get16x16Image(4, 0, redEnemyRightS2);
         redEnemyUpS1 = ImageUtils.createImage2x2x3(memory, 0x678d);
         redEnemyUpS2 = ImageUtils.createImage2x2x3(memory, 0x672d);
         redEnemyDownS1 = ImageUtils.createImage2x2x3(memory, 0x668d);
         redEnemyDownS2 = ImageUtils.createImage2x2x3(memory, 0x662d);
+        redEnemyDownS1Demo = ImageUtils.get16x16Image(0, 5, redEnemyDownS1);
+        redEnemyDownS2Demo = ImageUtils.get16x16Image(0, 5, redEnemyDownS2);
         chickenUp = ImageUtils.createImage2x2x2(memory, 0x5f1d);
         chickenUp1 = ImageUtils.createImage2x2x2(memory, 0x5f5d);
         chickenUp2 = ImageUtils.createImage2x2x2(memory, 0x5f9d);

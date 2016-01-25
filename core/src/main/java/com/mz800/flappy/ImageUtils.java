@@ -34,6 +34,10 @@ class ImageUtils {
         return createImage(3, 16, 2, colors, memory, addr);
     }
 
+    static BufferedImage get16x16Image(int x, int y, BufferedImage image) {
+        return image.getSubimage(x, y, 16, 16);
+    }
+
     static BufferedImage createImage2x2x3(byte[] memory, int addr) {
         return createImage(2, 24, 2, colors, memory, addr);
     }

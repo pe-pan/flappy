@@ -27,6 +27,11 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="sensorLandscape" >
         </activity>
+        <activity
+            android:name=".BestScoreActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="sensorLandscape" >
+        </activity>
     </application>
 
 </manifest>
