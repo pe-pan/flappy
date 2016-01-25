@@ -42,30 +42,26 @@ public class FullscreenActivity extends FlappyActivity {
         game = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                try {
-                    int scNo = getIntent().getIntExtra(SCENE_NUMBER, 1);
-                    Main main = Main.getInstance(view);
-                    main.listener = new Main.Listener() {
-                        @Override
-                        public int[] gameStarting(int scNo) {
-                            return loadScore(scNo);
-                        }
+                int scNo = getIntent().getIntExtra(SCENE_NUMBER, 1);
+                Main main = Main.getInstance(view);
+                main.listener = new Main.Listener() {
+                    @Override
+                    public int[] gameStarting(int scNo) {
+                        return loadScore(scNo);
+                    }
 
-                        @Override
-                        public void gameFinished(int scNo, int score, int lives, int time) {
-                            storeOpenScene(scNo);
-                            storeScore(scNo-1, score, lives);
-                            int sceneSpace = getResources().getInteger(R.integer.sceneSpace);
-                            int sceneWidth = SelectSceneActivity.getSceneWidth(sceneSpace);
-                            int minShift = SelectSceneActivity.getMinShift(sceneWidth);
-                            int currentShift = retrieveCurrentShift(minShift);
-                            storeScrollShift(currentShift + sceneSpace + sceneWidth);
-                        }
-                    };
-                    main.game(scNo);
-                } catch (Exception e) {
-                    Log.e("Activity", "Exception thrown "+e.getMessage(), e);
-                }
+                    @Override
+                    public void gameFinished(int scNo, int score, int lives, int time) {
+                        storeOpenScene(scNo);
+                        storeScore(scNo-1, score, lives);
+                        int sceneSpace = getResources().getInteger(R.integer.sceneSpace);
+                        int sceneWidth = SelectSceneActivity.getSceneWidth(sceneSpace);
+                        int minShift = SelectSceneActivity.getMinShift(sceneWidth);
+                        int currentShift = retrieveCurrentShift(minShift);
+                        storeScrollShift(currentShift + sceneSpace + sceneWidth);
+                    }
+                };
+                main.game(scNo);
                 return null;
             }
         }.execute();

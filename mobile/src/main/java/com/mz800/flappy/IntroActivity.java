@@ -43,12 +43,8 @@ public class IntroActivity extends FlappyActivity {
         intro = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                try {
-                    Main.getInstance(view);
-                    new Intro().intro();
-                } catch (Exception e) {
-                    Log.e("Activity", "Exception thrown " + e.getMessage(), e);
-                }
+                Main.getInstance(view);  //todo this should not be necessary -> move vram into Intro class
+                new Intro().intro();
                 return null;
             }
         }.execute();

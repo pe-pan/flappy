@@ -29,17 +29,17 @@ public class Main {
         void gameFinished(int scNo, int score, int lives, int time);
     }
 
-    public static Main getInstance(SurfaceView view) throws Exception {
+    public static Main getInstance(SurfaceView view) {
         Log.d(TAG, "Init");
         return new Main(view);
     }
 
-    private Main(SurfaceView view) throws Exception {
+    private Main(SurfaceView view)  {
         vram.createWindow(view);
         finalScr = new FinalScreen();
     }
 
-    void game(int scNo) throws Exception {
+    void game(int scNo) {
         keyboard.clearKeyPressed();
         keyboard.clear();
         Main.resetState(NORMAL_WAIT);
