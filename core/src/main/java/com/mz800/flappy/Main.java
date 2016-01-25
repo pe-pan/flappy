@@ -305,7 +305,7 @@ public class Main {
             }
             return gameState;
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Log.d(TAG, "Interrupting wait");
             return EXIT_GAME;
         }
     }
