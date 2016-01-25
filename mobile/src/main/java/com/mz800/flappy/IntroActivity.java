@@ -62,14 +62,6 @@ public class IntroActivity extends FlappyActivity {
         }
     }
 
-    @Override
-    protected void onPause() {
-        Log.d(TAG, "onPause");
-        super.onPause();
-        Device.music.pause();
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
-    }
-
     public void playIntro(View view) {
         mainMenu.setVisibility(View.GONE);
         //todo remove the code below from the production!
