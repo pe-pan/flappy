@@ -387,7 +387,7 @@ class Scene {
         return false;
     }
 
-    int gameLoop() throws Exception {
+    int gameLoop() {
         int wait = DELAYS[gameSpeed];
         keyboard.clear();
         while (true) {
