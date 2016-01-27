@@ -1,6 +1,8 @@
 package com.mz800.flappy;
 
 import com.mz800.flappy.awt.BufferedImage;
+import com.mz800.flappy.awt.Color;
+import com.mz800.flappy.awt.Graphics;
 
 import static com.mz800.flappy.Device.music;
 import static com.mz800.flappy.Device.vram;
@@ -17,7 +19,7 @@ public class BestScoreScreen {
 
     static int speed = SLOW;
 
-    public static void bestScore() {
+    public static void bestScore(BestScore[] bestScores) {
         vram.clear();
         vram.refresh();
         music.start();
@@ -25,23 +27,25 @@ public class BestScoreScreen {
         chickenBorder();
         if (!Main.isWaiting()) return;
 
+        BufferedImage background = getBestScoreList(bestScores);
+
         int x = 2*18;
         int y = 2*1;
         BufferedImage[][] horizontalIcons = { { Images.redEnemyRight, Images.redEnemyRightS2Demo}, {Images.redEnemyLeft, Images.redEnemyLeftS2Demo}};
         BufferedImage[] verticalIcons = { Images.redEnemyDownS1Demo, Images.redEnemyDownS2Demo };
         for (int i = 0; i < 10; i++) {
-            drawImage(x, y, Images.redEnemyDown);
+            drawImage(x, y, Images.redEnemyDown, background);
             for (int j = 0; j < 2*17; j++) {
                 int yMod4 = (y >> 1) & 0x1; // if y mod 4 == 1 then 1 else 0;
                 int inc = (yMod4 << 1) - 1; // if y mod 4 == 1 then +1 else -1;
                 x -= inc;                   // go left or right depending on if y mod 4 is divisible by 4
-                drawImage(x, y, horizontalIcons[yMod4][x & 0x01]);
+                drawImage(x, y, horizontalIcons[yMod4][x & 0x01], background);
                 if (!Main.isWaiting()) return;
             }
-            drawImage(x, y, Images.redEnemyDown);
+            drawImage(x, y, Images.redEnemyDown, background);
             for (int j = 0; j < 2; j++) {
                 y++;
-                drawImage(x, y, verticalIcons[j]);
+                drawImage(x, y, verticalIcons[j], background);
                 if (!Main.isWaiting()) return;
             }
         }
@@ -143,10 +147,32 @@ public class BestScoreScreen {
     }
 
 
+    private static BufferedImage getBestScoreList(BestScore[] bestScores) {
+        //create black background
+        BufferedImage background = new BufferedImage(18 * Constants.SPRITE_SIZE, 10 * Constants.SPRITE_SIZE, BufferedImage.TYPE_INT_RGB);
+        Graphics g = background.getGraphics();
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, background.getWidth(), background.getHeight());
+
+        for (int i = 0; i < bestScores.length; i++) {
+            BestScore bestScore = bestScores[i];
+            int y = i * Constants.SPRITE_SIZE;
+            g.drawString(bestScore.getPlayerId(), 0, y, Color.YELLOW);
+            g.drawText("   ", 8 * ((18 - 6) * 2 - 1), y, Color.WHITE);  // todo this is to clean too long player name; do it differently -> g.drawString should be restricted to rectangle
+            g.drawText(" "+bestScore.getLives()+"x", 8 * ((18 - 6) * 2 - 1), y + Constants.SPRITE_HALF, Color.LIGHT_GRAY);
+            g.drawImage(Images.chickenDown, (18 - 5) * Constants.SPRITE_SIZE, y, null);
+            g.drawText("At", (18 - 4) * Constants.SPRITE_SIZE, y, Color.LIGHT_GRAY);
+            g.drawText("S:", (18 - 4) * Constants.SPRITE_SIZE, y + Constants.SPRITE_HALF, Color.LIGHT_GRAY);
+            g.drawText(String.format("%5dx", bestScore.getAttempts()), (18 - 3) * Constants.SPRITE_SIZE, y, Color.WHITE);
+            g.drawText(String.format("%06d", bestScore.getScore()), (18 - 3) * Constants.SPRITE_SIZE, y + Constants.SPRITE_HALF, Color.YELLOW);
+        }
+        return background;
+    }
+
     private static int oldX = -1, oldY = -1;
-    private static void drawImage(int x, int y, BufferedImage img) {
+    private static void drawImage(int x, int y, BufferedImage img, BufferedImage background) {
         if (oldX >= 0) {
-            vram.emptyRectNoOfs(oldX, oldY, 2, 16);
+            vram.imageNoOfs(oldX, oldY, background.getSubimage((oldX - 2) * Constants.SPRITE_HALF, (oldY - 2) * Constants.SPRITE_HALF, Constants.SPRITE_SIZE, Constants.SPRITE_SIZE));
         }
         vram.imageNoOfs(x, y, img);
         vram.refresh();

@@ -7,9 +7,9 @@ import com.mz800.flappy.awt.BufferedImage;
 /**
  * Image utilities.
  * 
- * @author Petr Slechta
+ * @author Petr Slechta 2014; Petr Panuska 2016
  */
-class ImageUtils {
+public class ImageUtils {
 
     private static final int ZOOM = 1;
 
@@ -84,6 +84,10 @@ class ImageUtils {
             }
         }
         return img;
+    }
+
+    public static BufferedImage createLetterImage(int z, Color color, Color background) {
+        return createLetterImage(1, 8, color, Device.memory, 0x6add + 8 * z, background);
     }
 
     static BufferedImage createLetterImage(int w, int h, Color color, byte[] memory, int addr) {

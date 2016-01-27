@@ -4,12 +4,17 @@ package com.mz800.flappy;
  * Flappy:
  *   Original game created by dB-SOFT in 1984 for SHARP MZ-800 computer.
  *   Java version by Petr Slechta, 2014.
+ *   Android version by Petr Panuska, 2016.
  */
-class Constants {
+public class Constants {
 
     static final int SCREEN_WIDTH = 320;
     static final int SCREEN_HEIGHT = 200;
     static final int NUM_SCENES = 200;
+    static final int LIVES = 5;
+    public static final int SPRITE_SIZE = 16;
+    public static final int SPRITE_HALF = 8;
+    public static final int FONT_WIDTH = SPRITE_HALF;
 
     static final int UP = 1;
     static final int DOWN = 2;

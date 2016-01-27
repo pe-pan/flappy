@@ -39,8 +39,10 @@ public class BestScoreActivity extends FlappyActivity {
         animation = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
+                int sceneNumber = getIntent().getIntExtra(SCENE_NUMBER, 0);
+                BestScore[] bestScores = null; //BestScoreActivity.get(sceneNumber);
                 Main.resetState(Main.NORMAL_WAIT);
-                BestScoreScreen.bestScore();
+                BestScoreScreen.bestScore(bestScores);
                 return null;
             } }.execute();
     }

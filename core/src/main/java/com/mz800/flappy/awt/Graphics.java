@@ -3,6 +3,10 @@ package com.mz800.flappy.awt;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Typeface;
+
+import com.mz800.flappy.Constants;
+import com.mz800.flappy.ImageUtils;
 
 /**
  * Flappy:
@@ -35,5 +39,40 @@ public class Graphics {
     public boolean drawImage(BufferedImage img, int x, int y, Paint paint) {
         c.drawBitmap(img.getBitmap(), x, y, paint);
         return true;
+    }
+
+    public void drawString(String str, int x, int y, Color color) {
+        Paint p = new Paint();
+        p.setTypeface(Typeface.DEFAULT_BOLD);
+        p.setTextSize(Constants.SPRITE_SIZE);
+        p.setColor(color.getValue());
+        c.drawText(str, x, y + Constants.SPRITE_SIZE, p);
+    }
+
+    /**
+     * Draws string using monospaced (Flappy built-in) font.
+     * @param text
+     * @param x
+     * @param y
+     * @param color
+     */
+    public void drawText(String text, int x, int y, Color color) {
+        //todo copied from VRAM.printText()
+        for (int i = 0, maxi = text.length(); i < maxi; i++) {
+            int z = text.charAt(i);
+            if (z < 0x20 || z >= 0xE0) {
+                z = '!';
+            }
+            if (z >= 0xA0) {
+                z -= 0xA0;
+            } else if (z >= 0x80) {
+                z = '!';
+            } else {
+                z -= 0x20;
+            }
+            BufferedImage imgChar = ImageUtils.createLetterImage(z, color, Color.BLACK);
+            drawImage(imgChar, x, y, null);
+            x += Constants.FONT_WIDTH;
+        }
     }
 }

@@ -13,6 +13,7 @@ public enum Color {
     YELLOW(0xffffff00),
     WHITE(0xffffffff),
     DARK_GRAY(0xff404040),
+    LIGHT_GRAY(0xffc0c0c0),
 
     black(0xff000000),
     red(0xffff0000),
