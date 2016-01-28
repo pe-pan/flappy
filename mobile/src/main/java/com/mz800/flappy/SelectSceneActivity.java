@@ -335,7 +335,7 @@ public class SelectSceneActivity extends FlappyActivity {
 
     public void showHighScores(View v) {
         int scNo = (currentShift + Device.displayWidth/2) / sceneWidthSpace;
-        startActivity(new Intent(SelectSceneActivity.this, BestScoreActivity.class).putExtra(FullscreenActivity.SCENE_NUMBER, scNo + 1));
+        startActivity(new Intent(SelectSceneActivity.this, BestScoreActivity.class).putExtra(FullscreenActivity.SCENE_NUMBER, scNo));
     }
 
     public void showHint(View v) {
