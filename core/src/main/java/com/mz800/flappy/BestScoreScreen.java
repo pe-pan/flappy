@@ -15,7 +15,7 @@ import static com.mz800.flappy.Device.vram;
  */
 public class BestScoreScreen {
     public static final int FAST = 1;
-    public static final int SLOW = 50;
+    public static final int SLOW = 21; // DELAYS[5] from Scene class
 
     static int speed = SLOW;
 
