@@ -37,6 +37,7 @@ public class Main {
     private Main(SurfaceView view)  {
         vram.createWindow(view);
         finalScr = new FinalScreen();
+        lastTimePoint = System.nanoTime();
     }
 
     void game(int scNo) {
@@ -295,13 +296,30 @@ public class Main {
 
     private static int gameState = NORMAL_WAIT;
 
+    private static long lastTimePoint = 0;
+
+    /**
+     * Waits the given time. The time is shorten for the period spent between
+     * two subsequent calls of this method.
+     * @param t
+     * @return
+     */
     static synchronized int wait(int t) {
         try {
             if (gameState == NORMAL_WAIT) {
-                Main.class.wait(t * 6);
+                long waitTime = t * 6;
+                long currentTimePoint = System.nanoTime();
+                currentTimePoint -= lastTimePoint;              // period of time spent between two subsequent wait calls
+                currentTimePoint = currentTimePoint / 1000000;  // nanos -> millis
+                waitTime -= currentTimePoint;                   // shorten wait time for this period
+                if (waitTime > 0) {
+                    Main.class.wait(waitTime);
+                }
+                lastTimePoint = System.nanoTime();
             }
             while (gameState == KEEP_WAITING) {
                 Main.class.wait();
+                lastTimePoint = System.nanoTime();
             }
             return gameState;
         } catch (InterruptedException e) {
