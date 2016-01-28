@@ -44,6 +44,7 @@ class Images {
     static BufferedImage arrUp, arrLeft, arrRight, arrDown, space1, space2, space3;
     static BufferedImage cDbSoft, bySSKO;
     static BufferedImage score, time, sceneRed, sceneYellow;
+    static BufferedImage noEnemySleep1, noEnemySleep2, noEnemySleep3, noEnemySleep4;
 
     private static final String TAG = Images.class.getSimpleName();
 
@@ -135,6 +136,13 @@ class Images {
         time = ImageUtils.createTextImage(memory, 0x6E06 + 1, 4, Color.red, Color.BLACK);
         sceneRed = ImageUtils.createTextImage(memory, 0x6f81 + 1, 6, Color.red, Color.BLACK);
         sceneYellow = ImageUtils.createTextImage(memory, 0x6f81 + 1, 6, Color.yellow, Color.BLACK);
+
+        // out of redEnemySleep make noEnemySleep (the same picture but instead of the redEnemy, use transparent color)
+        Color[] colors = new Color[]{Color.TRANSPARENT, Color.TRANSPARENT, Color.TRANSPARENT, Color.YELLOW};
+        noEnemySleep1 = ImageUtils.createImage(2, 16, 2, colors, memory, 0x692d);
+        noEnemySleep2 = ImageUtils.createImage(2, 16, 2, colors, memory, 0x696d);
+        noEnemySleep3 = ImageUtils.createImage(2, 16, 2, colors, memory, 0x69ad);
+        noEnemySleep4 = ImageUtils.createImage(2, 16, 2, colors, memory, 0x69ed);
     }
 
 }

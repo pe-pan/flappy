@@ -19,6 +19,12 @@ public class BestScoreScreen {
 
     static int speed = SLOW;
 
+    private static BufferedImage[][] horizontalIcons = { { Images.redEnemyRight, Images.redEnemyRightS2Demo}, {Images.redEnemyLeft, Images.redEnemyLeftS2Demo}};
+    private static BufferedImage[] verticalIcons = { Images.redEnemyDownS1Demo, Images.redEnemyDownS2Demo };
+    private static BufferedImage[] flappySummoningFrog = { Images.chickenLeft, Images.chickenLeftFire1, Images.chickenLeftFire2, Images.chickenLeft, Images.chickenDown, null, null };
+    private static BufferedImage[] frogAppears = { null, null, null, Images.redEnemySleep4, Images.redEnemySleep3, Images.redEnemySleep2, Images.redEnemySleep1 }; // length of this array must be the same as flappySummoningFrog array
+    private static BufferedImage[] frogDisappears = { Images.noEnemySleep1, Images.noEnemySleep2, Images.noEnemySleep3, Images.noEnemySleep4 };
+    private static BufferedImage background;
     public static void bestScore(BestScore[] bestScores) {
         vram.clear();
         vram.refresh();
@@ -27,12 +33,14 @@ public class BestScoreScreen {
         chickenBorder();
         if (!Main.isWaiting()) return;
 
-        BufferedImage background = getBestScoreList(bestScores);
+        background = getBestScoreList(bestScores);
 
+        oldX = -1;
         int x = 2*18;
         int y = 2*1;
-        BufferedImage[][] horizontalIcons = { { Images.redEnemyRight, Images.redEnemyRightS2Demo}, {Images.redEnemyLeft, Images.redEnemyLeftS2Demo}};
-        BufferedImage[] verticalIcons = { Images.redEnemyDownS1Demo, Images.redEnemyDownS2Demo };
+
+        summonFrog(x, y);
+
         for (int i = 0; i < 10; i++) {
             drawImage(x, y, Images.redEnemyDown, background);
             for (int j = 0; j < 2*17; j++) {
@@ -43,10 +51,19 @@ public class BestScoreScreen {
                 if (!Main.isWaiting()) return;
             }
             drawImage(x, y, Images.redEnemyDown, background);
-            for (int j = 0; j < 2; j++) {
-                y++;
-                drawImage(x, y, verticalIcons[j], background);
-                if (!Main.isWaiting()) return;
+            if (i == 9) { // Frog has finished his way down
+                speed = SLOW;
+                summonFrog(x, y);  // get Frog stunned
+                for (BufferedImage image : frogDisappears) {  // let Frog to disappear
+                    drawImage(x, y, image, background);
+                }
+                drawImage(x, y, null, background);
+            } else {
+                for (int j = 0; j < 2; j++) {
+                    y++;
+                    drawImage(x, y, verticalIcons[j], background);
+                    if (!Main.isWaiting()) return;
+                }
             }
         }
     }
@@ -169,12 +186,27 @@ public class BestScoreScreen {
         return background;
     }
 
+    private static void summonFrog(int x, int y) {
+        for (int i = 0; i < flappySummoningFrog.length; i++) {
+            BufferedImage flappy = flappySummoningFrog[i];
+            if (flappy != null) vram.imageNoOfs(x + 2, y, flappy);
+            if (i == 2 && y == 2) vram.imageNoOfs(x + 1, y, Images.mushroom);  // show mushroom only first time (when summoning Frog not when dispersing Frog)
+            BufferedImage frog = frogAppears[i];
+            if (frog != null) {
+                drawImage(x, y, frog, background);
+            } else {
+                vram.refresh();
+                Main.wait(speed);
+            }
+        }
+    }
+
     private static int oldX = -1, oldY = -1;
     private static void drawImage(int x, int y, BufferedImage img, BufferedImage background) {
         if (oldX >= 0) {
             vram.imageNoOfs(oldX, oldY, background.getSubimage((oldX - 2) * Constants.SPRITE_HALF, (oldY - 2) * Constants.SPRITE_HALF, Constants.SPRITE_SIZE, Constants.SPRITE_SIZE));
         }
-        vram.imageNoOfs(x, y, img);
+        if (img != null) vram.imageNoOfs(x, y, img);
         vram.refresh();
         Main.wait(speed);
         oldX = x;
