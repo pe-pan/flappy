@@ -19,7 +19,7 @@
 
         <Button
             android:layout_width="0px"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:onClick="showHighScores"
@@ -27,7 +27,7 @@
 
         <Button
             android:layout_width="0px"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:onClick="startGame"
@@ -35,7 +35,7 @@
 
         <Button
             android:layout_width="0px"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:onClick="showHint"
