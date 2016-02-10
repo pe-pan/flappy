@@ -25,6 +25,11 @@ public class Main {
     Listener listener;
 
     interface Listener {
+        /**
+         * Returns previous scores and lives.
+         * @param scNo
+         * @return
+         */
         int[] gameStarting(int scNo);
         void gameFinished(int scNo, int score, int lives, int time);
     }
