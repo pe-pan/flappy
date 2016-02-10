@@ -171,7 +171,8 @@ public class BestScoreScreen {
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, background.getWidth(), background.getHeight());
 
-        for (int i = 0; i < bestScores.length; i++) {
+        int i;
+        for (i = 0; i < bestScores.length; i++) {
             BestScore bestScore = bestScores[i];
             int y = i * Constants.SPRITE_SIZE;
             g.drawString(bestScore.getPlayerName(), 0, y, Color.YELLOW);
@@ -182,6 +183,10 @@ public class BestScoreScreen {
             g.drawText("S:", (18 - 4) * Constants.SPRITE_SIZE, y + Constants.SPRITE_HALF, Color.LIGHT_GRAY);
             g.drawText(String.format("%5dx", bestScore.getAttempts()), (18 - 3) * Constants.SPRITE_SIZE, y, Color.WHITE);
             g.drawText(String.format("%06d", bestScore.getScore()), (18 - 3) * Constants.SPRITE_SIZE, y + Constants.SPRITE_HALF, Color.YELLOW);
+        }
+        for (; i < BestScore.TOP_VISIBLE_SCORES; i++) {
+            int y = i * Constants.SPRITE_SIZE;
+            g.drawString("<----- Empty Slot "+(i+1)+" ----->", 0, y, Color.YELLOW);
         }
         return background;
     }

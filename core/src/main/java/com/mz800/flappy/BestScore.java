@@ -14,6 +14,7 @@ import java.io.ObjectOutput;
  */
 public class BestScore implements Externalizable {
     private static final String TAG = BestScore.class.getSimpleName();
+    public static final int TOP_VISIBLE_SCORES = 10;
     private static final long serialVersionUID = 5397326438849609255L;
 
     private int score;
