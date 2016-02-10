@@ -174,7 +174,7 @@ public class BestScoreScreen {
         for (int i = 0; i < bestScores.length; i++) {
             BestScore bestScore = bestScores[i];
             int y = i * Constants.SPRITE_SIZE;
-            g.drawString(bestScore.getPlayerId(), 0, y, Color.YELLOW);
+            g.drawString(bestScore.getPlayerName(), 0, y, Color.YELLOW);
             g.drawText("   ", 8 * ((18 - 6) * 2 - 1), y, Color.WHITE);  // todo this is to clean too long player name; do it differently -> g.drawString should be restricted to rectangle
             g.drawText(" "+bestScore.getLives()+"x", 8 * ((18 - 6) * 2 - 1), y + Constants.SPRITE_HALF, Color.LIGHT_GRAY);
             g.drawImage(Images.chickenDown, (18 - 5) * Constants.SPRITE_SIZE, y, null);

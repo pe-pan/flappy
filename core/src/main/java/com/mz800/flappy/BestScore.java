@@ -21,6 +21,11 @@ public class BestScore implements Externalizable {
     private long date;
     private String playerId;
 
+    /**
+     * Lazy filled name of the player.
+     */
+    private String playerName;
+
     @Override
     public void readExternal(ObjectInput input) throws IOException, ClassNotFoundException {
         score = input.readInt();
@@ -28,6 +33,7 @@ public class BestScore implements Externalizable {
         attempts = input.readInt();
         date  = input.readLong();
         playerId = (String) input.readObject();
+        playerName = "Newbie"; //todo string constant
     }
 
     @Override
@@ -69,5 +75,25 @@ public class BestScore implements Externalizable {
 
     public String getPlayerId() {
         return playerId;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
+    @Override
+    public String toString() {
+        return "BestScore{" +
+                "score=" + score +
+                ", lives=" + lives +
+                ", attempts=" + attempts +
+                ", date=" + date +
+                ", playerId='" + playerId + '\'' +
+                ", playerName='" + playerName + '\'' +
+                '}';
     }
 }
