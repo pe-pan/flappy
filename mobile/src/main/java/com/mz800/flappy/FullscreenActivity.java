@@ -22,8 +22,6 @@ public class FullscreenActivity extends FlappyActivity {
     private View gameMenu;
     private AsyncTask<Void, Void, Void> game;
 
-    public static final String SCENE_NUMBER = "SCENE_NUMBER";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");

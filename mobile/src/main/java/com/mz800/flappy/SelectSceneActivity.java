@@ -326,7 +326,7 @@ public class SelectSceneActivity extends FlappyActivity {
             Toast.makeText(SelectSceneActivity.this, getString(R.string.notThisSceneYet), Toast.LENGTH_LONG).show();
             return;
         } else {
-            startActivity(new Intent(SelectSceneActivity.this, FullscreenActivity.class).putExtra(FullscreenActivity.SCENE_NUMBER, scNo + 1));
+            startActivity(new Intent(SelectSceneActivity.this, FullscreenActivity.class).putExtra(SCENE_NUMBER, scNo + 1));
             storeSceneNumber(scNo);
             finish();
             return;
@@ -335,7 +335,7 @@ public class SelectSceneActivity extends FlappyActivity {
 
     public void showHighScores(View v) {
         int scNo = (currentShift + Device.displayWidth/2) / sceneWidthSpace;
-        startActivity(new Intent(SelectSceneActivity.this, BestScoreActivity.class).putExtra(FullscreenActivity.SCENE_NUMBER, scNo));
+        startActivity(new Intent(SelectSceneActivity.this, BestScoreActivity.class).putExtra(SCENE_NUMBER, scNo));
     }
 
     public void showHint(View v) {
