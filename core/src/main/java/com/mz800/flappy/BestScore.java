@@ -14,12 +14,17 @@ import java.io.ObjectOutput;
  */
 public class BestScore implements Externalizable {
     private static final String TAG = BestScore.class.getSimpleName();
+    private static final long serialVersionUID = 5397326438849609255L;
 
     private int score;
     private int lives;
     private int attempts;
     private long date;
     private String playerId;
+
+    //for externalizable
+    public BestScore() {
+    }
 
     /**
      * Lazy filled name of the player.
