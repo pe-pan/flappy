@@ -12,6 +12,7 @@ import java.io.ObjectOutput;
  * Android version by Petr Panuska, 2015.
  */
 public class ScreenScore implements Externalizable {
+    private static final long serialVersionUID = 6450251885936319999L;
     public static boolean initialized = false;
     public static final ScreenScore[] screenScores = new ScreenScore[Constants.NUM_SCENES];
 
@@ -22,6 +23,8 @@ public class ScreenScore implements Externalizable {
     int bestScore;
     int bestTime;
     String bestPlayer;
+
+    public ScreenScore() { }
 
     static void init() {
         for (int i = 0; i < screenScores.length; i++) {
