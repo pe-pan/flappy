@@ -268,4 +268,10 @@ public class FlappyActivity extends Activity {
         saveScoreDetails();
         return true;
     }
+
+    void increaseAttempts(int scNo) {
+        loadScoreDetails();
+        ScreenScore.screenScores[scNo].overallAttempts++;
+        saveScoreDetails();
+    }
 }
