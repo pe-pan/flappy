@@ -1,7 +1,6 @@
 package com.mz800.flappy;
 
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -67,19 +66,20 @@ public class IntroActivity extends FlappyActivity {
     }
 
     public void playGame(View view) {
-        startActivity(new Intent(this, FullscreenActivity.class).putExtra(FullscreenActivity.SCENE_NUMBER, retrieveSceneNumber()+1));
-        Main.setState(Main.EXIT_GAME);
-        mainMenu.setVisibility(View.GONE);
-        intro.cancel(true);
-        finish();
+        startActivity(new Intent(this, FullscreenActivity.class).putExtra(SCENE_NUMBER, retrieveSceneNumber() + 1));
+        hideMenuAndFinishIntro();
     }
 
     public void selectScreen(View view) {
-        Main.setState(Main.EXIT_GAME);
-        mainMenu.setVisibility(View.GONE);
-        Device.music.stop();
         startActivity(new Intent(this, SelectSceneActivity.class));
+        hideMenuAndFinishIntro();
+    }
+
+    private void hideMenuAndFinishIntro() {
+        mainMenu.setVisibility(View.GONE);
+        Main.setState(Main.EXIT_GAME);
         intro.cancel(true);
+        Device.music.stop();
         finish();
     }
 
