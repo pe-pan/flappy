@@ -26,11 +26,19 @@ public class Main {
 
     interface Listener {
         /**
-         * Returns previous scores and lives.
+         * This is called every game (every 5 Flappy lives). Returns previous scores and lives.
          * @param scNo
          * @return
          */
         int[] gameStarting(int scNo);
+
+        /** This is called each time Flappy dies.
+         *
+         * @param scNo
+         * @param score
+         * @param lives
+         * @param time
+         */
         void gameFinished(int scNo, int score, int lives, int time);
     }
 
