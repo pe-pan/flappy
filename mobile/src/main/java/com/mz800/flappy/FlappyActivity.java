@@ -119,6 +119,11 @@ public class FlappyActivity extends Activity {
         return p.getInt(OPEN_SCENES, 0);
     }
 
+    /**
+     * Stores the open scene only if the given number is bigger than already stored!
+     *
+     * @param num
+     */
     void storeOpenScene(int num) {
         int current = retrieveOpenScenes();
         if (num <= current) return;
