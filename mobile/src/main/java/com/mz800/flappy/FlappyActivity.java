@@ -133,6 +133,12 @@ public class FlappyActivity extends Activity {
         ed.apply();
     }
 
+    /**
+     * Returns two-ints-array where first int is the sum of scores of the scene and second is the number of lives.
+     *
+     * @param scNo
+     * @return
+     */
     int[] loadScore(int scNo) {
         loadScoreDetails();
         int previousScores = 0;
