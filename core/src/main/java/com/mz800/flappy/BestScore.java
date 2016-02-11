@@ -91,6 +91,24 @@ public class BestScore implements Externalizable {
         this.playerName = playerName;
     }
 
+    public boolean isBetter(BestScore anotherScore) {
+        if (anotherScore.score < this.score) return true;
+        if (anotherScore.score > this.score) return false;
+        // scores equal
+        if (anotherScore.lives < this.lives) return true;
+        if (anotherScore.lives > this.lives) return false;
+        // lives equal
+        if (anotherScore.attempts < this.attempts) return true;
+        if (anotherScore.attempts > this.attempts) return false;
+        // attempts equal
+        if (anotherScore.date < this.date) return true;
+        if (anotherScore.date > this.date) return false;
+        // dates equal
+
+        // they are equal
+        return false;
+    }
+
     @Override
     public String toString() {
         return "BestScore{" +

@@ -40,7 +40,7 @@ public class BestScoreActivity extends FlappyActivity {
             @Override
             protected Void doInBackground(Void... params) {
                 int sceneNumber = getIntent().getIntExtra(SCENE_NUMBER, 0);
-                BestScore[] bestScores = null; //BestScoreActivity.get(sceneNumber);
+                BestScore[] bestScores = bestScoreService.getBestScores(sceneNumber);
                 Main.resetState(Main.NORMAL_WAIT);
                 BestScoreScreen.bestScore(bestScores);
                 return null;

@@ -22,4 +22,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':core')
+    compile project(path: ':backend', configuration: 'android-endpoints')
+    compile 'com.google.http-client:google-http-client-gson:1.19.0' exclude module: 'httpclient'
+
+    testCompile 'junit:junit:4.12'
 }

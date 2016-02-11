@@ -14,7 +14,7 @@ import static com.mz800.flappy.Device.keyboard;
  * Flappy:
  * Original game created by dB-SOFT in 1984 for SHARP MZ-800 computer.
  * Java version by Petr Slechta, 2014.
- * Android version by Petr Panuska, 2015.
+ * Android version by Petr Panuska, 2016.
  */
 public class FullscreenActivity extends FlappyActivity {
     private static final String TAG = FullscreenActivity.class.getSimpleName();
@@ -45,12 +45,15 @@ public class FullscreenActivity extends FlappyActivity {
                 main.listener = new Main.Listener() {
                     @Override
                     public int[] gameStarting(int scNo) {
+                        // todo increase number of attempts
                         return loadScore(scNo);
                     }
 
                     @Override
                     public void gameFinished(int scNo, int score, int lives, int time) {
                         storeOpenScene(scNo);
+                        //todo use the real attempts
+                        bestScoreService.addBestScore(scNo - 1, new BestScore(score, lives, 1, System.currentTimeMillis(), retrievePlayerId()));
                         storeScore(scNo-1, score, lives);
                         int sceneSpace = getResources().getInteger(R.integer.sceneSpace);
                         int sceneWidth = SelectSceneActivity.getSceneWidth(sceneSpace);

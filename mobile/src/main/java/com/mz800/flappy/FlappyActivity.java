@@ -28,7 +28,7 @@ import java.util.UUID;
  * Flappy:
  * Original game created by dB-SOFT in 1984 for SHARP MZ-800 computer.
  * Java version by Petr Slechta, 2014.
- * Android version by Petr Panuska, 2015.
+ * Android version by Petr Panuska, 2016.
  */
 public class FlappyActivity extends Activity {
     private static final String TAG = FlappyActivity.class.getSimpleName();
@@ -49,6 +49,9 @@ public class FlappyActivity extends Activity {
         super.onResume();
         Device.init(view);
         loadScoreDetails();
+        if (bestScoreService == null) {
+            bestScoreService = new BestScoreService(this);
+        }
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
