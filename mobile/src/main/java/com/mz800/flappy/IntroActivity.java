@@ -93,6 +93,7 @@ public class IntroActivity extends FlappyActivity {
     }
 
     public void exitGame(View view) {
+        hideMenuAndFinishIntro();
         Device.music.destroy();
         super.onBackPressed();
     }
