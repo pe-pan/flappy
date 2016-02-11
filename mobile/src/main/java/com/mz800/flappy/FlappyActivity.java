@@ -1,19 +1,28 @@
 package com.mz800.flappy;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.media.AudioManager;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.ContactsContract;
 import android.util.Base64;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.widget.Toast;
+
+import com.mz800.flappy.score.BestScoreService;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * Flappy:
@@ -29,8 +38,11 @@ public class FlappyActivity extends Activity {
     public static final String SCROLL_SHIFT = "scroll.shift";
     public static final String OPEN_SCENES = "open.scenes";
     public static final String SCORES = "metadata";
+    public static final String PLAYER_NAME = "player.name";
+    public static final String PLAYER_ID = "player.id";
 
     protected SurfaceView view;
+    protected static BestScoreService bestScoreService;
 
     @Override
     protected void onResume() {
@@ -130,6 +142,94 @@ public class FlappyActivity extends Activity {
         SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor ed = p.edit();
         ed.putInt(OPEN_SCENES, num);
+        ed.apply();
+    }
+
+    String retrievePlayerName() {
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        String name = p.getString(PLAYER_NAME, null);
+        if (name == null) {
+            name = getDefaultPlayerName();
+            storePlayerName(name);
+        }
+        return name;
+    }
+
+    private static String[] codeNames = {
+            "No Name", "No Name", "Cupcake", "Donut", "Eclair", "Eclair", "Eclair", "Froyo", "Gingerbread", "Gingerbread",
+            "Honeycomb", "Honeycomb", "Honeycomb", "Ice Cream Sandwich", "Ice Cream Sandwich", "Jelly Bean", "Jelly Bean", "Jelly Bean", "KitKat", "N/A",
+            "Lollipop", "Lollipop", "Marshmallow"};
+
+    private String getShortUUID() {
+        Random r = new Random();
+        byte[] buf = new byte[6];
+        r.nextBytes(buf);
+
+        return Base64.encodeToString(buf, Base64.NO_PADDING);
+    }
+
+    private String getDeviceTypeName() {
+        String s;
+        try {
+            int apiLevel = Build.VERSION.SDK_INT;
+            String codeName = apiLevel >= codeNames.length ? "Future" : codeNames[apiLevel - 1];
+            s = Build.MANUFACTURER.substring(0, 1).toUpperCase() + Build.MANUFACTURER.substring(1) // make first letter upper case
+                    + " " + Build.MODEL + " on " + codeName + " " + Build.VERSION.RELEASE + " (" + apiLevel + ") ";
+        } catch (Exception e) {
+            s = "";
+        }
+        s = s + Device.displayWidth + "x" + Device.displayHeight + " " + getShortUUID();
+        return s;
+    }
+
+    private String getDefaultPlayerName() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            try {
+                Uri CONTENT_URI = ContactsContract.Profile.CONTENT_URI;
+                String DISPLAY_NAME = ContactsContract.Profile.DISPLAY_NAME;
+                ContentResolver contentResolver = getContentResolver();
+                Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null);
+                if (cursor.moveToFirst()) { // is the at least one account?
+                    return cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Exception when reading contact profile", e);
+                return getDeviceTypeName();
+            }
+        } else {
+            // pre-ICS device
+            return getDeviceTypeName();
+        }
+        // no account found
+        return getDeviceTypeName();
+    }
+
+    void storePlayerName(String playerName) {
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = p.edit();
+        ed.putString(PLAYER_NAME, playerName);
+        ed.apply();
+    }
+
+    /**
+     * Generates new UUID player ID and stores it if there is no generated yet.
+     *
+     * @return
+     */
+    String retrievePlayerId() {
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        String playerId = p.getString(PLAYER_ID, null);
+        if (playerId == null) {
+            playerId = UUID.randomUUID().toString();
+            storePlayerId(playerId);
+        }
+        return playerId;
+    }
+
+    void storePlayerId(String playerId) {
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = p.edit();
+        ed.putString(PLAYER_ID, playerId);
         ed.apply();
     }
 

@@ -43,8 +43,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:onClick="playIntro"
-                android:text="@string/resume_intro" />
+                android:onClick="showOptions"
+                android:text="@string/show_options" />
 
             <Button
                 android:layout_width="match_parent"

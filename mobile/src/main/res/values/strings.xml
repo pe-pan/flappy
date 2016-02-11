@@ -8,6 +8,7 @@
     <string name="main_menu">Main Menu</string>
     <string name="play_flappy">Play Flappy</string>
     <string name="resume_intro">Resume Intro</string>
+    <string name="show_options">Give Name</string>
     <string name="exit_flappy">Exit Flappy</string>
     <string name="notThisSceneYet">Not this scene yet!</string>
     <string name="scores">Scores</string>

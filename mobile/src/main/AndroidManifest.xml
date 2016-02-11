@@ -32,6 +32,11 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="sensorLandscape" >
         </activity>
+        <activity
+            android:name=".OptionsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="sensorLandscape" >
+        </activity>
     </application>
 
 </manifest>

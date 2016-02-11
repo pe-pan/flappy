@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Toast;
 
 /**
  * Flappy:
@@ -57,12 +56,9 @@ public class IntroActivity extends FlappyActivity {
         }
     }
 
-    public void playIntro(View view) {
-        mainMenu.setVisibility(View.GONE);
-        //todo remove the code below from the production!
-        Main.cheating = !Main.cheating;
-        Toast.makeText(this, "Cheating "+(Main.cheating ? "ON" : "OFF"), Toast.LENGTH_LONG).show();
-        //todo remove the code above from the production!
+    public void showOptions(View view) {
+        startActivity(new Intent(this, OptionsActivity.class));
+        hideMenuAndFinishIntro();
     }
 
     public void playGame(View view) {
