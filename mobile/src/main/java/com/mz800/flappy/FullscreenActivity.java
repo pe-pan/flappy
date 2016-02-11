@@ -1,13 +1,13 @@
 package com.mz800.flappy;
 
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
+
 import static com.mz800.flappy.Device.keyboard;
 
 /**
@@ -54,7 +54,7 @@ public class FullscreenActivity extends FlappyActivity {
                         storeOpenScene(scNo);
                         //todo use the real attempts
                         bestScoreService.addBestScore(scNo - 1, new BestScore(score, lives, 1, System.currentTimeMillis(), retrievePlayerId()));
-                        storeScore(scNo-1, score, lives);
+                        storeScore(scNo - 1, score, lives);
                         int sceneSpace = getResources().getInteger(R.integer.sceneSpace);
                         int sceneWidth = SelectSceneActivity.getSceneWidth(sceneSpace);
                         int minShift = SelectSceneActivity.getMinShift(sceneWidth);
@@ -115,12 +115,12 @@ public class FullscreenActivity extends FlappyActivity {
                 key = 0;
                 isMove = false;
                 break;
-            case MotionEvent.ACTION_POINTER_UP :
+            case MotionEvent.ACTION_POINTER_UP:
             case MotionEvent.ACTION_POINTER_2_UP:
                 Log.d(TAG, "Action Pointer Up");
                 keyboard.keyUp(SPACE_BAR);
                 break;
-            case MotionEvent.ACTION_POINTER_DOWN :
+            case MotionEvent.ACTION_POINTER_DOWN:
             case MotionEvent.ACTION_POINTER_2_DOWN:
                 Log.d(TAG, "Action Pointer Down");
                 keyboard.keyDown(SPACE_BAR);
