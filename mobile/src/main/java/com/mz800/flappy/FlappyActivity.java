@@ -62,9 +62,8 @@ public class FlappyActivity extends Activity {
             SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
             SharedPreferences.Editor ed = p.edit();
             ed.putString(SCORES, base64);
-            ed.commit();
-//            ed.apply();
-        } catch(IOException e) {
+            ed.commit(); // persist immediately so we are safe
+        } catch (IOException e) {
             Log.e(TAG, "Exception when saving score details", e);
             Toast.makeText(this, "Cannot save scores!", Toast.LENGTH_LONG).show();
         }
@@ -132,14 +131,13 @@ public class FlappyActivity extends Activity {
     int[] loadScore(int scNo) {
         loadScoreDetails();
         int previousScores = 0;
-        for (int i = 0; i < scNo-1; i++) {
+        for (int i = 0; i < scNo - 1; i++) {
             previousScores += ScreenScore.screenScores[i].myBestScore;
         }
-        return new int[] { previousScores,
-                (scNo-1) % 5 == 0                     // for every fifth scene
+        return new int[]{previousScores,
+                (scNo - 1) % 5 == 0                     // for every fifth scene
                         ? 5 :                         // give 5 lives
-                        ScreenScore.screenScores[scNo-2].myLives }; // or the previous num of lives
-
+                        ScreenScore.screenScores[scNo - 2].myLives}; // or the previous num of lives
     }
 
     void storeScore(int scNo, int score, int lives) {
