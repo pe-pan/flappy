@@ -25,7 +25,12 @@ public class BestScoreScreen {
     private static BufferedImage[] frogAppears = { null, null, null, Images.redEnemySleep4, Images.redEnemySleep3, Images.redEnemySleep2, Images.redEnemySleep1 }; // length of this array must be the same as flappySummoningFrog array
     private static BufferedImage[] frogDisappears = { Images.noEnemySleep1, Images.noEnemySleep2, Images.noEnemySleep3, Images.noEnemySleep4 };
     private static BufferedImage background;
-    public static void bestScore(BestScore[] bestScores) {
+
+    interface GiveBestScore {
+        BestScore[] callback();
+    }
+
+    public static void bestScore(GiveBestScore giveBestScore) {
         vram.clear();
         vram.refresh();
         music.start();
@@ -33,7 +38,7 @@ public class BestScoreScreen {
         chickenBorder();
         if (!Main.isWaiting()) return;
 
-        background = getBestScoreList(bestScores);
+        background = getBestScoreList(giveBestScore.callback());
 
         oldX = -1;
         int x = 2*18;

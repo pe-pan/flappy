@@ -3,6 +3,7 @@ package com.mz800.flappy.backend;
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiNamespace;
+import com.google.apphosting.api.ApiProxy;
 import com.googlecode.objectify.cmd.Query;
 
 import java.util.Date;
@@ -56,7 +57,21 @@ public class SceneService {
 
     @ApiMethod(name="putPlayer")
     public void putPlayer(Player player) {
+        player.time = System.currentTimeMillis();  //todo is this time synchronized with all servlet instances?
+        // as the time is most probably not synchronized
+        // FMI, see http://stackoverflow.com/questions/18264338/google-appengine-server-instance-clock-synchronization
+        // http://stackoverflow.com/questions/16184051/google-app-engine-sync-all-servers-time-and-clients-javascript-timers?lq=1
+        // if this will not work, one workaround is to deduct certain amount of time from the parameter in getPlayersSince method
+        // this way this method might return even players already returned on the other hand, it will never miss any player
+        // the amount of time should be bigger than is the maximum of assumed diference in times of unsynchronized servers
         log.info("Putting player "+player);
         ofy().save().entity(player).now();
+    }
+
+    @ApiMethod(name="getPlayersSince")
+    public List<Player> getPlayersSince(@Named("time") long time) {
+        log.info("Giving all players having time bigger than "+time);
+        Query<Player> q = ofy().load().type(Player.class).filter("time >", time);
+        return q.list();
     }
 }

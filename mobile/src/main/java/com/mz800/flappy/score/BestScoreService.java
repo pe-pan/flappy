@@ -43,6 +43,7 @@ public class BestScoreService {
     private static final Executor SERIAL_EXECUTOR = new SerialExecutor();
     private final Map<Integer, BestScore[]> scoreCache; // best scores are sorted from the best to the worse
     private final Map<String, String> playersCache; // <playerId, playerName>
+    private long newestPlayerTime = 0;              // time of player that was synchronized last time
     private static final int BEST_SCORE_FILE_VERSION = 1;
     private final PersistentQueue queue;
     public static final int PLAYERS_FILE_VERSION = 1;
@@ -54,20 +55,25 @@ public class BestScoreService {
         scoreCache = new HashMap<>();
         playersCache = new HashMap<>();
 
+        loadPlayersCache();
+
         SceneService.Builder sceneServiceBuilder = new SceneService.Builder(new NetHttpTransport(), getJsonFactory(), null);
 
         remoteService = sceneServiceBuilder.build();
 
-        PersistentQueue.GetPlayerMessage.registerCallback(new PersistentQueue.GetPlayerMessage.Callback() {
+        PersistentQueue.GetPlayersMessage.registerCallback(new PersistentQueue.GetPlayersMessage.Callback() {
             @Override
-            public void handleSendResult(PersistentQueue.GetPlayerMessage message, Player player) {
-                Log.d(TAG, "Async handling result of send; putting player into cache: " + player);
-                if (player != null) {
+            public void handleSendResult(PersistentQueue.GetPlayersMessage message, List<Player> players) {
+                Log.d(TAG, "Async handling result of send; putting " + players.size() + " players into cache");
+                for (Player player : players) {
                     synchronized (playersCache) {
                         playersCache.put(player.getId(), player.getName());
+                        if (player.getTime() > newestPlayerTime) {
+                            newestPlayerTime = player.getTime();
+                        }
                     }
-                    savePlayersCache();
                 }
+                savePlayersCache();
             }
         });
 
@@ -115,28 +121,24 @@ public class BestScoreService {
         }
     }
 
-    public BestScore[] getBestScores(int scene) {
-        BestScore[] scores = get(scene);
-        for (BestScore score : scores) {
-            synchronized (playersCache) {
-                //todo this should be done differently (put the player name already in the cache)
-                String playerName = playersCache.get(score.getPlayerId());
-                if (playerName == null) {
-                    loadPlayersCache();
-                    playerName = playersCache.get(score.getPlayerId());
-                }
-                if (playerName != null) {
-                    score.setPlayerName(playerName);
-                } else {
-                    updatePlayers(score.getPlayerId());
+    public void updateBestScoresAndPlayers(int scene) {
+        updateBestScores(scene);
+        updatePlayers();
+    }
+
+    public BestScore[] getBestScoresFromCache(int scene) {
+        synchronized (scoreCache) {
+            BestScore[] scores = get(scene); // this first loads the cache from file if not loaded yet
+            for (BestScore score : scores) {
+                synchronized (playersCache) {
+                    String playerName = playersCache.get(score.getPlayerId());
+                    if (playerName != null) {
+                        score.setPlayerName(playerName);
+                    }
                 }
             }
+            return scores;
         }
-        updateBestScores(scene);
-        // calcuate hash from existing users and send it to server
-        // server calculates the same hash and remembers it
-        // this will save some reads in case there is not many changes in top scores
-        return scores;
     }
 
     public void addBestScore(int scene, BestScore bestScore) {
@@ -254,6 +256,7 @@ public class BestScoreService {
                     playersCache.put(playerId, playerName);
                 }
             }
+            newestPlayerTime = stream.readLong();
             stream.close();
         } catch (IOException | ClassNotFoundException e) {
             Log.e(TAG, "Exception when loading players cache", e);
@@ -279,6 +282,7 @@ public class BestScoreService {
                     stream.writeObject(e.getKey());
                     stream.writeObject(e.getValue());
                 }
+                stream.writeLong(newestPlayerTime);
             }
             stream.close();
         } catch (IOException e) {
@@ -312,11 +316,11 @@ public class BestScoreService {
     //as this op can take couple of seconds (in case the service is not accessible or the internet is off)
     //this must be run in async task
     //todo try to remove this synchronization and don't use async task
-    public void updatePlayers(final String playerId) {
+    public void updatePlayers() {
         executeTask(new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                queue.getPlayer(playerId);
+                queue.getPlayers(newestPlayerTime);
                 return null;
             }
         });

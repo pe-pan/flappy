@@ -7,6 +7,7 @@ import com.google.api.client.util.DateTime;
 import com.mz800.flappy.BestScore;
 import com.mz800.flappy.backend.sceneService.SceneService;
 import com.mz800.flappy.backend.sceneService.model.Player;
+import com.mz800.flappy.backend.sceneService.model.PlayerCollection;
 import com.mz800.flappy.backend.sceneService.model.SceneRecord;
 import com.mz800.flappy.backend.sceneService.model.SceneRecordCollection;
 
@@ -19,6 +20,7 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,8 +50,8 @@ class PersistentQueue implements Runnable {
         _persistMessageAndNotify(new PutPlayerMessage(id, name));
     }
 
-    void getPlayer(final String id) {
-        _persistMessageAndNotify(new GetPlayerMessage(id));
+    void getPlayers(final long time) {
+        _persistMessageAndNotify(new GetPlayersMessage(time));
     }
 
     void topScore(final int sceneNo) {
@@ -275,63 +277,63 @@ class PersistentQueue implements Runnable {
         }
     }
 
-    public static class GetPlayerMessage extends Message {
+    public static class GetPlayersMessage extends Message {
         private static final long serialVersionUID = -4146701661718242293L;
 
         interface Callback {
-            void handleSendResult(GetPlayerMessage message, Player player);
+            void handleSendResult(GetPlayersMessage message, List<Player> player);
         }
 
         static Callback callback = null;
 
         static void registerCallback(Callback callback) {
-            GetPlayerMessage.callback = callback;
+            GetPlayersMessage.callback = callback;
         }
 
-        private String playerId;
+        private long time;
 
-        public GetPlayerMessage(String playerId) {
-            this.playerId = playerId;
+        public GetPlayersMessage(long time) {
+            this.time = time;
         }
 
         //for externalizable
-        public GetPlayerMessage() {
+        public GetPlayersMessage() {
         }
 
         @Override
         protected String getFileName() {
-            return "get_player_" + playerId;
+            return "get_players";
         }
 
         @Override
         Object send() throws IOException {
-            Log.d(TAG, "Sending message Get Player for player " + playerId);
-            SceneService.GetPlayer getPlayer = BestScoreService.remoteService.getPlayer(playerId);
-            Player result = getPlayer.execute();
-            Log.d(TAG, getPlayer.toString());
-            if (callback != null) {
-                callback.handleSendResult(this, result);
+            Log.d(TAG, "Sending message Get Players for player newer than " + new Date(time));
+            SceneService.GetPlayersSince getPlayersSince = BestScoreService.remoteService.getPlayersSince(time);
+            PlayerCollection players = getPlayersSince.execute();
+            Log.d(TAG, getPlayersSince.toString());
+            if (callback != null && players != null && players.getItems() != null && players.getItems().size() > 0) {
+                callback.handleSendResult(this, players.getItems());
             }
-            return result;
+            return players;
         }
 
         @Override
         public String toString() {
-            return "GetPlayerMessage{" +
-                    "playerId='" + playerId + '\'' +
+            return "GetPlayersMessage{" +
+                    "time=" + time +
                     '}';
         }
 
         @Override
         public void writeExternal(ObjectOutput output) throws IOException {
             super.writeExternal(output);
-            output.writeObject(playerId);
+            output.writeLong(time);
         }
 
         @Override
         public void readExternal(ObjectInput input) throws IOException, ClassNotFoundException {
             super.readExternal(input);
-            playerId = (String) input.readObject();
+            time = input.readLong();
         }
     }
 

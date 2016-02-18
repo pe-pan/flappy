@@ -8,6 +8,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -79,5 +80,38 @@ public class PlayerTest {
         assert player != null;
         assert player.id.equals("id2");
         assert player.name.equals("Jenik");
+    }
+
+    @Test
+    public void testOrder() {
+        long time = System.currentTimeMillis();
+        List<Player> players = service.getPlayersSince(time);
+        assert players.size() == 0;
+
+        service.putPlayer(new Player("id0", "Petulka"));
+        service.putPlayer(new Player("id1", "Pavlicek"));
+        service.putPlayer(new Player("id0", "Peta"));
+
+        players = service.getPlayersSince(time);
+        assert players.size() == 2;
+
+        Player petrik, pavlik;
+        if (players.get(0).id.equals("id0")) {
+            petrik = players.get(0);
+            pavlik = players.get(1);
+        } else {
+            petrik = players.get(1);
+            pavlik = players.get(0);
+        }
+
+        assert petrik.id.equals("id0");
+        assert pavlik.id.equals("id1");
+        assert petrik.name.equals("Peta");
+        assert pavlik.name.equals("Pavlicek");
+
+        assert petrik.time > pavlik.time;
+
+        players = service.getPlayersSince(petrik.time);
+        assert players.size() == 0;
     }
 }
