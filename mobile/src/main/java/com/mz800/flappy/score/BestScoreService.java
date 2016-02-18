@@ -128,7 +128,7 @@ public class BestScoreService {
 
     public BestScore[] getBestScoresFromCache(int scene) {
         synchronized (scoreCache) {
-            BestScore[] scores = get(scene); // this first loads the cache from file if not loaded yet
+            BestScore[] scores = getOrLoadScoreCache(scene);
             for (BestScore score : scores) {
                 synchronized (playersCache) {
                     String playerName = playersCache.get(score.getPlayerId());
@@ -142,7 +142,7 @@ public class BestScoreService {
     }
 
     public void addBestScore(int scene, BestScore bestScore) {
-        BestScore[] scores = get(scene);
+        BestScore[] scores = getOrLoadScoreCache(scene);
         int i;
         for (i = 0; i < scores.length; i++) {
             BestScore score = scores[i];
@@ -290,7 +290,13 @@ public class BestScoreService {
         }
     }
 
-    private BestScore[] get(int scene) {
+    /**
+     * Loads the cache from file if not loaded yet.
+     *
+     * @param scene
+     * @return
+     */
+    private BestScore[] getOrLoadScoreCache(int scene) {
         BestScore[] bs;
         synchronized (scoreCache) {
             bs = scoreCache.get(scene);
