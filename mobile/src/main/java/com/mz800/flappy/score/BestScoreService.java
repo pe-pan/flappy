@@ -204,7 +204,7 @@ public class BestScoreService {
             stream.close();
             return bestScores;
         } catch (IOException | ClassNotFoundException e) {
-            Log.e(TAG, "Exception when loading score cache details", e);
+            Log.e(TAG, "Exception when loading score cache details");
             return new BestScore[0];
         }
     }
@@ -231,7 +231,7 @@ public class BestScoreService {
             }
             stream.close();
         } catch (IOException e) {
-            Log.e(TAG, "Exception when saving score cache details", e);
+            Log.e(TAG, "Exception when saving score cache details");
         }
     }
 
@@ -259,7 +259,7 @@ public class BestScoreService {
             newestPlayerTime = stream.readLong();
             stream.close();
         } catch (IOException | ClassNotFoundException e) {
-            Log.e(TAG, "Exception when loading players cache", e);
+            Log.e(TAG, "Exception when loading players cache");
         }
     }
 
@@ -286,7 +286,7 @@ public class BestScoreService {
             }
             stream.close();
         } catch (IOException e) {
-            Log.e(TAG, "Exception when saving best score details", e);
+            Log.e(TAG, "Exception when saving best score details");
         }
     }
 
