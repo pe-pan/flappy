@@ -144,6 +144,7 @@ public class BestScoreService {
     public void addBestScore(int scene, BestScore bestScore) {
         BestScore[] scores = getOrLoadScoreCache(scene);
         int i;
+        //todo this does not check if another score from my player already exist in the list -> it can add 2 scores of the same player!!
         for (i = 0; i < scores.length; i++) {
             BestScore score = scores[i];
             if (bestScore.isBetter(score)) {
