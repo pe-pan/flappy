@@ -1,1 +1,1 @@
-include ':mobile', ':core', ':backend'
+include ':mobile', ':core', ':backend', ':application', ':test'
