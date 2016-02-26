@@ -40,6 +40,8 @@ public class FlappyActivity extends Activity {
     public static final String SCORES = "metadata";
     public static final String PLAYER_NAME = "player.name";
     public static final String PLAYER_ID = "player.id";
+    public static final String HAS_RECORD = "has.record";
+    public static final String HAS_CHANGED_NAME = "has.changed.name";
 
     protected SurfaceView view;
     protected static BestScoreService bestScoreService;
@@ -148,7 +150,7 @@ public class FlappyActivity extends Activity {
         ed.apply();
     }
 
-    String retrievePlayerName() {
+    public String retrievePlayerName() {
         SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         String name = p.getString(PLAYER_NAME, null);
         if (name == null) {
@@ -207,33 +209,64 @@ public class FlappyActivity extends Activity {
         return getDeviceTypeName();
     }
 
-    void storePlayerName(String playerName) {
+    public void storePlayerName(String playerName) {
         SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor ed = p.edit();
         ed.putString(PLAYER_NAME, playerName);
         ed.apply();
+        storeHasChangedName(true);
+        if (hasRecord()) {
+            bestScoreService.putPlayer(retrievePlayerId(), playerName);
+        }
     }
 
+    private static String playerId = null;
     /**
      * Generates new UUID player ID and stores it if there is no generated yet.
      *
      * @return
      */
-    String retrievePlayerId() {
+    public String retrievePlayerId() {
+        if (playerId != null) return playerId;
         SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         String playerId = p.getString(PLAYER_ID, null);
         if (playerId == null) {
             playerId = UUID.randomUUID().toString();
             storePlayerId(playerId);
         }
+        FlappyActivity.playerId = playerId;
         return playerId;
     }
 
-    void storePlayerId(String playerId) {
+    private void storePlayerId(String playerId) {
         SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor ed = p.edit();
         ed.putString(PLAYER_ID, playerId);
         ed.apply();
+    }
+
+    public void storeHasRecord(boolean b) {
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = p.edit();
+        ed.putBoolean(HAS_RECORD, b);
+        ed.apply();
+    }
+
+    public boolean hasRecord() {
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        return p.getBoolean(HAS_RECORD, false);
+    }
+
+    public void storeHasChangedName(boolean b) {
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = p.edit();
+        ed.putBoolean(HAS_CHANGED_NAME, b);
+        ed.apply();
+    }
+
+    public boolean hasChangedName() {
+        SharedPreferences p = getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        return p.getBoolean(HAS_CHANGED_NAME, true);  // the very first time, it should send the user name
     }
 
     /**
@@ -266,6 +299,7 @@ public class FlappyActivity extends Activity {
         ScreenScore.screenScores[scNo].myBestScore = score;
         ScreenScore.screenScores[scNo].myLives = lives;
         saveScoreDetails();
+        bestScoreService.addBestScore(scNo - 1, new BestScore(score, lives, ScreenScore.screenScores[scNo - 1].overallAttempts, System.currentTimeMillis(), retrievePlayerId()));
         return true;
     }
 

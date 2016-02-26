@@ -74,4 +74,23 @@ public class SceneService {
         Query<Player> q = ofy().load().type(Player.class).filter("time >", time);
         return q.list();
     }
+
+    @ApiMethod(name="testOverQuotaExceptionMethod")
+    public List<Player> testOverQuotaExceptionMethod(@Named("time") long time) {
+        throw new ApiProxy.OverQuotaException(SceneService.class.getPackage().getName(), "testOverQuotaExceptionMethod");
+    }
+
+    //todo for testing only
+    @ApiMethod(name="getTestCode")
+    public TestEntity getTestCode(@Named("id") long id) {
+        log.info("Getting test entity "+id);
+        return ofy().load().type(TestEntity.class).id(id).now();
+    }
+
+    //todo for testing only
+    @ApiMethod(name="putTestCode")
+    public void putTestCode(TestEntity testEntity) {
+        log.info("Putting test entity "+testEntity);
+        ofy().save().entity(testEntity).now();
+    }
 }

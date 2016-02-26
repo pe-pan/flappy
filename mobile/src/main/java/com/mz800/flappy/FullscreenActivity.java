@@ -56,10 +56,7 @@ public class FullscreenActivity extends FlappyActivity {
                     @Override
                     public void gameFinished(int scNo, int score, int lives, int time) {
                         storeOpenScene(scNo);
-                        boolean reallyStored = storeScore(scNo - 1, score, lives);
-                        if (reallyStored) {
-                            bestScoreService.addBestScore(scNo - 1, new BestScore(score, lives, ScreenScore.screenScores[scNo - 1].overallAttempts, System.currentTimeMillis(), retrievePlayerId()));
-                        }
+                        storeScore(scNo - 1, score, lives);
                         int sceneSpace = getResources().getInteger(R.integer.sceneSpace);
                         int sceneWidth = SelectSceneActivity.getSceneWidth(sceneSpace);
                         int minShift = SelectSceneActivity.getMinShift(sceneWidth);

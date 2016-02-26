@@ -2,6 +2,7 @@ package com.mz800.flappy.backend;
 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.google.apphosting.api.ApiProxy;
 import com.googlecode.objectify.ObjectifyService;
 
 import org.junit.AfterClass;
@@ -113,5 +114,16 @@ public class PlayerTest {
 
         players = service.getPlayersSince(petrik.time);
         assert players.size() == 0;
+
+    }
+
+    @Test
+    public void testOverQuotaException() {
+        try {
+            service.testOverQuotaExceptionMethod(0);
+        } catch (ApiProxy.OverQuotaException e) {
+            return;
+        }
+        assert true;
     }
 }

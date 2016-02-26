@@ -1,7 +1,6 @@
 package com.mz800.flappy.score;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
@@ -11,9 +10,11 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.mz800.flappy.BestScore;
+import com.mz800.flappy.FlappyActivity;
 import com.mz800.flappy.backend.sceneService.SceneService;
 import com.mz800.flappy.backend.sceneService.model.Player;
 import com.mz800.flappy.backend.sceneService.model.SceneRecord;
+import com.mz800.flappy.backend.sceneService.model.TestEntity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
 /**
@@ -47,10 +49,10 @@ public class BestScoreService {
     private static final int BEST_SCORE_FILE_VERSION = 1;
     private final PersistentQueue queue;
     public static final int PLAYERS_FILE_VERSION = 1;
-    static SceneService remoteService;
-    private Context cxt;
+    public static SceneService remoteService;
+    private FlappyActivity cxt;
 
-    public BestScoreService(Context cxt) {
+    public BestScoreService(FlappyActivity cxt) {
         this.cxt = cxt;
         scoreCache = new HashMap<>();
         playersCache = new HashMap<>();
@@ -171,7 +173,12 @@ public class BestScoreService {
             scoreCache.put(scene, newScores);
         }
         saveScoreCache(scene);
+        if (cxt.hasChangedName()) {
+            putPlayer(cxt.retrievePlayerId(), cxt.retrievePlayerName());
+            cxt.storeHasChangedName(false);
+        }
         addRecord(scene, bestScore);
+        cxt.storeHasRecord(true);
     }
 
     /**
@@ -352,6 +359,89 @@ public class BestScoreService {
                 return null;
             }
         });
+    }
+
+    //todo for testing only!
+    public Map<String, String> getPlayersCache() {
+        return playersCache;
+    }
+
+    //todo for testing only!
+    public Map<Integer, BestScore[]> getScoreCache() {
+        return scoreCache;
+    }
+
+    //todo for testing only
+    public void clearSceneCache(int scene) {
+        File f = new File(cxt.getCacheDir(), BEST_SCORE_SCENE_FILE_CACHE + scene);
+        f.delete();
+        scoreCache.remove(scene);
+    }
+
+    //todo for testing only
+    public void clearPlayersCache() {
+        File f = new File(cxt.getCacheDir(), PLAYERS_FILE_CACHE);
+        f.delete();
+        playersCache.clear();
+    }
+
+    //todo for testing only
+    public void putTestCode(final int code) {
+        executeTask(new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                Log.d(TAG, "Putting code " + code);
+
+                TestEntity testEntity = new TestEntity();
+                testEntity.set("id", 1l);
+                testEntity.set("code", code);
+
+                try {
+                    SceneService.PutTestCode putCode = null;
+                    putCode = remoteService.putTestCode(testEntity);
+                    Object o = putCode.execute();
+                    //todo evaluate o
+                    Log.d(TAG, putCode.toString());
+                } catch (IOException e) {
+                    Log.e(TAG, "Can't put test code " + code, e);
+                }
+                return null;
+            }
+        });
+    }
+
+    //todo for testing only
+    public int getTestCode() {
+        AsyncTask<Void, Void, Integer> task = new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... params) {
+                Log.d(TAG, "Getting code");
+
+                try {
+                    SceneService.GetTestCode getCode = null;
+                    getCode = remoteService.getTestCode((long) 1);
+                    TestEntity testEntity = getCode.execute();
+                    if (testEntity == null) return 0;
+                    //todo evaluate o
+                    Log.d(TAG, testEntity.toString());
+                    return testEntity.getCode();
+                } catch (IOException e) {
+                    Log.e(TAG, "Can't get test code", e);
+                }
+                return -1;
+            }
+        };
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                return task.executeOnExecutor(SERIAL_EXECUTOR).get();
+            } else {
+                return task.execute().get();
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            Log.e(TAG, "Can't execute get test code", e);
+            return -1;
+        }
+
     }
 
     //todo copied from AsyncTask

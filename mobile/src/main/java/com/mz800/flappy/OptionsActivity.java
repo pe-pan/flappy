@@ -34,7 +34,6 @@ public class OptionsActivity extends FlappyActivity {
         if (newPlayerName.length() > MAX_PLAYER_NAME_LEN) newPlayerName = newPlayerName.substring(0, MAX_PLAYER_NAME_LEN);
         if (!newPlayerName.equals(oldPlayerName)) {
             storePlayerName(newPlayerName);
-            bestScoreService.putPlayer(retrievePlayerId(), newPlayerName);
             //todo remove the code below from the production!
             Main.cheating = !Main.cheating;
             Toast.makeText(this, "Cheating " + (Main.cheating ? "ON" : "OFF"), Toast.LENGTH_LONG).show();
