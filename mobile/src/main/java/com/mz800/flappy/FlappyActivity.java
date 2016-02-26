@@ -295,7 +295,9 @@ public class FlappyActivity extends Activity {
      * @return true if score saved; false if not saved (as there is a better one already)
      */
     boolean storeScore(int scNo, int score, int lives) {
-        if (ScreenScore.screenScores[scNo].myBestScore >= score) return false;
+        ScreenScore myScore = ScreenScore.screenScores[scNo];
+        if (myScore.myBestScore > score) return false;
+        if (myScore.myBestScore == score && myScore.myLives >= lives) return false;
         ScreenScore.screenScores[scNo].myBestScore = score;
         ScreenScore.screenScores[scNo].myLives = lives;
         saveScoreDetails();
