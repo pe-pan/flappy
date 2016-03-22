@@ -44,14 +44,14 @@ public class SceneService {
      * @return records are being returned in sorted order
      */
     public List<SceneRecord> top(@Named("sceneNo") int sceneNo, @Named("records") int records) {
-        log.info("Giving top list of "+records+" records for scene "+sceneNo);
+        log.info("Giving top list of " + records + " records for scene " + sceneNo);
         Query<SceneRecord> q = ofy().load().type(SceneRecord.class).filter("sceneNo", sceneNo).order("- score").order("- lives").order("attempts").order("date").limit(records);
         return q.list();
     }
 
     @ApiMethod(name="getPlayer")
     public Player getPlayer(@Named("id") String id) {
-        log.info("Giving player having id: "+id);
+        log.info("Giving player having id: " + id);
         return ofy().load().type(Player.class).id(id).now();
     }
 
