@@ -16,4 +16,20 @@
         <item name="android:background">@drawable/menu_background</item>
         <item name="android:clickable">false</item>
     </style>
+
+    <style name="button_red" parent="@style/button">
+        <item name="android:background">@drawable/button_red</item>
+    </style>
+
+    <style name="button_green" parent="@style/button">
+        <item name="android:background">@drawable/button_green</item>
+    </style>
+
+    <style name="button_blue" parent="@style/button">
+        <item name="android:background">@drawable/button_blue</item>
+    </style>
+
+    <style name="button_yellow" parent="@style/button">
+        <item name="android:background">@drawable/button_yellow</item>
+    </style>
 </resources>

@@ -33,6 +33,7 @@
             android:orientation="vertical">
 
             <Button
+                style="@style/button_green"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -40,6 +41,7 @@
                 android:text="@string/play_flappy" />
 
             <Button
+                style="@style/button_yellow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -47,6 +49,7 @@
                 android:text="@string/show_options" />
 
             <Button
+                style="@style/button_blue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -54,6 +57,7 @@
                 android:text="@string/select_scene" />
 
             <Button
+                style="@style/button_red"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
