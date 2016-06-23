@@ -301,7 +301,7 @@ public class FlappyActivity extends Activity {
         ScreenScore.screenScores[scNo].myBestScore = score;
         ScreenScore.screenScores[scNo].myLives = lives;
         saveScoreDetails();
-        bestScoreService.addBestScore(scNo - 1, new BestScore(score, lives, ScreenScore.screenScores[scNo - 1].overallAttempts, System.currentTimeMillis(), retrievePlayerId()));
+        bestScoreService.addBestScore(scNo, new BestScore(score, lives, ScreenScore.screenScores[scNo].overallAttempts, System.currentTimeMillis(), retrievePlayerId()));
         return true;
     }
 
