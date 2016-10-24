@@ -275,7 +275,7 @@ public class SelectSceneActivity extends FlappyActivity {
 
     private Bitmap drawSceneBitmap(int num) {
         Log.d(TAG, "Drawing scaled scene " + num);
-        if (num >= Constants.NUM_SCENES ) {
+        if (num >= Constants.NUM_SCENES || num < 0) {
             return null;
         }
         Scene scene = new Scene(num+1, new VRAM());
