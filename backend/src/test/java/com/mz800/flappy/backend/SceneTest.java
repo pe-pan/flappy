@@ -24,7 +24,6 @@ public class SceneTest {
 
     static{
         ObjectifyService.register(SceneRecord.class);
-        ObjectifyService.register(SceneRecordHash.class);
     }
 
     static SceneService service;

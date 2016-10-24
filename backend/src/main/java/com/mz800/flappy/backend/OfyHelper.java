@@ -18,6 +18,7 @@ public class OfyHelper implements ServletContextListener {
         // request if no warmup request was invoked.
         ObjectifyService.register(SceneRecord.class);
         ObjectifyService.register(Player.class);
+        ObjectifyService.register(TestEntity.class); //todo for testing only
     }
 
     @Override
