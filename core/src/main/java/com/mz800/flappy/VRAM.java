@@ -129,6 +129,9 @@ public class VRAM {
         }
     }
 
+    private float ratio;
+    private int marginX, marginY;
+
     void refresh() {
         SurfaceHolder holder = window.getHolder();
         Canvas c = holder.lockCanvas();
@@ -148,14 +151,16 @@ public class VRAM {
                 float ratioW = (float) targetWidth / (float) sourceWidth;
                 ratio = Math.min(ratioH, ratioW);
                 Log.d("VRAM", "ratio: " + ratio);
+                marginX = targetWidth -  (int) ((float) sourceWidth * ratio);   // how much pixels to move the picture to the bottom / right corner (0,0 = top / left corner)
+                marginY = targetHeight - (int) ((float) sourceHeight * ratio);
             }
+            c.translate(marginX / 2, marginY);                                  // move it to the middle of horizontal and bottom of vertical
             c.scale(ratio, ratio);
             c.drawBitmap(img.getBitmap(), 0, 0, paint);
             holder.unlockCanvasAndPost(c);
         }
     }
 
-    private float ratio = 0;
     private Paint paint;
     void createWindow(SurfaceView window) {
         this.window = window;
