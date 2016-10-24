@@ -71,4 +71,9 @@ public class Device {
             Log.e(TAG, "Error when loading memory", e);
         }
     }
+
+    public static void destroy() {
+        music.destroy();
+        initialized = false;
+    }
 }
