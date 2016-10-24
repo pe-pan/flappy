@@ -1,8 +1,10 @@
 package com.mz800.flappy;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.AudioManager;
@@ -11,7 +13,10 @@ import android.os.Build;
 import android.provider.ContactsContract;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mz800.flappy.score.BestScoreService;
@@ -309,5 +314,22 @@ public class FlappyActivity extends Activity {
         loadScoreDetails();
         ScreenScore.screenScores[scNo].overallAttempts++;
         saveScoreDetails();
+    }
+
+    void showMessage(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+            }
+        });
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.layout_message, null);
+        TextView text = (TextView) view.findViewById(R.id.message);
+        text.setText(message);
+        builder.setView(view);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.Toast;
 
 /**
  * Flappy:
@@ -323,7 +322,7 @@ public class SelectSceneActivity extends FlappyActivity {
 
         if (!canBeSelected(scNo)) {
             //todo change this text / implementation
-            Toast.makeText(SelectSceneActivity.this, getString(R.string.notThisSceneYet), Toast.LENGTH_LONG).show();
+            showMessage(getString(R.string.finish_pentad));
             return;
         } else {
             startActivity(new Intent(SelectSceneActivity.this, FullscreenActivity.class).putExtra(SCENE_NUMBER, scNo + 1));
@@ -339,7 +338,7 @@ public class SelectSceneActivity extends FlappyActivity {
     }
 
     public void showHint(View v) {
-        Toast.makeText(SelectSceneActivity.this, "Will show hints", Toast.LENGTH_SHORT).show();
+        showMessage(getString(R.string.will_show_hints));
     }
 
     @Override

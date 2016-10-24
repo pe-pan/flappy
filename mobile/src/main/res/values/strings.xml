@@ -14,4 +14,7 @@
     <string name="scores">Scores</string>
     <string name="play">Play</string>
     <string name="hint">Hint</string>
+    <string name="ok">OK</string>
+    <string name="will_show_hints">Will show hints to finish this scene. Not implemented yet.</string>
+    <string name="finish_pentad">Finish pentad of scenes first!</string>
 </resources>
