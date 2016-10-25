@@ -432,7 +432,7 @@ class Scene {
                 extraCycles--;
                 if (extraCycles == 0) {
                     music.stop();
-                    return 0;
+                    return Main.NORMAL_WAIT;
                 }
             }
         }
