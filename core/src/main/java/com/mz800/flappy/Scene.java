@@ -99,12 +99,9 @@ class Scene {
         placeBlueWall(addr);
 
         if (preview) {
-            vram.image(1, 1, Images.chickenDown);
-            String n = Integer.toString(num);
-            while (n.length() < 3) {
-                n = '0' + n;
-            }
-            vram.printText(13, 1, " [SCENE " + n + "] ", Color.yellow);
+            vram.imageNoOfs(13, 2, Images.sceneYellow);
+            printNumber(22, 2, num, 3, Color.YELLOW);
+
         }
     }
 
