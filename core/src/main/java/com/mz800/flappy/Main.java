@@ -107,6 +107,7 @@ public class Main {
             if (res == EXIT_GAME) {
                 return;
             } else if (res == LOOSE_LIFE || res == NORMAL_WAIT) {
+                // todo shift the scenes also upon unsuccessful run
                 Main.setState(NORMAL_WAIT);
                 lives--;
                 if (lives == 0) {
