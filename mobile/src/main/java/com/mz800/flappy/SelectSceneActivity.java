@@ -280,7 +280,7 @@ public class SelectSceneActivity extends FlappyActivity {
         }
         Scene scene = new Scene(num+1, new VRAM());
         ScreenScore score = ScreenScore.screenScores[num];
-        int lives = num % 5 == 0 ? 5 : ScreenScore.screenScores[num-1].myLives;  // take number of lives from previous scene
+        int lives = getLives(num);
         if (num <= openScenes) {
             scene.predrawScene(true, lives, score.myBestScore);
         } else {

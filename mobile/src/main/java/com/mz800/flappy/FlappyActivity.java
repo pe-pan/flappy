@@ -286,10 +286,21 @@ public class FlappyActivity extends Activity {
         for (int i = 0; i < scNo - 1; i++) {
             previousScores += ScreenScore.screenScores[i].myBestScore;
         }
-        return new int[]{previousScores,
-                (scNo - 1) % 5 == 0                     // for every fifth scene
-                        ? 5 :                         // give 5 lives
-                        ScreenScore.screenScores[scNo - 2].myLives}; // or the previous num of lives
+        int lives = getLives(scNo - 1);
+        return new int[]{previousScores, lives};
+    }
+
+    /**
+     * How many lives this scene should start with?
+     * @param scNo
+     * @return
+     */
+    int getLives(int scNo) {
+        int lives = scNo % 5 == 0                           // for every fifth scene
+                ? 5 :                                       // give 5 lives
+                ScreenScore.screenScores[scNo - 1].myLives; // or the previous num of lives
+        if (lives <= 0) lives = 1;                          // if the previous game was not played (user typed a password), give it 1 life
+        return lives;
     }
 
     /**
