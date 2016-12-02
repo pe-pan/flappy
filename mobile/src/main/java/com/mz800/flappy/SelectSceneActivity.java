@@ -287,15 +287,7 @@ public class SelectSceneActivity extends FlappyActivity {
             scene.predrawSceneNumberScreen(lives, score.myBestScore);
         }
         Bitmap b = scene.getVRAM().getImage().getBitmap();
-        if (!canBeSelected(num)) {
-            b = updateSaturation(b, 0.5f);
-        }
         return Bitmap.createScaledBitmap(b, sceneWidth, sceneHeight, true);
-    }
-
-    private boolean canBeSelected(int scNo) {
-        if (Main.cheating) return true;
-        return scNo <= openScenes - (openScenes % 5);
     }
 
     // copied from http://android-er.blogspot.com/2013/09/adjust-saturation-of-bitmap-with.html
@@ -319,17 +311,10 @@ public class SelectSceneActivity extends FlappyActivity {
 
     public void startGame(View v) {
         int scNo = (currentShift + Device.displayWidth/2) / sceneWidthSpace;
-
-        if (!canBeSelected(scNo)) {
-            //todo change this text / implementation
-            showMessage(getString(R.string.finish_pentad));
-            return;
-        } else {
-            startActivity(new Intent(SelectSceneActivity.this, FullscreenActivity.class).putExtra(SCENE_NUMBER, scNo + 1));
-            storeSceneNumber(scNo);
-            finish();
-            return;
-        }
+        startActivity(new Intent(SelectSceneActivity.this, FullscreenActivity.class).putExtra(SCENE_NUMBER, scNo + 1));
+        storeSceneNumber(scNo);
+        finish();
+        return;
     }
 
     public void showHighScores(View v) {
