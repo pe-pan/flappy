@@ -8,7 +8,7 @@
     <string name="main_menu">Main Menu</string>
     <string name="play_flappy">Play Flappy</string>
     <string name="resume_intro">Resume Intro</string>
-    <string name="show_options">Give Name</string>
+    <string name="show_options">Show Options</string>
     <string name="exit_flappy">Exit Flappy</string>
     <string name="notThisSceneYet">Not this scene yet!</string>
     <string name="scores">Scores</string>
@@ -16,4 +16,8 @@
     <string name="hint">Hint</string>
     <string name="ok">OK</string>
     <string name="will_show_hints">Will show hints to finish this scene. Not implemented yet.</string>
+    <string name="scene_password">Scene key:</string>
+    <string name="open_scene">Opening scenes #1-#%d</string>
+    <string name="scene_already_open">Scenes #1-#%d already open</string>
+    <string name="incorrect_password">Incorrect password!</string>
 </resources>

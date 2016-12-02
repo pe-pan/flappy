@@ -18,6 +18,7 @@ public class OptionsActivity extends FlappyActivity {
     private static final int MAX_PLAYER_NAME_LEN = 64;
 
     private EditText playerNameView;
+    private EditText passwordView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class OptionsActivity extends FlappyActivity {
         setContentView(R.layout.activity_options);
         playerNameView = (EditText) findViewById(R.id.playerName);
         playerNameView.setText(retrievePlayerName());
+        passwordView = (EditText) findViewById(R.id.password);
     }
 
     public void saveOptions(View view) {
@@ -38,6 +40,25 @@ public class OptionsActivity extends FlappyActivity {
             Main.cheating = !Main.cheating;
             Toast.makeText(this, "Cheating " + (Main.cheating ? "ON" : "OFF"), Toast.LENGTH_LONG).show();
             //todo remove the code above from the production!
+        }
+
+        String password = passwordView.getText().toString();
+        if (password.length() > 0) {
+            int i = Scene.checkPass(password);
+            if (i < 0) {
+                Toast.makeText(this, R.string.incorrect_password, Toast.LENGTH_LONG).show();
+            } else {
+                int openScene = retrieveOpenScenes();
+                if (openScene < (i + 1) * 5) {
+                    openScene = (i + 1) * 5;
+                    if (openScene >= Constants.NUM_SCENES)
+                        openScene = Constants.NUM_SCENES - 1; // do not open scene #201 (there is no such!)
+                    storeOpenScene(openScene);
+                    Toast.makeText(this, getString(R.string.open_scene, openScene + 1), Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, getString(R.string.scene_already_open, openScene + 1), Toast.LENGTH_LONG).show();
+                }
+            }
         }
         closeOptions(view);
     }
