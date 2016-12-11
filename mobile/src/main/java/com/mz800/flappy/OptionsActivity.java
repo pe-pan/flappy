@@ -1,7 +1,14 @@
 package com.mz800.flappy;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -13,7 +20,7 @@ import android.widget.Toast;
  * Java version by Petr Slechta, 2014.
  * Android version by Petr Panuska, 2016.
  */
-public class OptionsActivity extends FlappyActivity {
+public class OptionsActivity extends FlappyActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
     private static final String TAG = OptionsActivity.class.getSimpleName();
     private static final int MAX_PLAYER_NAME_LEN = 64;
 
@@ -28,6 +35,35 @@ public class OptionsActivity extends FlappyActivity {
         playerNameView = (EditText) findViewById(R.id.playerName);
         playerNameView.setText(retrievePlayerName());
         passwordView = (EditText) findViewById(R.id.password);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.READ_CONTACTS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                showMessage(getString(R.string.give_contact_permission), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions(OptionsActivity.this,
+                                new String[]{Manifest.permission.READ_CONTACTS},
+                                MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                    }
+                });
+            }
+        }
+    }
+
+    public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 77;
+
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_READ_CONTACTS) {
+            if (permissions.length > 0 &&
+                    permissions[0].equals(Manifest.permission.READ_CONTACTS) &&
+                    grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                playerNameView.setText(getOwnerDisplayName());
+            }
+        }
     }
 
     public void saveOptions(View view) {

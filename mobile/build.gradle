@@ -23,4 +23,5 @@ dependencies {
     compile project(':core')
     compile project(path: ':backend', configuration: 'android-endpoints')
     compile 'com.google.http-client:google-http-client-gson:1.19.0' exclude module: 'httpclient'
+    compile 'com.android.support:support-v4:23.0.0'
 }

@@ -1,5 +1,6 @@
 package com.mz800.flappy;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
@@ -8,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.util.Base64;
@@ -192,26 +192,27 @@ public class FlappyActivity extends Activity {
         return s;
     }
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    protected String getOwnerDisplayName() {
+        try {
+            ContentResolver contentResolver = getContentResolver();
+            Cursor cursor = contentResolver.query(ContactsContract.Profile.CONTENT_URI, null, null, null, null);
+            if (cursor.moveToFirst()) { // is the at least one account?
+                return cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Exception when reading contact profile", e);
+        }
+        return getDeviceTypeName(); // no account found or an exception when reading contacts
+    }
+
     private String getDefaultPlayerName() {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            try {
-                Uri CONTENT_URI = ContactsContract.Profile.CONTENT_URI;
-                String DISPLAY_NAME = ContactsContract.Profile.DISPLAY_NAME;
-                ContentResolver contentResolver = getContentResolver();
-                Cursor cursor = contentResolver.query(CONTENT_URI, null, null, null, null);
-                if (cursor.moveToFirst()) { // is the at least one account?
-                    return cursor.getString(cursor.getColumnIndex(DISPLAY_NAME));
-                }
-            } catch (Exception e) {
-                Log.e(TAG, "Exception when reading contact profile", e);
-                return getDeviceTypeName();
-            }
+            return getOwnerDisplayName();
         } else {
             // pre-ICS device
             return getDeviceTypeName();
         }
-        // no account found
-        return getDeviceTypeName();
     }
 
     public void storePlayerName(String playerName) {
