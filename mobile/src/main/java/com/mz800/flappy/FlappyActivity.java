@@ -327,13 +327,14 @@ public class FlappyActivity extends Activity {
         saveScoreDetails();
     }
 
-    void showMessage(String message) {
+    /**
+     * Show message and do something once the user clicks OK.
+     * @param message
+     * @param listener
+     */
+    void showMessage(String message, final DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-            }
-        });
+        builder.setPositiveButton(getString(R.string.ok), listener);
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.layout_message, null);
         TextView text = (TextView) view.findViewById(R.id.message);
@@ -342,5 +343,17 @@ public class FlappyActivity extends Activity {
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    /**
+     * Show message; do nothing when the user clicks OK.
+     * @param message
+     */
+    void showMessage(String message) {
+        showMessage(message, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+            }
+        });
     }
 }
