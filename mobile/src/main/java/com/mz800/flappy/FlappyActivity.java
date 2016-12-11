@@ -182,7 +182,7 @@ public class FlappyActivity extends Activity {
         String s;
         try {
             int apiLevel = Build.VERSION.SDK_INT;
-            String codeName = apiLevel >= codeNames.length ? "Future" : codeNames[apiLevel - 1];
+            String codeName = apiLevel > codeNames.length ? "Future" : codeNames[apiLevel - 1];
             s = Build.MANUFACTURER.substring(0, 1).toUpperCase() + Build.MANUFACTURER.substring(1) // make first letter upper case
                     + " " + Build.MODEL + " on " + codeName + " " + Build.VERSION.RELEASE + " (" + apiLevel + ") ";
         } catch (Exception e) {
