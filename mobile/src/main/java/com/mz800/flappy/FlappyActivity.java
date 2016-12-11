@@ -168,7 +168,7 @@ public class FlappyActivity extends Activity {
     private static String[] codeNames = {
             "No Name", "No Name", "Cupcake", "Donut", "Eclair", "Eclair", "Eclair", "Froyo", "Gingerbread", "Gingerbread",
             "Honeycomb", "Honeycomb", "Honeycomb", "Ice Cream Sandwich", "Ice Cream Sandwich", "Jelly Bean", "Jelly Bean", "Jelly Bean", "KitKat", "N/A",
-            "Lollipop", "Lollipop", "Marshmallow"};
+            "Lollipop", "Lollipop", "Marshmallow", "Nougat", "Nougat"};
 
     private String getShortUUID() {
         Random r = new Random();
