@@ -309,8 +309,12 @@ public class SelectSceneActivity extends FlappyActivity {
         return bitmapResult;
     }
 
+    private int getSceneNo() {
+        return (currentShift + Device.displayWidth / 2) / sceneWidthSpace;
+    }
+
     public void startGame(View v) {
-        int scNo = (currentShift + Device.displayWidth/2) / sceneWidthSpace;
+        int scNo = getSceneNo();
         startActivity(new Intent(SelectSceneActivity.this, FullscreenActivity.class).putExtra(SCENE_NUMBER, scNo + 1));
         storeSceneNumber(scNo);
         finish();
@@ -318,7 +322,7 @@ public class SelectSceneActivity extends FlappyActivity {
     }
 
     public void showHighScores(View v) {
-        int scNo = (currentShift + Device.displayWidth/2) / sceneWidthSpace;
+        int scNo = getSceneNo();
         startActivity(new Intent(SelectSceneActivity.this, BestScoreActivity.class).putExtra(SCENE_NUMBER, scNo));
     }
 
