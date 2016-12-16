@@ -13,7 +13,7 @@ From copyright reasons, this game is not hosted in Google Play Store; to install
     <li>At your device, enable installing application from unknown sources.<br>
       For instructions, see <a href="http://www.androidcentral.com/allow-app-installs-unknown-sources">here</a>.</li>
     <li>Open this page - <i>https://github.com/pe-pan/flappy</i> - in your Android device</li>
-    <li>Click on <a href="https://github.com/pe-pan/flappy/releases/download/v0.3-alpha/application-debug.apk">this link</a></li>
+    <li>Click on <a href="https://github.com/pe-pan/flappy/releases/download/v0.4-alpha/application-debug.apk">this link</a></li>
     <li>Confirm the installation</li>
 </ol>
 
@@ -24,6 +24,7 @@ The code contains the original Flappy game with several improvements to reflect 
   <li>Finger tap simulates keyboard space bar (to throw a mushroom)</li>
   <li>Dedicated scene selector to skip scenes (requires password)</li>
   <li>Hi-score screen showing scores shared with other players</li>
+  <li>Scene hints hosted in YouTube (recorded by <a href="http://www.petrdiblik.cz/flappy-stara-laska-nerezavi/">Petr Dibl&iacute;k</a>)</li>
 </ol>
 
 <h2>Code structure</h2>
@@ -65,6 +66,6 @@ The code is split into following modules:
 </ul>
 
 <h2>Contact</h2>
-For feedback or bug reports, contact <a href="http://panuska.net">Petr Panu&#x161;ka</a>.
+For feedback or bug reports, please, contact <a href="http://panuska.net">Petr Panu&#x161;ka</a>.
 <br>
 &copy; 2016 <a href="http://panuska.net">Petr Panu&#x161;ka</a>

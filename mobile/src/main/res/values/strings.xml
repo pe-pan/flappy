@@ -15,7 +15,7 @@
     <string name="play">Play</string>
     <string name="hint">Hint</string>
     <string name="ok">OK</string>
-    <string name="will_show_hints">Will show hints to finish this scene. Not implemented yet.</string>
+    <string name="cant_show_hints">Error when trying to play the YouTube video (id: %s)</string>
     <string name="scene_password">Scene key:</string>
     <string name="open_scene">Opening scenes #1-#%d</string>
     <string name="scene_already_open">Scenes #1-#%d already open</string>

@@ -1,5 +1,6 @@
 package com.mz800.flappy;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -7,12 +8,15 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
+
+import java.util.Random;
 
 /**
  * Flappy:
@@ -327,7 +331,25 @@ public class SelectSceneActivity extends FlappyActivity {
     }
 
     public void showHint(View v) {
-        showMessage(getString(R.string.will_show_hints));
+        int scNo = getSceneNo();
+        String videoIds = SceneVideoId.YOU_TUBE_IDS[scNo];
+        String[] idS = videoIds.split(";");                 // multiple videos about a single scene are split by ";"
+        int videoIndex = new Random().nextInt(idS.length);  // select random video
+        String id = idS[videoIndex];
+        Intent videoIntent;
+        try {
+            videoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
+        } catch (ActivityNotFoundException ex) {
+            Log.e(TAG, "No YouTube application found!! Trying web instead!!");
+            try {
+                videoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + id));
+            } catch (Exception e) {
+                showMessage(getString(R.string.cant_show_hints, id));
+                Log.e(TAG, "Can't start the video");
+                return;
+            }
+        }
+        startActivity(videoIntent);
     }
 
     @Override
