@@ -1,6 +1,8 @@
 package com.mz800.flappy.awt;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 
 /**
  * Flappy:
@@ -13,6 +15,11 @@ public class BufferedImage {
     private Graphics g;
     public static final int TYPE_INT_RGB = Bitmap.Config.ARGB_8888.ordinal();
 
+    public BufferedImage(BitmapDrawable d) {
+        Bitmap immb = d.getBitmap();
+        b = immb.copy(Bitmap.Config.ARGB_8888, false);
+    }
+
     public BufferedImage(int width,
                          int height,
                          int imageType) {
@@ -20,8 +27,8 @@ public class BufferedImage {
         g = new Graphics(b);
     }
 
-    private BufferedImage(Bitmap b, int x, int y, int width, int height) {
-        this.b = Bitmap.createBitmap(b, x, y, width, height);
+    private BufferedImage(Bitmap b) {
+        this.b = b;
     }
 
     public Graphics getGraphics() {
@@ -33,7 +40,40 @@ public class BufferedImage {
     }
 
     public BufferedImage getSubimage (int x, int y, int w, int h) {
-        return new BufferedImage(b, x, y, w, h);
+        Bitmap b = Bitmap.createBitmap(this.b, x, y, w, h);
+        return new BufferedImage(b);
+    }
+
+    /**
+     * Returns a copy of this image rotated by 90 degrees.
+     * @return
+     */
+    public BufferedImage getRotatedImage() {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        Bitmap b = Bitmap.createBitmap(this.getBitmap(), 0, 0, this.getWidth(), this.getHeight(),  matrix, false);
+        return new BufferedImage(b);
+    }
+
+    /**
+     * Returns a copy of this image mirrored by vertical axis
+     * @return
+     */
+    public BufferedImage getMirroredImage() {
+        Matrix matrix = new Matrix();
+        matrix.preScale(-1, 1);
+        Bitmap b = Bitmap.createBitmap(this.getBitmap(), 0, 0, this.getWidth(), this.getHeight(),  matrix, false);
+        return new BufferedImage(b);
+    }
+
+    /**
+     * Returns 16x16 subimage starting at x, y
+     * @param x
+     * @param y
+     * @return
+     */
+    public BufferedImage getSubimage (int x, int y) {
+        return getSubimage(x, y, 16, 16);
     }
 
     public int getWidth() {

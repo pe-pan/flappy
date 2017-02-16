@@ -44,6 +44,7 @@ class Scene {
     private int timeBlink = 0;
 
     private final VRAM vram;
+    private byte memory [];
 
     Scene(int number) {
         this(number, Device.vram);
@@ -53,6 +54,7 @@ class Scene {
         this.num = number;
         this.chicken = new Chicken(this);
         this.vram = vram;
+        this.memory = num <= 100 ? Scenes.data[num-1] : Scenes2.data[num-101];
     }
 
     byte[][] getModel() {
@@ -68,12 +70,7 @@ class Scene {
     }
 
     void predrawScene(boolean preview, int lives, int score) {
-        int max = memory[0xB000] & 0xFF;
-        if (num > max) {
-            return;
-        }
-
-        int addr = findLevel(num);
+        int addr = 0;
         for (int y = 0; y < 22; y++) {
             for (int x = 0; x < 40; x++) {
                 model[y][x] = SPACE;

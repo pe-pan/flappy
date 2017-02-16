@@ -123,10 +123,10 @@ public class Intro {
             return r;
         }
         vram.emptyRectNoOfs(0, 9, 40, (25 - 9) * 8);
-        drawWall(13, 0x33DA);
-        drawWall(14, 0x33DA);
-        drawWall(22, 0x33EE);
-        drawWall(23, 0x33F8);
+        drawWall(0, 13, 15, 2, Images.redWall);
+        drawWall(17, 13, 28, 2, Images.redWall);
+        drawWall(0, 22, 40, 2, Images.redWall);
+        drawWall(28, 22, 2, 1, Images.blueWall);
         vram.imageNoOfs(28, 11, Images.chickenDown);
         vram.imageNoOfs(24, 16, Images.redEnemyDown);
         vram.imageNoOfs(11, 20, Images.blueEnemyLeft2);
@@ -178,12 +178,10 @@ public class Intro {
         vram.imageNoOfs(32, 13, Images.chickenDown);
         vram.imageNoOfs(35, 13, Images.arrRight);
         vram.imageNoOfs(32, 16, Images.arrDown);
-        vram.imageNoOfs(30, 19, Images.space1);
-        vram.imageNoOfs(32, 19, Images.space2);
-        vram.imageNoOfs(34, 19, Images.space3);
-        drawWall(12, 0x3402);
-        drawWall(13, 0x3402);
-        drawWall(24, 0x3416);
+        vram.imageNoOfs(30, 19, Images.space);
+        drawWall(21, 12, 6, 2, Images.redWall);
+        drawWall(0, 24, 40, 1, Images.redWall);
+        drawWall(31, 24, 2, 1, Images.blueWall);
         // 25e0
 
         vram.imageNoOfs(25, 10, Images.chickenDown);
@@ -433,10 +431,9 @@ public class Intro {
     }
 
     private int drawLogo(boolean blueStyle) {
-        int addr = blueStyle ? 0x3326 : 0x3380;
         int r;
         for (int i = 1; i <= 9; i++) {
-            drawLogoPart(addr, i);
+            drawLogoPart(i, blueStyle ? Images.blueWall : Images.redWall);
             vram.refresh();
             r = Main.wait(20);
             if (r != Main.NORMAL_WAIT) {
@@ -446,52 +443,46 @@ public class Intro {
         return 0;
     }
 
-    private void drawLogoPart(int addr, int lines) {
+    private byte[] logo = { // FLAPPY
+            (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000,
+            (byte) 0b00111110, (byte) 0b11000011, (byte) 0b11101111, (byte) 0b10111110, (byte) 0b11001100,
+            (byte) 0b00111110, (byte) 0b11000011, (byte) 0b11101111, (byte) 0b10111110, (byte) 0b11001100,
+            (byte) 0b00110000, (byte) 0b11000011, (byte) 0b01101101, (byte) 0b10110110, (byte) 0b11001100,
+            (byte) 0b00110000, (byte) 0b11000011, (byte) 0b01101101, (byte) 0b10110110, (byte) 0b11001100,
+            (byte) 0b00111110, (byte) 0b11000011, (byte) 0b11101111, (byte) 0b10111110, (byte) 0b11111100,
+            (byte) 0b00111110, (byte) 0b11000011, (byte) 0b11101111, (byte) 0b10111110, (byte) 0b11111100,
+            (byte) 0b00110000, (byte) 0b11111011, (byte) 0b01101100, (byte) 0b00110000, (byte) 0b00110000,
+            (byte) 0b00110000, (byte) 0b11111011, (byte) 0b01101100, (byte) 0b00110000, (byte) 0b00110000
+    };
+
+    private boolean isWall(int x, int y) {
+        int i = (x >> 3) + 5 * y;  // which byte is it? (8 bits in a single byte and 5 bytes per one line)
+        int j = x & 0b00000111;    // which bit in the byte is it?
+        byte b = logo[i];          // take the byte
+        return ((b << j) & 0b10000000) != 0;
+    }
+
+    private void drawLogoPart(int lines, BufferedImage wall) {
         int y = 9 - lines;
         for (int line = 0; line < lines; line++) {
             int x = 0;
-            for (int i = 0; i < 10; i++) {
-                int b = memory[addr + line * 10 + i] & 0xFF;
-                for (int j = 0; j < 4; j++) {
-                    b <<= 2;
-                    switch (b & 0x300) {
-                        case 0x100:
-                            vram.imageNoOfs(x, y, Images.redWall);
-                            break;
-                        case 0x200:
-                            vram.imageNoOfs(x, y, Images.blueWall);
-                            break;
-                        case 0x300:
-                            break;
-                        default:
-                            vram.emptyRectNoOfs(x, y, 1, 8);
-                    }
-                    x++;
+            for (int i = 0; i < 40; i++) {
+                if (isWall(x, line)) {
+                    vram.imageNoOfs(x, y, wall);
+                } else {
+                    vram.emptyRectNoOfs(x, y, 1, 8);
                 }
+                x++;
             }
             y++;
         }
     }
 
-    private void drawWall(int y, int addr) {
-        int x = 0;
-        for (int i = 0; i < 10; i++) {
-            int b = memory[addr + i] & 0xFF;
-            for (int j = 0; j < 4; j++) {
-                b <<= 2;
-                switch (b & 0x300) {
-                    case 0x100:
-                        vram.imageNoOfs(x, y, Images.redWall);
-                        break;
-                    case 0x200:
-                        vram.imageNoOfs(x, y, Images.blueWall);
-                        break;
-                    case 0x300:
-                        break;
-                    default:
-                        vram.emptyRectNoOfs(x, y, 1, 8);
-                }
-                x++;
+
+    private void drawWall(int x, int y, int w, int h, BufferedImage wall) {
+        for (int i = 0; i < w; i++) {
+            for (int j = 0; j < h; j++) {
+                vram.imageNoOfs(x + i, y + j, wall);
             }
         }
     }

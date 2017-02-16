@@ -60,16 +60,10 @@ public class Graphics {
         //todo copied from VRAM.printText()
         for (int i = 0, maxi = text.length(); i < maxi; i++) {
             int z = text.charAt(i);
-            if (z < 0x20 || z >= 0xE0) {
+            if (z < 0x20 || z > 0x7a) {
                 z = '!';
             }
-            if (z >= 0xA0) {
-                z -= 0xA0;
-            } else if (z >= 0x80) {
-                z = '!';
-            } else {
-                z -= 0x20;
-            }
+            z -= 0x20;
             BufferedImage imgChar = ImageUtils.createLetterImage(z, color, Color.BLACK);
             drawImage(imgChar, x, y, null);
             x += Constants.FONT_WIDTH;

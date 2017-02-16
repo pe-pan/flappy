@@ -4,13 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.Display;
 import android.view.SurfaceView;
-import android.view.View;
 import android.view.WindowManager;
-
-import com.mz800.core.R;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Flappy:
@@ -20,7 +14,6 @@ import java.io.InputStream;
  */
 public class Device {
     private static final String TAG = Device.class.getSimpleName();
-    static byte[] memory = new byte[65536];
     public static Keyboard keyboard;
     public static VRAM vram;
     public static Music music;
@@ -35,8 +28,7 @@ public class Device {
             return;
         }
         Log.d(TAG, "Init");
-        initMemory(view);
-        Images.load();
+        Images.load(view.getResources());
         keyboard = Keyboard.getInstance();
         vram = VRAM.getInstance();
         vram.createWindow(view);
@@ -52,24 +44,6 @@ public class Device {
             displayWidth = displayWidth - displayHeight;
         }
         initialized = true;
-    }
-
-    private static void initMemory(View view) {
-        Log.d(TAG, "Initializing memory");
-        try {
-            InputStream is = view.getResources().openRawResource(R.raw.flappy);
-            int read = 0;
-            while (read < 65536) {
-                int res = is.read(memory, read, 65536 - read);
-                if (res < 0) {
-                    break;
-                }
-                read += res;
-            }
-            is.close();
-        } catch (IOException e) {
-            Log.e(TAG, "Error when loading memory", e);
-        }
     }
 
     public static void destroy() {
