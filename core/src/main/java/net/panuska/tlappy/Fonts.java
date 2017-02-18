@@ -549,13 +549,13 @@ public class Fonts {
                 (byte) 0b00111100,
                 (byte) 0b00000000
         }, {                   // letter \ - (0x5c)
-                (byte) 0b11001100,
-                (byte) 0b01111000,
-                (byte) 0b11111100,
+                (byte) 0b00000000,
+                (byte) 0b11000000,
+                (byte) 0b01100000,
                 (byte) 0b00110000,
-                (byte) 0b11111100,
-                (byte) 0b00110000,
-                (byte) 0b00110000,
+                (byte) 0b00011000,
+                (byte) 0b00001100,
+                (byte) 0b00000110,
                 (byte) 0b00000000
         }, {                   // letter ] - (0x5d)
                 (byte) 0b00111100,
