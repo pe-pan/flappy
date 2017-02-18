@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:onClick="playGame"
-                android:text="@string/play_flappy" />
+                android:text="@string/play_tlappy" />
 
             <Button
                 style="@style/button_yellow"
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:onClick="exitGame"
-                android:text="@string/exit_flappy" />
+                android:text="@string/exit_tlappy" />
 
         </LinearLayout>
     </LinearLayout>

@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="FlappyTheme" parent="android:style/Theme.NoTitleBar.Fullscreen">
+    <style name="TlappyTheme" parent="android:style/Theme.NoTitleBar.Fullscreen">
         <item name="android:buttonStyle">@style/button</item>
         <item name="android:textViewStyle">@style/menu</item>
     </style>
