@@ -7,15 +7,9 @@ This source code is based on a <a href="https://sourceforge.net/projects/flappy/
 originally disassembled and rewritten from Z80 machine code by <a href="http://www.8bit-times.eu/">Petr &#x160;lechta</a>.
 <br>
 
-<h2>Installation instructions</h2>
-From copyright reasons, this game is not hosted in Google Play Store; to install Flappy in your Android device (version 2.3.3 and above), follow the instructions below:
-<ol>
-    <li>At your device, enable installing application from unknown sources.<br>
-      For instructions, see <a href="http://www.androidcentral.com/allow-app-installs-unknown-sources">here</a>.</li>
-    <li>Open this page - <i>https://github.com/pe-pan/flappy</i> - in your Android device</li>
-    <li>Click on <a href="https://github.com/pe-pan/flappy/releases/download/v0.4-alpha/application-debug.apk">this link</a></li>
-    <li>Confirm the installation</li>
-</ol>
+<h2>Installation</h2>
+  <p>The game has been published into Google Play Store under the name
+  <a href="https://play.google.com/store/apps/details?id=net.panuska.tlappy.application">Tlappy</a>. Go ahead and install the game (Android device version 2.3.3 and above).</p>
 
 <h2>Differences from original</h2>
 The code contains the original Flappy game with several improvements to reflect Android platform differences.
