@@ -1,0 +1,11 @@
+indexes:
+
+- kind: SceneRecord
+  properties:
+  - name: sceneNo
+  - name: score
+    direction: desc
+  - name: lives
+    direction: desc
+  - name: attempts
+  - name: date
