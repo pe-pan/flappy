@@ -6,10 +6,10 @@
     <string name="select_scene">Select Scene</string>
     <string name="play_intro">Play Intro</string>
     <string name="main_menu">Main Menu</string>
-    <string name="play_tlappy">Play Tlappy</string>
+    <string name="play_tlappy">Play Flappy</string>
     <string name="resume_intro">Resume Intro</string>
     <string name="show_options">Show Options</string>
-    <string name="exit_tlappy">Exit Tlappy</string>
+    <string name="exit_tlappy">Exit Flappy</string>
     <string name="notThisSceneYet">Not this scene yet!</string>
     <string name="scores">Scores</string>
     <string name="play">Play</string>

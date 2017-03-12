@@ -443,16 +443,16 @@ public class Intro {
         return 0;
     }
 
-    private byte[] logo = { // TLAPPY
+    private byte[] logo = { // FLAPPY
             (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000, (byte) 0b00000000,
-            (byte) 0b01111110, (byte) 0b11000011, (byte) 0b11101111, (byte) 0b10111110, (byte) 0b11001100,
-            (byte) 0b01111110, (byte) 0b11000011, (byte) 0b11101111, (byte) 0b10111110, (byte) 0b11001100,
-            (byte) 0b00011000, (byte) 0b11000011, (byte) 0b01101101, (byte) 0b10110110, (byte) 0b11001100,
-            (byte) 0b00011000, (byte) 0b11000011, (byte) 0b01101101, (byte) 0b10110110, (byte) 0b11001100,
-            (byte) 0b00011000, (byte) 0b11000011, (byte) 0b11101111, (byte) 0b10111110, (byte) 0b11111100,
-            (byte) 0b00011000, (byte) 0b11000011, (byte) 0b11101111, (byte) 0b10111110, (byte) 0b11111100,
-            (byte) 0b00011000, (byte) 0b11111011, (byte) 0b01101100, (byte) 0b00110000, (byte) 0b00110000,
-            (byte) 0b00011000, (byte) 0b11111011, (byte) 0b01101100, (byte) 0b00110000, (byte) 0b00110000
+            (byte) 0b00111110, (byte) 0b11000011, (byte) 0b11101111, (byte) 0b10111110, (byte) 0b11001100,
+            (byte) 0b00111110, (byte) 0b11000011, (byte) 0b11101111, (byte) 0b10111110, (byte) 0b11001100,
+            (byte) 0b00110000, (byte) 0b11000011, (byte) 0b01101101, (byte) 0b10110110, (byte) 0b11001100,
+            (byte) 0b00110000, (byte) 0b11000011, (byte) 0b01101101, (byte) 0b10110110, (byte) 0b11001100,
+            (byte) 0b00111110, (byte) 0b11000011, (byte) 0b11101111, (byte) 0b10111110, (byte) 0b11111100,
+            (byte) 0b00111110, (byte) 0b11000011, (byte) 0b11101111, (byte) 0b10111110, (byte) 0b11111100,
+            (byte) 0b00110000, (byte) 0b11111011, (byte) 0b01101100, (byte) 0b00110000, (byte) 0b00110000,
+            (byte) 0b00110000, (byte) 0b11111011, (byte) 0b01101100, (byte) 0b00110000, (byte) 0b00110000
     };
 
     private boolean isWall(int x, int y) {
