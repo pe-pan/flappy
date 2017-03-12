@@ -686,42 +686,19 @@ class Scene {
     }
 
     int gameOver() {
+        music.start();
         keyboard.clear();
-        vram.emptyRectNoOfs(10, 7, 20, 11 * 8);
+        vram.emptyRectNoOfs(10, 7, 20, 4 * 8);
         drawGameOverText();
-        vram.printText(11, 13, "Replay...", Color.RED);
-        vram.printText(20, 13, "Space key", Color.YELLOW);
-        vram.printText(11, 16, "Menu.....", Color.RED);
-        vram.printText(20, 16, "Enter key", Color.YELLOW);
-        int x;
-        for (int i = 0; i < 0x30; i++) {
+        while (Main.isWaiting()) {
             vram.emptyRectNoOfs(11, 8, 18, 16);
             vram.refresh();
-            x = testKey();
-            if (x != 0) {
-                return x;
-            }
+            Main.wait(50);
             drawGameOverText();
             vram.refresh();
-            x = testKey();
-            if (x != 0) {
-                return x;
-            }
+            Main.wait(50);
         }
         return INTRO;
-    }
-
-    private int testKey() {
-        for (int i = 0; i < 10; i++) {
-            if (keyboard.spaceKey()) {
-                return GAME;
-            }
-            if (keyboard.enterKey()) {
-                return SETUP;
-            }
-            Main.wait(5);
-        }
-        return 0;
     }
 
     private void drawGameOverText() {
