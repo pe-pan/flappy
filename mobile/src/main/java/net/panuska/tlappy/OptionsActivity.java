@@ -9,11 +9,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import net.panuska.tlappy.mobile.BuildConfig;
 import net.panuska.tlappy.mobile.R;
 
 /**
@@ -28,6 +32,13 @@ public class OptionsActivity extends TlappyActivity implements ActivityCompat.On
 
     private EditText playerNameView;
     private EditText passwordView;
+    private View aboutView;
+    private View optionsView;
+    private TextView androidDeveloper;
+    private TextView javaDeveloper;
+    private TextView sceneVideos;
+    private TextView flappyGitHub;
+    private TextView version;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +48,22 @@ public class OptionsActivity extends TlappyActivity implements ActivityCompat.On
         playerNameView = (EditText) findViewById(R.id.playerName);
         playerNameView.setText(retrievePlayerName());
         passwordView = (EditText) findViewById(R.id.password);
+        aboutView = findViewById(R.id.aboutView);
+        optionsView = findViewById(R.id.optionsView);
+        androidDeveloper = (TextView) findViewById(R.id.androidDeveloper);
+        androidDeveloper.setText(Html.fromHtml("<a href='http://panuska.net'>"+getResources().getString(R.string.android_developer_contact)+"</a>"));
+        androidDeveloper.setMovementMethod(LinkMovementMethod.getInstance());
+        javaDeveloper = (TextView) findViewById(R.id.javaDeveloper);
+        javaDeveloper.setText(Html.fromHtml("<a href='http://www.8bit-times.eu'>"+getResources().getString(R.string.java_developer_contact)+"</a>"));
+        javaDeveloper.setMovementMethod(LinkMovementMethod.getInstance());
+        sceneVideos = (TextView) findViewById(R.id.sceneVideos);
+        sceneVideos.setText(Html.fromHtml("<a href='https://www.youtube.com/user/MrAvayak'>"+getResources().getString(R.string.scene_videos_contact)+"</a>"));
+        sceneVideos.setMovementMethod(LinkMovementMethod.getInstance());
+        flappyGitHub = (TextView) findViewById(R.id.flappyGitHub);
+        flappyGitHub.setText(Html.fromHtml("<a href='https://github.com/pe-pan/flappy/issues'>"+getResources().getString(R.string.flappy_github_contact)+"</a>"));
+        flappyGitHub.setMovementMethod(LinkMovementMethod.getInstance());
+        version = (TextView) findViewById(R.id.version);
+        version.setText(BuildConfig.VERSION_NAME);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
@@ -99,6 +126,16 @@ public class OptionsActivity extends TlappyActivity implements ActivityCompat.On
 
     public void closeOptions(View view) {
         onBackPressed();
+    }
+
+    public void showAbout(View view) {
+        optionsView.setVisibility(View.GONE);
+        aboutView.setVisibility(View.VISIBLE);
+    }
+
+    public void closeAbout(View view) {
+        aboutView.setVisibility(View.GONE);
+        optionsView.setVisibility(View.VISIBLE);
     }
 
     @Override

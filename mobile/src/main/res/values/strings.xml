@@ -21,4 +21,14 @@
     <string name="scene_already_open">Scenes #1-#%d already open</string>
     <string name="incorrect_password">Incorrect password!</string>
     <string name="give_contact_permission">Give permission to fill in player name automatically</string>
+    <string name="android_developer_contact">Petr Panuška</string>
+    <string name="java_developer_contact">Petr Šlechta</string>
+    <string name="scene_videos_contact">Petr Diblík</string>
+    <string name="flappy_github_contact">Flappy@GitHub</string>
+    <string name="android_developer">Android developer: </string>
+    <string name="java_developer">Java developer: </string>
+    <string name="scene_videos">Scene videos: </string>
+    <string name="bug_reports">Bug reports: </string>
+    <string name="version">Version: </string>
+    <string name="close">Close</string>
 </resources>

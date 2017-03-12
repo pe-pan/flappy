@@ -11,6 +11,12 @@
         <item name="android:minHeight">50sp</item>
     </style>
 
+    <style name="text" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">20sp</item>
+        <item name="android:minHeight">22sp</item>
+        <item name="android:background">@android:color/black</item>
+    </style>
+
     <style name="menu" parent="button">
         <item name="android:textSize">32sp</item>
         <item name="android:background">@drawable/menu_background</item>
