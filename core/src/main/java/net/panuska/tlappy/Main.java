@@ -94,14 +94,6 @@ public class Main {
             if (res == EXIT_GAME) {
                 return;
             }
-            if (res == LOOSE_LIFE) {
-                Main.setState(NORMAL_WAIT);
-                lives--;
-                if (lives == 0) {
-                    sel = s.gameOver();
-                }
-                continue;
-            }
             music.start();
             res = s.gameLoop();
             if (res == EXIT_GAME) {
@@ -111,7 +103,8 @@ public class Main {
                 Main.setState(NORMAL_WAIT);
                 lives--;
                 if (lives == 0) {
-                    sel = s.gameOver();
+                    s.gameOver();
+                    return;
                 }
             } else {
                 listener.gameFinished(scNo, score, lives, 0); //todo time should be also saved here
