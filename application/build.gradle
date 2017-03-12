@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias '<--your_alias-->'
+            keyPassword '<--your-key-password-->'
+            storeFile file('<--your-file-->')
+            storePassword '<--your-store-password-->'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
@@ -15,6 +23,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            zipAlignEnabled true
+            signingConfig signingConfigs.config
         }
     }
 }
