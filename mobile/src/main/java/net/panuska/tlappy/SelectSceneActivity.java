@@ -338,20 +338,20 @@ public class SelectSceneActivity extends TlappyActivity {
         String[] idS = videoIds.split(";");                 // multiple videos about a single scene are split by ";"
         int videoIndex = new Random().nextInt(idS.length);  // select random video
         String id = idS[videoIndex];
-        Intent videoIntent;
         try {
-            videoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
+            Intent videoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + id));
+            startActivity(videoIntent);
         } catch (ActivityNotFoundException ex) {
             Log.e(TAG, "No YouTube application found!! Trying web instead!!");
             try {
-                videoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + id));
+                Intent videoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + id));
+                startActivity(videoIntent);
             } catch (Exception e) {
                 showMessage(getString(R.string.cant_show_hints, id));
                 Log.e(TAG, "Can't start the video");
                 return;
             }
         }
-        startActivity(videoIntent);
     }
 
     @Override
