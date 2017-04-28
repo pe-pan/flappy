@@ -19,7 +19,7 @@
     <string name="scene_password">Scene key:</string>
     <string name="open_scene">Opening scenes #1-#%d</string>
     <string name="scene_already_open">Scenes #1-#%d already open</string>
-    <string name="incorrect_password">Incorrect password!</string>
+    <string name="incorrect_scene_key">Incorrect scene key!</string>
     <string name="give_contact_permission">Give permission to fill in player name automatically</string>
     <string name="android_developer_contact">Petr Panuška</string>
     <string name="java_developer_contact">Petr Šlechta</string>

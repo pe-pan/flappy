@@ -107,7 +107,7 @@ public class OptionsActivity extends TlappyActivity implements ActivityCompat.On
         if (password.length() > 0) {
             int i = Scene.checkPass(password);
             if (i < 0) {
-                Toast.makeText(this, R.string.incorrect_password, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.incorrect_scene_key, Toast.LENGTH_LONG).show();
             } else {
                 int openScene = retrieveOpenScenes();
                 if (openScene < (i + 1) * 5) {
