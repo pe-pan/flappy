@@ -31,4 +31,7 @@
     <string name="bug_reports">Bug reports: </string>
     <string name="version">Version: </string>
     <string name="close">Close</string>
+    <string name="player_name">Player name:</string>
+    <string name="about">About</string>
+    <string name="cancel">Cancel</string>
 </resources>
