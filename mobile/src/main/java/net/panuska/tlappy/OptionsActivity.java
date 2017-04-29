@@ -14,6 +14,7 @@ import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,6 +80,13 @@ public class OptionsActivity extends TlappyActivity implements ActivityCompat.On
                 });
             }
         }
+        if (isAndroidTV()) { // on Android TV
+            View customControls = findViewById(R.id.customControls);
+            LinearLayout customControlsLayout = (LinearLayout) findViewById(R.id.customControlsLayout);
+            customControls.setVisibility(View.VISIBLE);  // make custom controls button visible
+            customControlsLayout.setWeightSum(4f);       // and make enough place for the button
+            customControls.requestFocus();
+        }
     }
 
     public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 77;
@@ -136,6 +144,25 @@ public class OptionsActivity extends TlappyActivity implements ActivityCompat.On
     public void closeAbout(View view) {
         aboutView.setVisibility(View.GONE);
         optionsView.setVisibility(View.VISIBLE);
+    }
+
+    public void showCustomControlsMenu(View view) {
+        findViewById(R.id.customControlsMenu).setVisibility(View.VISIBLE);
+    }
+
+    public void closeControlsMenu(View view) {
+        findViewById(R.id.customControlsMenu).setVisibility(View.GONE);
+    }
+
+    public void recordCustomControls(View view) {
+        closeControlsMenu(view);
+        startActivity(new Intent(OptionsActivity.this, CustomControlsActivity.class));
+    }
+
+    public void resetCustomControls(View view) {
+        CustomControlsActivity.initCustomControls();
+        storeCustomControls(CustomControlsActivity.keyboardMap);
+        Toast.makeText(this, getString(R.string.controls_reset), Toast.LENGTH_LONG).show();
     }
 
     @Override

@@ -10,11 +10,14 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 
 import net.panuska.tlappy.mobile.R;
 
@@ -36,7 +39,8 @@ public class SelectSceneActivity extends TlappyActivity {
     private int sceneWidthSpace;
     private FingerUpGestureDetector detector;
     private int openScenes;
-    private View buttons;
+    private ViewGroup buttons;
+    private int focusedIndex;
 
     static final float START_FLING_INHIBITION = 0.05f;
     static final float FLING_INHIBITION = 0.95f;
@@ -60,7 +64,8 @@ public class SelectSceneActivity extends TlappyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selectscene);
         view = (SurfaceView) findViewById(R.id.sceneList);
-        buttons = findViewById(R.id.selectSceneButtons);
+        buttons = (ViewGroup) findViewById(R.id.selectSceneButtons);
+        focusedIndex = 1;  // play button
     }
 
     @Override
@@ -202,6 +207,43 @@ public class SelectSceneActivity extends TlappyActivity {
     public boolean onTouchEvent(MotionEvent event) {
         if (detector.onTouchEvent(event)) return true;
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        int keyCode = event.getKeyCode();
+        if (event.getAction() != KeyEvent.ACTION_UP) {
+            return super.dispatchKeyEvent(event);
+        }
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_UP:
+                detector.fListener.onScroll(null, null, +sceneWidthSpace, 0); //todo scroll smoothly (now it jumps to the next screen)
+                detector.fListener.onFingerUp(null);
+                break;
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                detector.fListener.onScroll(null, null, -sceneWidthSpace, 0);
+                detector.fListener.onFingerUp(null);
+                break;
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                focusedIndex--;
+                if (focusedIndex < 0) focusedIndex = buttons.getChildCount()-1;
+                buttons.getChildAt(focusedIndex).requestFocus();
+                break;
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                focusedIndex++;
+                if (focusedIndex >= buttons.getChildCount()) focusedIndex = 0;
+                buttons.getChildAt(focusedIndex).requestFocus();
+                break;
+            case KeyEvent.KEYCODE_DPAD_CENTER: // button can have no focus (then handle its click)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                    buttons.getChildAt(focusedIndex).callOnClick();
+                    break;
+                } else {
+                    return super.dispatchKeyEvent(event);
+                }
+            default: return super.dispatchKeyEvent(event);
+        }
+        return true;
     }
 
     @Override

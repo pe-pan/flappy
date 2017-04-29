@@ -3,16 +3,19 @@ package net.panuska.tlappy;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.UiModeManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.media.AudioManager;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.util.Base64;
 import android.util.Log;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
@@ -26,6 +29,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -47,6 +51,7 @@ public class TlappyActivity extends Activity {
     public static final String PLAYER_ID = "player.id";
     public static final String HAS_RECORD = "has.record";
     public static final String HAS_CHANGED_NAME = "has.changed.name";
+    public static final String CUSTOM_CONTROLS = "custom.controls.prefs";
 
     protected SurfaceView view;
     protected static BestScoreService bestScoreService;
@@ -188,6 +193,7 @@ public class TlappyActivity extends Activity {
         } catch (Exception e) {
             s = "";
         }
+        if (isAndroidTV()) s = "TV " + s;
         s = s + Device.displayWidth + "x" + Device.displayHeight + " " + getShortUUID();
         return s;
     }
@@ -275,6 +281,32 @@ public class TlappyActivity extends Activity {
         return p.getBoolean(HAS_CHANGED_NAME, true);  // the very first time, it should send the user name
     }
 
+    public void storeCustomControls(SparseIntArray array) {
+        SharedPreferences p = getSharedPreferences(CUSTOM_CONTROLS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = p.edit();
+        ed.clear();  // clear all
+        for (int i = 0; i < array.size(); i++) {
+            int key = array.keyAt(i);
+            int value = array.valueAt(i);
+            ed.putInt(""+key, value);
+        }
+        ed.apply();
+    }
+
+    public void loadOrInitCustomControls(SparseIntArray array) {
+        SharedPreferences p = getSharedPreferences(CUSTOM_CONTROLS, Context.MODE_PRIVATE);
+        Map<String, Integer> values = (Map<String, Integer>) p.getAll();
+        if (values == null || values.size() == 0) {  // init
+            CustomControlsActivity.initCustomControls();
+        } else {
+            for (String key : values.keySet()) {
+                int value = values.get(key);
+                int keyInt = Integer.parseInt(key);
+                array.put(keyInt, value);
+            }
+        }
+    }
+
     /**
      * Returns two-ints-array where first int is the sum of scores of the scene and second is the number of lives.
      *
@@ -356,5 +388,14 @@ public class TlappyActivity extends Activity {
                 // User clicked OK button
             }
         });
+    }
+
+    public boolean isAndroidTV() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            UiModeManager uiModeManager = (UiModeManager) getSystemService(UI_MODE_SERVICE);
+            return uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION;
+        } else {
+            return false;
+        }
     }
 }

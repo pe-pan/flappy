@@ -32,6 +32,20 @@
     <string name="version">Version: </string>
     <string name="close">Close</string>
     <string name="player_name">Player name:</string>
+    <string name="controls">Controls</string>
     <string name="about">About</string>
     <string name="cancel">Cancel</string>
+    <string name="move_left">Press a key to move left!!</string>
+    <string name="move_right">Press a key to move right!!</string>
+    <string name="move_up">Press a key to move up!!</string>
+    <string name="move_down">Press a key to move down!!</string>
+    <string name="throw_mushroom">Press a key to throw a toadstool!!</string>
+    <string name="controls_saved">Your custom controls have been saved!</string>
+    <string name="controls_reset">Controls have been reset to inital state</string>
+    <string name="cant_record">Can\'t record those keys!!</string>
+    <string name="key_in_use">Key already in use!!</string>
+    <string name="controls_menu">Controls</string>
+    <string name="record_controls">Record Controls</string>
+    <string name="reset_controls">Reset Controls</string>
+    <string name="close_menu">Close Menu</string>
 </resources>

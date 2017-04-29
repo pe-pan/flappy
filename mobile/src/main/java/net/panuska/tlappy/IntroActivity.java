@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import net.panuska.tlappy.mobile.R;
 
@@ -18,7 +20,7 @@ import net.panuska.tlappy.mobile.R;
 public class IntroActivity extends TlappyActivity {
     private static final String TAG = IntroActivity.class.getSimpleName();
 
-    private View mainMenu;
+    private LinearLayout mainMenu;
     private AsyncTask intro;
 
     @Override
@@ -27,13 +29,28 @@ public class IntroActivity extends TlappyActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
         view = (SurfaceView) findViewById(R.id.intro_content);
-        mainMenu = findViewById(R.id.mainMenu);
+        mainMenu = (LinearLayout) findViewById(R.id.mainMenu);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mainMenu.setVisibility(mainMenu.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             }
         });
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) { // support for Android TV controls; make menu visible
+        if (event.getAction() == KeyEvent.ACTION_UP && event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) { // when pressing the DPAD center key
+            LinearLayout buttonLayout = (LinearLayout) mainMenu.getChildAt(1);
+            for (int i = 0; i < buttonLayout.getChildCount(); i++) {
+                if (buttonLayout.getChildAt(i).isFocused()) {   // if there is any button focused
+                    return super.dispatchKeyEvent(event);       // press the button
+                }
+            }                                                   // otherwise show / hide the menu
+            mainMenu.setVisibility(mainMenu.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            return true;
+        }
+        return super.dispatchKeyEvent(event);
     }
 
     @Override

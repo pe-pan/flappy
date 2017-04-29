@@ -55,6 +55,7 @@
                 android:layout_weight="1" />
 
             <LinearLayout
+                android:id="@+id/customControlsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
@@ -68,6 +69,17 @@
                     android:layout_weight="1"
                     android:onClick="saveOptions"
                     android:text="@string/ok" />
+
+                <Button
+                    android:id="@+id/customControls"
+                    style="@style/button_yellow"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:onClick="showCustomControlsMenu"
+                    android:text="@string/controls"
+                    android:visibility="gone" />
 
                 <Button
                     style="@style/button_blue"
@@ -91,4 +103,5 @@
     </RelativeLayout>
 
     <include layout="@layout/dialog_about" />
+    <include layout="@layout/dialog_controls" />
 </RelativeLayout>

@@ -1,8 +1,10 @@
 package net.panuska.tlappy;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
 
@@ -31,6 +33,29 @@ public class BestScoreActivity extends TlappyActivity {
                 Log.d(TAG, "Waiting time set to: "+BestScoreScreen.speed);
             }
         });
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) { // emulate Android TV DPAD key as to finger click
+        int keyCode = event.getKeyCode();
+        if (event.getAction() != KeyEvent.ACTION_UP) {
+            return super.dispatchKeyEvent(event);
+        }
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_UP:
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+            case KeyEvent.KEYCODE_DPAD_CENTER:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                    view.callOnClick();
+                    break;
+                } else {
+                    return super.dispatchKeyEvent(event);
+                }
+            default: return super.dispatchKeyEvent(event);
+        }
+        return true;
     }
 
     @Override

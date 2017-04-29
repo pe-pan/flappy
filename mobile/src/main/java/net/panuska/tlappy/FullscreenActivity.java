@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
@@ -39,6 +40,7 @@ public class FullscreenActivity extends TlappyActivity {
     protected void onResume() {
         Log.d(TAG, "onResume");
         super.onResume();
+        loadOrInitCustomControls(CustomControlsActivity.keyboardMap);
         game = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
@@ -95,6 +97,21 @@ public class FullscreenActivity extends TlappyActivity {
     static final int DOWN = 40;
 
     private int key;
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        int translatedKey = CustomControlsActivity.keyboardMap.get(event.getKeyCode(), -1);
+        if (translatedKey != -1) { // value found
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                keyboard.keyDown(translatedKey);
+                Log.d(TAG, "key down: "+event.getKeyCode());
+            } else if (event.getAction() == KeyEvent.ACTION_UP) {
+                keyboard.keyUp(translatedKey);
+                Log.d(TAG, "key up  : "+event.getKeyCode());
+            }
+        } else Log.d(TAG, "key not found "+event.getKeyCode());
+        return super.dispatchKeyEvent(event);
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
