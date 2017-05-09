@@ -1,3 +1,4 @@
+
 <h1>Flappy MZ-800 for Android</h1>
 
 Android remake of <a href="https://en.wikipedia.org/wiki/Flappy">an old and famous game Flappy</a> originally written for 8-bit
@@ -9,7 +10,7 @@ originally disassembled and rewritten from Z80 machine code by <a href="http://w
 
 <h2>Installation</h2>
   <p>The game has been published into Google Play Store under the name
-  <a href="https://play.google.com/store/apps/details?id=net.panuska.tlappy.application">Tlappy</a>. Go ahead and install the game (Android device version 2.3.3 and above).</p>
+  <a href="https://play.google.com/store/apps/details?id=net.panuska.tlappy.app.tv">Tlappy</a>. Go ahead and install the game (Android device version 2.3.3 and above).</p>
 
 <h2>Differences from original</h2>
 The code contains the original Flappy game with several improvements to reflect Android platform differences.
