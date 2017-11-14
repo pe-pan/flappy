@@ -85,13 +85,13 @@ class RedEnemy extends Moveable {
                         diffY = -diffY;
                     }
                     if (diffY >= 6) {
-                        if (Math.random() < 0x10 / 256) {
+                        if (Math.random() < 0x10 / 256f) {
                             doMove(true);
                         } else {
                             upOrDown();
                         }
                     } else {
-                        if (Math.random() < 8 / 256) {
+                        if (Math.random() < 8 / 256f) {
                             doMove(true);
                         } else {
                             upOrDown();
@@ -160,7 +160,7 @@ class RedEnemy extends Moveable {
         if (rnd) {
             setRandomMove();
         }
-        if (Math.random() < 0x0a / 256) {
+        if (Math.random() < 0x0a / 256f) {
             setRandomMove();
         }
         switch (selectedMove) {
