@@ -40,6 +40,7 @@ appengine {
     endpoints {
         getClientLibsOnBuild = true
         getDiscoveryDocsOnBuild = true
+        googleClientVersion = '1.23.0'
     }
     httpAddress = "0.0.0.0"
 }
