@@ -22,6 +22,7 @@ android {
         targetSdkVersion 25
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -34,6 +35,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.android.support:multidex:1.0.3'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':mobile')
 }

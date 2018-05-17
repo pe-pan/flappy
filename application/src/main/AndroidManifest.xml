@@ -18,7 +18,8 @@
         android:icon="@drawable/logo"
         android:isGame="true"
         android:label="@string/app_name"
-        android:theme="@style/TlappyTheme">
+        android:theme="@style/TlappyTheme"
+        android:name="android.support.multidex.MultiDexApplication" >
         <activity
             android:name="net.panuska.tlappy.IntroActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
