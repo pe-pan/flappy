@@ -22,9 +22,8 @@ android {
 
 dependencies {
     implementation 'com.android.support:multidex:1.0.3'
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':core')
-    compile project(path: ':backend', configuration: 'android-endpoints')
-    compile 'com.google.http-client:google-http-client-gson:1.19.0' exclude module: 'httpclient'
-    compile 'com.android.support:support-v4:25.4.0'
+    api project(':core')
+    api project(path: ':backend', configuration: 'android-endpoints')
+    implementation 'com.google.http-client:google-http-client-gson:1.19.0' exclude module: 'httpclient'
+    implementation 'com.android.support:support-v4:25.4.0'
 }
