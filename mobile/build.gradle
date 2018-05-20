@@ -20,10 +20,29 @@ android {
     }
 }
 
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.google.cloud.tools:endpoints-framework-gradle-plugin:1.0.3'
+    }
+}
+apply plugin: 'com.google.cloud.tools.endpoints-framework-client'
+
 dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     api project(':core')
-    api project(path: ':backend', configuration: 'android-endpoints')
-    implementation 'com.google.http-client:google-http-client-gson:1.19.0' exclude module: 'httpclient'
     implementation 'com.android.support:support-v4:25.4.0'
+    annotationProcessor 'com.google.appengine:appengine-api-1.0-sdk:1.9.63'
+    implementation 'com.google.appengine:appengine-api-1.0-sdk:1.9.63'
+
+    api ('com.google.api-client:google-api-client-android:1.23.0') {
+        exclude module: 'httpclient'
+    }
+    implementation ('com.google.http-client:google-http-client-gson:1.23.0') {
+        exclude module: 'httpclient'
+    }
+    endpointsServer project(path: ':backend', configuration: 'endpoints')
 }
